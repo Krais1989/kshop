@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KShop.Payments.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:KShop.Payments.WebApi.Controllers.PaymentController.GetStatus(System.Guid)">
+            <summary>
+            Позволяет получить статус платежа
+            </summary>
+        </member>
+        <member name="M:KShop.Payments.WebApi.Controllers.PaymentController.Payment(KShop.Payments.WebApi.Controllers.PaymentModyfi)">
+            <summary>
+            Redirect-url для платежной системы
+            </summary>
+            <param name="orderId"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

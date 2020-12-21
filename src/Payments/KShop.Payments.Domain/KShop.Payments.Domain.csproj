@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
+    <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
+    <ProjectReference Include="..\KShop.Payments.Persistence\KShop.Payments.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

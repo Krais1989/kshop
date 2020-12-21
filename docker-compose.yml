@@ -1,0 +1,132 @@
+version: '3.5'
+services:
+    dbs_catalogue:
+        image: mysql:latest
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db_catalogue'
+            MYSQL_USER: 'asd'
+            MYSQL_PASSWORD: 'asd'
+            MYSQL_ROOT_PASSWORD: 'asd'
+        ports:
+            - '3306:3306'
+        expose: 
+            - '3306'
+        networks:
+            market_test_network:
+                aliases:
+                    - dbs_catalogue
+        volumes:
+            - vol-dbs_catalogue:/var/lib/mysql
+
+    dbs_orders:
+        image: mysql:latest
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db_orders'
+            MYSQL_USER: 'asd'
+            MYSQL_PASSWORD: 'asd'
+            MYSQL_ROOT_PASSWORD: 'asd'
+        ports:
+            - '3307:3306'
+        expose: 
+            - '3307'
+        networks:
+            market_test_network:
+                aliases:
+                    - dbs_orders
+        volumes:
+            - vol-dbs_orders:/var/lib/mysql
+
+    dbs_payments:
+        image: mysql:latest
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db_payments'
+            MYSQL_USER: 'asd'
+            MYSQL_PASSWORD: 'asd'
+            MYSQL_ROOT_PASSWORD: 'asd'
+        ports:
+            - '3308:3306'
+        expose: 
+            - '3308'
+        networks:
+            market_test_network:
+                aliases:
+                    - dbs_payments
+        volumes:
+            - vol-dbs_payments:/var/lib/mysql
+
+    msgb_rabbitmq:
+        image: 'rabbitmq:3.8.9-management-alpine'
+        hostname: 'rabbit1'
+        restart: always
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        environment: 
+            RABBITMQ_DEFAULT_VHOST: "/"
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_DEFAULT_USER: 'guest'
+            RABBITMQ_DEFAULT_PASS: 'guest'
+        networks:
+            market_test_network:
+                aliases:
+                    - msgb_rabbitmq
+        volumes:
+            - vol-msgb_rabbitmq:/var/lib/rabbitmq/mnesia
+            #- "./docker/rabbitmq/enabled_plugins.txt:/etc/rabbitmq/enabled_plugins"
+
+    redis:
+        image: 'redis:alpine'
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server --requirepass 123123
+        environment:
+            - REDIS_REPLICATION_MODE=master
+        networks:
+            market_test_network:
+                aliases:
+                    - redis
+        volumes:
+            - vol-redis:/var/lib/redis
+            #- "./volumes/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+        - 9080:8080
+        networks:
+            market_test_network:
+                aliases:
+                - adminer
+    log_seq:
+        image: datalust/seq:latest
+        restart: always
+        environment: 
+            HOST_PATH_TO_SEQ: '/data'
+            ACCEPT_EULA: 'Y'
+        ports: 
+            - '5080:80'
+            - '5341:5341'
+        volumes:
+            - vol-log_seq:/data
+        networks:
+            market_test_network:
+                aliases:
+                - log_seq
+
+networks:
+    market_test_network:
+        name: market_test_network
+
+volumes:
+    vol-dbs_catalogue: {}
+    vol-dbs_orders: {}
+    vol-dbs_payments: {}
+    vol-msgb_rabbitmq: {}
+    vol-log_seq: {}
+    vol-redis: {}
+    
