@@ -1,10 +1,10 @@
 version: '3.5'
 services:
-    dbs_catalogue:
+    dbs_catalogues:
         image: mysql:latest
         restart: always
         environment: 
-            MYSQL_DATABASE: 'db_catalogue'
+            MYSQL_DATABASE: 'db_catalogues'
             MYSQL_USER: 'asd'
             MYSQL_PASSWORD: 'asd'
             MYSQL_ROOT_PASSWORD: 'asd'
@@ -13,11 +13,11 @@ services:
         expose: 
             - '3306'
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
-                    - dbs_catalogue
+                    - dbs_catalogues
         volumes:
-            - vol-dbs_catalogue:/var/lib/mysql
+            - vol-dbs_catalogues:/var/lib/mysql
 
     dbs_orders:
         image: mysql:latest
@@ -32,7 +32,7 @@ services:
         expose: 
             - '3307'
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                     - dbs_orders
         volumes:
@@ -51,7 +51,7 @@ services:
         expose: 
             - '3308'
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                     - dbs_payments
         volumes:
@@ -70,7 +70,7 @@ services:
             RABBITMQ_DEFAULT_USER: 'guest'
             RABBITMQ_DEFAULT_PASS: 'guest'
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                     - msgb_rabbitmq
         volumes:
@@ -82,11 +82,11 @@ services:
         restart: always
         ports:
             - '6379:6379'
-        command: redis-server --requirepass 123123
+        command: redis-server --requirepass asd
         environment:
             - REDIS_REPLICATION_MODE=master
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                     - redis
         volumes:
@@ -99,7 +99,7 @@ services:
         ports:
         - 9080:8080
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                 - adminer
     log_seq:
@@ -114,16 +114,16 @@ services:
         volumes:
             - vol-log_seq:/data
         networks:
-            market_test_network:
+            kshop_network:
                 aliases:
                 - log_seq
 
 networks:
-    market_test_network:
-        name: market_test_network
+    kshop_network:
+        name: kshop_network
 
 volumes:
-    vol-dbs_catalogue: {}
+    vol-dbs_catalogues: {}
     vol-dbs_orders: {}
     vol-dbs_payments: {}
     vol-msgb_rabbitmq: {}
