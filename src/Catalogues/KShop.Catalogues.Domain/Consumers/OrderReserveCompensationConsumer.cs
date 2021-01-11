@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace KShop.Catalogues.Domain.Consumers
 {
-    public class OrderReservationCompensationConsumer : IConsumer<IOrderReserveCompensationEvent>
+    public class OrderReserveCompensationConsumer : IConsumer<IOrderReserveCompensationEvent>
     {
-        private readonly ILogger<OrderReservationConsumer> _logger;
+        private readonly ILogger<OrderReserveConsumer> _logger;
         private readonly CatalogueContext _dbContext;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderReservationCompensationConsumer(ILogger<OrderReservationConsumer> logger, CatalogueContext dbContext, IPublishEndpoint publishEndpoint)
+        public OrderReserveCompensationConsumer(ILogger<OrderReserveConsumer> logger, CatalogueContext dbContext, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _dbContext = dbContext;

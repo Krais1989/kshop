@@ -1,10 +1,14 @@
+using FluentValidation.AspNetCore;
 using KShop.Payments.Domain.BackgroundServices;
 using KShop.Payments.Domain.Consumers;
+using KShop.Payments.Domain.Mediators;
+using KShop.Payments.Domain.Validators;
 using KShop.Payments.Persistence;
 using KShop.ServiceBus;
 using MassTransit;
 using MassTransit.Definition;
 using MassTransit.Saga;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,7 +48,7 @@ namespace KShop.Payments.WebApi
                 db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
             });
 
-            services.AddHostedService<PaymentCheckBackgroundService>();
+            services.AddHostedService<PaymentApproveBackgroundService>();
 
             var rabbinCon = new RabbitConnection();
             Configuration.GetSection("RabbitConnection").Bind(rabbinCon);
@@ -52,7 +56,7 @@ namespace KShop.Payments.WebApi
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
-                x.AddConsumers(typeof(OrderPaymentEventConsumer).Assembly);
+                x.AddConsumers(typeof(OrderPayEventConsumer).Assembly);
 
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
@@ -73,7 +77,11 @@ namespace KShop.Payments.WebApi
             });
             services.AddMassTransitHostedService();
 
-            services.AddControllers();
+            services.AddMediatR(typeof(PaymentCreateMediatorHandler).Assembly);
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(PaymentCreateFluentValidator).Assembly));
+
             services.AddMarketTestSwagger(Configuration);
         }
 

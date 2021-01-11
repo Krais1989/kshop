@@ -1,11 +1,15 @@
+using FluentValidation.AspNetCore;
 using KShop.Communications.Contracts.Orders;
 using KShop.Orders.Domain.Activities;
+using KShop.Orders.Domain.Handlers;
 using KShop.Orders.Domain.Sagas;
+using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
 using KShop.ServiceBus;
 using MassTransit;
 using MassTransit.Definition;
 using MassTransit.Saga;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -85,7 +89,11 @@ namespace KShop.Orders.WebApi
             });
             services.AddMassTransitHostedService();
 
-            services.AddControllers();
+            services.AddMediatR(typeof(OrderCreateMediatorHandler).Assembly);
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
+
             services.AddMarketTestSwagger(Configuration);
         }
 

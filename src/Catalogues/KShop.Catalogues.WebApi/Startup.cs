@@ -1,8 +1,12 @@
+using FluentValidation.AspNetCore;
 using KShop.Catalogues.Domain.Consumers;
+using KShop.Catalogues.Domain.Mediators;
+using KShop.Catalogues.Domain.Validators;
 using KShop.Catalogues.Persistence;
 using KShop.ServiceBus;
 using MassTransit;
 using MassTransit.Definition;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -48,7 +52,7 @@ namespace KShop.Catalogues.WebApi
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
-                x.AddConsumers(typeof(OrderReservationConsumer).Assembly);
+                x.AddConsumers(typeof(OrderReserveConsumer).Assembly);
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
@@ -63,7 +67,11 @@ namespace KShop.Catalogues.WebApi
             });
             services.AddMassTransitHostedService();
 
-            services.AddControllers();
+            services.AddMediatR(typeof(OrderReserveMediatorHandler).Assembly);
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderReserveFluentValidator).Assembly));
+
             services.AddMarketTestSwagger(Configuration);
         }
 

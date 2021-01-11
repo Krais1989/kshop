@@ -28,7 +28,7 @@ namespace KShop.Payments.WebApi.Controllers
         }
 
         /// <summary>
-        /// Позволяет получить статус платежа
+        /// Получить статус платежа
         /// </summary>
         [HttpGet("[action]")]
         public async Task<ActionResult> GetStatus(Guid orderId)
@@ -37,12 +37,12 @@ namespace KShop.Payments.WebApi.Controllers
         }
 
         /// <summary>
-        /// Redirect-url для платежной системы
+        /// Redirect-url для платежной системы, принимает запросы с результатами платежа
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
         [HttpGet("[action]")]
-        public async Task<ActionResult> Payment([FromQuery] PaymentModyfi paymentInfo)
+        public async Task<ActionResult> SetPayment([FromQuery] PaymentModyfi paymentInfo)
         {
             return Ok();
         }

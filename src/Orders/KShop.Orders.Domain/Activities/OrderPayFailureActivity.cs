@@ -1,10 +1,12 @@
 ﻿using Automatonymous;
 using KShop.Communications.Contracts.Orders;
+using KShop.Orders.Domain.Handlers;
 using KShop.Orders.Domain.Sagas;
 using KShop.Orders.Persistence;
 using KShop.Orders.Persistence.Entities;
 using KShop.ServiceBus;
 using MassTransit;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
@@ -13,22 +15,22 @@ namespace KShop.Orders.Domain.Activities
 
     public class OrderPayFailureActivity : BaseSagaActivity<OrderSagaState, IOrderPayFailureEvent>
     {
-        private readonly IPublishEndpoint _pubEndpoint;
-        private readonly OrderContext _dbContext;
+        private readonly IMediator _mediator;
 
-        public OrderPayFailureActivity(IPublishEndpoint pubEndpoint, ILogger<OrderPayFailureActivity> logger, OrderContext orderContext)
+        public OrderPayFailureActivity(ILogger<OrderPayFailureActivity> logger, IMediator mediator)
             : base(logger)
         {
-            _pubEndpoint = pubEndpoint;
-            _dbContext = orderContext;
+            _mediator = mediator;
         }
 
         public override async Task Execute(BehaviorContext<OrderSagaState, IOrderPayFailureEvent> context, Behavior<OrderSagaState, IOrderPayFailureEvent> next)
         {
             await base.Execute(context, next);
-            var order = await _dbContext.Orders.FindAsync(context.Data.OrderID);
-            order.Status = Order.EStatus.Failed;
-            await _dbContext.SaveChangesAsync();
+            var result = await _mediator.Send(new OrderSetStatusMediatorRequest()
+            {
+                OrderID = context.Data.OrderID,
+                NewStatus = Order.EStatus.Failed
+            });
             await next.Execute(context).ConfigureAwait(false);
         }
     }

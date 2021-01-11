@@ -41,6 +41,10 @@ namespace KShop.Orders.Persistence.Entities
         }
 
         public Guid ID { get; set; }
+        /// <summary>
+        /// Получатель заказа
+        /// </summary>
+        public int CustomerID { get; set; }
         public EStatus Status { get; set; }
 
         public IEnumerable<OrderPosition> Positions { get; set; }

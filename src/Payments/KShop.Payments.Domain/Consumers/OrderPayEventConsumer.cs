@@ -1,7 +1,9 @@
 ﻿using KShop.Communications.Contracts.Orders;
+using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;
 using MassTransit;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,17 +13,20 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Consumers
 {
-    public class OrderPaymentEventConsumer : IConsumer<IOrderPayEvent>
+    /// <summary>
+    /// Обработки событий 
+    /// </summary>
+    public class OrderPayEventConsumer : IConsumer<IOrderPayEvent>
     {
-        private readonly ILogger<OrderPaymentEventConsumer> _logger;
+        private readonly ILogger<OrderPayEventConsumer> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
-        private readonly PaymentsContext _dbContext;
+        private readonly IMediator _mediator;
 
-        public OrderPaymentEventConsumer(ILogger<OrderPaymentEventConsumer> logger, IPublishEndpoint pubEndpoint, PaymentsContext dbContext)
+        public OrderPayEventConsumer(ILogger<OrderPayEventConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
-            _dbContext = dbContext;
+            _mediator = mediator;
         }
 
         public async Task Consume(ConsumeContext<IOrderPayEvent> context)
@@ -30,22 +35,11 @@ namespace KShop.Payments.Domain.Consumers
             try
             {
                 /* Создание платежа */
-                var payment = new Payment()
+                var result = await _mediator.Send(new PaymentCreateMediatorRequest()
                 {
-                    ID = context.Message.OrderID,
-                    StatusDate = DateTime.UtcNow,
-                    Status = Payment.EStatus.Pending,
-                    Logs = new List<PaymentLog> {
-                        new PaymentLog()
-                        {
-                            ModifyDate = DateTime.UtcNow,
-                            Status = Payment.EStatus.Pending
-                        }
-                    }
-                };
-
-                await _dbContext.Payments.AddAsync(payment);
-                await _dbContext.SaveChangesAsync();
+                    OrderID = context.Message.OrderID,
+                    Price = context.Message.Price,
+                });
             }
             catch (Exception e)
             {

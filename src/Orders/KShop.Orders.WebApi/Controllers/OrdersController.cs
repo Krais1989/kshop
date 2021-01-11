@@ -1,5 +1,5 @@
 ﻿using KShop.Communications.Contracts.Orders;
-using KShop.Orders.Domain.ValueObjects;
+using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Persistence;
 using KShop.Orders.Persistence.Entities;
 using KShop.Orders.WebApi.DTOs;
@@ -22,21 +22,24 @@ namespace KShop.Orders.WebApi.Controllers
         private readonly IPublishEndpoint _pubEndpoint;
         private readonly OrderContext _orderContext;
         private readonly IRequestClient<CheckOrderSagaRequest> _checkOrderClient;
+        private readonly IRequestClient<OrderCreateSagaRequest> _createOrderClient;
 
-        public OrdersController(ILogger<OrdersController> logger, IPublishEndpoint pubEndpoint, OrderContext orderContext, IRequestClient<CheckOrderSagaRequest> checkOrderClient)
+
+        public OrdersController(ILogger<OrdersController> logger, IPublishEndpoint pubEndpoint, OrderContext orderContext, IRequestClient<CheckOrderSagaRequest> checkOrderClient, IRequestClient<OrderCreateSagaRequest> createOrderClient)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
             _orderContext = orderContext;
             _checkOrderClient = checkOrderClient;
+            _createOrderClient = createOrderClient;
         }
 
 
         [HttpGet("{orderId}")]
         public async ValueTask<IActionResult> Get(Guid orderId)
         {
-            var (response, err) = 
-                await _checkOrderClient.GetResponse<CheckOrderSagaResponse,IOrderNotFoundResponse>(
+            var (response, err) =
+                await _checkOrderClient.GetResponse<CheckOrderSagaResponse, IOrderNotFoundResponse>(
                     new CheckOrderSagaRequest { OrderID = orderId });
 
             return response.IsCompletedSuccessfully ? Ok(await response) : NotFound(await err);
@@ -55,27 +58,16 @@ namespace KShop.Orders.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async ValueTask<ActionResult> Create([FromBody] OrderCreateDto dto)
+        public async ValueTask<ActionResult> Create([FromBody] OrderCreateRequestDto dto)
         {
-            /* Проверка данных для создания заказа */
-            /* Создание заказа в БД */
-            var entity = new Order()
+            var orderCreateRequest = new OrderCreateSagaRequest
             {
-                Status = Order.EStatus.Initial,
-                Positions = dto.Positions.Select(e => new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity }).ToList()
-            };
-            await _orderContext.AddAsync(entity);
-            await _orderContext.SaveChangesAsync();
-
-            /* Событие инициации саги */
-            var orderCreateEvent = new OrderCreateSagaRequest
-            {
-                OrderID = entity.ID,
+                CustomerID = 1,
                 Positions = dto.Positions.Select(e => new ProductStack { ProductID = e.ProductID, Quantity = e.Quantity }).ToList()
             };
 
-            await _pubEndpoint.Publish(orderCreateEvent);
-            return Ok(entity.ID);
+            var response = await _createOrderClient.GetResponse<IOrderCreateSagaResponse>(orderCreateRequest);
+            return Ok(response.Message);
         }
 
         [HttpPost("[action]")]

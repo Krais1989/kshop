@@ -43,10 +43,8 @@ namespace KShop.Payments.Persistence.Entities
             Rejected
         }
 
-        /// <summary>
-        /// Соответствует ID заказа
-        /// </summary>
         public Guid ID { get; set; }
+        public Guid OrderID { get; set; }
         public EStatus Status { get; set; }
         public DateTime StatusDate { get; set; }
 

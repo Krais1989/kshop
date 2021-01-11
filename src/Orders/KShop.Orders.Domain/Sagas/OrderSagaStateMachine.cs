@@ -1,12 +1,14 @@
 ﻿using Automatonymous;
 using GreenPipes;
 using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Domain.Activities;
 using MassTransit;
 using MassTransit.Definition;
 using MassTransit.Saga;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 
 namespace KShop.Orders.Domain.Sagas
 {
@@ -16,6 +18,7 @@ namespace KShop.Orders.Domain.Sagas
 
         public Guid CorrelationId { get; set; }
         public int Version { get; set; }
+        public IEnumerable<ProductStack> OrderPositions { get; set; }
     }
 
     public class OrderSagaStateMachineDefinition
@@ -56,7 +59,13 @@ namespace KShop.Orders.Domain.Sagas
             _logger = logger;
 
             InstanceState(x => x.CurrentState, Reserving, Processing);
-            Event(() => OrderCreateRequest, x => x.CorrelateById(ctx => ctx.Message.OrderID));
+            Event(() => OrderCreateRequest, x =>
+            {
+                x.InsertOnInitial = true;
+                x.SelectId(x => Guid.NewGuid());
+                x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
+            });
+
             Event(() => OrderReserveSuccess, x => x.CorrelateById(ctx => ctx.Message.OrderID));
             Event(() => OrderReserveFailure, x => x.CorrelateById(ctx => ctx.Message.OrderID));
             Event(() => OrderPaySuccess, x => x.CorrelateById(ctx => ctx.Message.OrderID));
@@ -71,7 +80,8 @@ namespace KShop.Orders.Domain.Sagas
                 x.OnMissingInstance(cfg =>
                     cfg.ExecuteAsync(async ctx =>
                         await ctx.RespondAsync<IOrderNotFoundResponse>(
-                            new {
+                            new
+                            {
                                 OrderID = ctx.Message.OrderID
                             }))
                     );
@@ -79,21 +89,33 @@ namespace KShop.Orders.Domain.Sagas
 
             DuringAny(
                 When(OrderCheckRequested)
-                    .RespondAsync(async x => await x.Init<ICheckOrderSagaResponse>(new CheckOrderSagaResponse()
-                    {
-                        OrderID = x.Instance.CorrelationId,
-                        State = x.Instance.CurrentState
-                    })));
+                    .RespondAsync(async x => await x.Init<ICheckOrderSagaResponse>(
+                        new CheckOrderSagaResponse()
+                        {
+                            OrderID = x.Instance.CorrelationId,
+                            State = x.Instance.CurrentState
+                        })));
+
+
+            //Initially(
+            //    When(OrderCreateRequest)
+            //        .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(
+            //            new
+            //            {
+            //                OrderID = x.Data.OrderID,
+            //                IsSuccess = true
+            //            }))); ;
 
             Initially(
                 When(OrderCreateRequest)
                     .Activity(x => x.OfType<OrderCreateActivity>())
                     .PublishAsync(async x => await x.Init<IOrderReserveEvent>(new
                     {
-                        OrderID = x.Data.OrderID,
-                        Positions = x.Data.Positions
+                        OrderID = x.Instance.CorrelationId,
+                        Positions = x.Instance.OrderPositions
                     }))
-                    .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(new OrderCreateSagaResponse() { OrderID = x.Data.OrderID }))
+                    .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(
+                        new OrderCreateSagaResponse() { OrderID = x.Instance.CorrelationId, IsSuccess = true }))
                     .TransitionTo(Reserving));
 
             During(Reserving,
@@ -113,7 +135,7 @@ namespace KShop.Orders.Domain.Sagas
                     .Activity(x => x.OfType<OrderPayFailureActivity>())
                     .PublishAsync(async x => await x.Init<IOrderReserveCompensationEvent>(new { OrderID = x.Data.OrderID }))
                     .Finalize());
-
+            
         }
     }
 }

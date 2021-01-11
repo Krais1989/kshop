@@ -10,22 +10,25 @@ namespace KShop.Communications.Contracts.Orders
     /// </summary>
     public interface IOrderCreateSagaRequest
     {
-        Guid OrderID { get; set; }
-        IEnumerable<IProductStack> Positions { get; set; }
+        int CustomerID { get; set; }
+        IEnumerable<ProductStack> Positions { get; set; }
     }
 
     public class OrderCreateSagaRequest : IOrderCreateSagaRequest
     {
-        public Guid OrderID { get; set; }
-        public IEnumerable<IProductStack> Positions { get; set; }
+        public int CustomerID { get; set; }
+        public IEnumerable<ProductStack> Positions { get; set; }
     }
 
     public interface IOrderCreateSagaResponse
     {
         Guid OrderID { get; set; }
+        bool IsSuccess { get; set; }
     }
+
     public class OrderCreateSagaResponse : IOrderCreateSagaResponse
     {
         public Guid OrderID { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

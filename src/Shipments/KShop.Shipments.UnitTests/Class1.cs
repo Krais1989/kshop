@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Catalogues.UnitTests
+namespace KShop.Shipments.UnitTests
 {
     public class Class1
     {
