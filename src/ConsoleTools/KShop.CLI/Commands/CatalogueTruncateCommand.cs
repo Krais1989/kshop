@@ -1,4 +1,5 @@
-﻿using KShop.Catalogues.Persistence;
+﻿
+using KShop.Products.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace MarketCLI
     public class CatalogueTruncateCommand : IBaseCommandAsync
     {
         private readonly ILogger<CatalogueTruncateCommand> _logger;
-        private readonly CatalogueContext _dbContext;
+        private readonly ProductsContext _dbContext;
 
-        public CatalogueTruncateCommand(ILogger<CatalogueTruncateCommand> logger, CatalogueContext dbContext)
+        public CatalogueTruncateCommand(ILogger<CatalogueTruncateCommand> logger, ProductsContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;

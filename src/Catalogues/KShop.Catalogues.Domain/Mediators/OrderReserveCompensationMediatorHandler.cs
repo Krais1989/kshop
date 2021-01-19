@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using KShop.Catalogues.Persistence;
+using KShop.Products.Persistence;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.Domain.Mediators
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace KShop.Products.Domain.Mediators
 {
 
     public class OrderReserveCompensationResponse
@@ -20,12 +23,21 @@ namespace KShop.Catalogues.Domain.Mediators
     }
     public class OrderReserveCompensationRequestHandler : IRequestHandler<OrderReserveCompensationRequest, OrderReserveCompensationResponse>
     {
-        private readonly ILogger<OrderReserveMediatorHandler> _logger;
-        private readonly CatalogueContext _catalogueContext;
+        private readonly ILogger<ProductsReserveMediatorHandler> _logger;
+        private readonly ProductsContext _catalogueContext;
+
+        public OrderReserveCompensationRequestHandler(ILogger<ProductsReserveMediatorHandler> logger, ProductsContext catalogueContext)
+        {
+            _logger = logger;
+            _catalogueContext = catalogueContext;
+        }
 
         public async Task<OrderReserveCompensationResponse> Handle(OrderReserveCompensationRequest request, CancellationToken cancellationToken)
         {
-            _catalogueContext.ProductReserves.Remo
+            /* Компенсация */
+
+            //var qRems = _catalogueContext.ProductReserves.Where(e => e.OrderID == request.OrderID);
+            //_catalogueContext.ProductReserves.RemoveRange()
             return new OrderReserveCompensationResponse();
         }
     }

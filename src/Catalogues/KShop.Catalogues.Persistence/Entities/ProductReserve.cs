@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Catalogues.Persistence.Entities
+namespace KShop.Products.Persistence.Entities
 {
     public class ProductReserve
     {

@@ -56,7 +56,7 @@ namespace KShop.Payments.WebApi
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
-                x.AddConsumers(typeof(OrderPayEventConsumer).Assembly);
+                x.AddConsumers(typeof(InvoceCreateConsumer).Assembly);
 
                 x.UsingRabbitMq((ctx, cfg) =>
                 {

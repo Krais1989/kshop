@@ -1,4 +1,5 @@
-﻿using KShop.Catalogues.Persistence;
+﻿
+using KShop.Products.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -72,7 +73,7 @@ namespace MarketCLI
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
-            services.AddDbContext<CatalogueContext>(db =>
+            services.AddDbContext<ProductsContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
                 db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));

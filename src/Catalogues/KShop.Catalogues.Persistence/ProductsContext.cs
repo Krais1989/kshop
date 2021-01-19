@@ -1,23 +1,23 @@
-﻿using KShop.Catalogues.Persistence.Entities;
+﻿using KShop.Products.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.Persistence
+namespace KShop.Products.Persistence
 {
-    public class CatalogueContext : DbContext
+    public class ProductsContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductPosition> ProductPositions { get; set; }
         public DbSet<ProductReserve> ProductReserves { get; set; }
 
-        public CatalogueContext()
+        public ProductsContext()
         {
         }
 
-        public CatalogueContext(DbContextOptions<CatalogueContext> options) : base(options)
+        public ProductsContext(DbContextOptions<ProductsContext> options) : base(options)
         {
         }
 
@@ -30,7 +30,7 @@ namespace KShop.Catalogues.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogueContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductsContext).Assembly);
         }
 
     }

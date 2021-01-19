@@ -1,8 +1,9 @@
-﻿using KShop.Catalogues.Persistence.Entities;
+﻿
+using KShop.Products.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace KShop.Catalogues.Persistence.EntityConfigurations
+namespace KShop.Products.Persistence.EntityConfigurations
 {
     public class ProductReserveEntityTypeConfiguration : IEntityTypeConfiguration<ProductReserve>
     {

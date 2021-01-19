@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.Persistence.Entities
+namespace KShop.Products.Persistence.Entities
 {
     public class Product
     {

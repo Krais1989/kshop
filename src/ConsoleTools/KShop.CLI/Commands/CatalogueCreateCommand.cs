@@ -1,5 +1,6 @@
-﻿using KShop.Catalogues.Persistence;
-using KShop.Catalogues.Persistence.Entities;
+﻿
+using KShop.Products.Persistence;
+using KShop.Products.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,9 +16,9 @@ namespace MarketCLI
     public class CatalogueCreateCommand : IBaseCommandAsync
     {
         private readonly ILogger<CatalogueCreateCommand> _logger;
-        private readonly CatalogueContext _dbContext;
+        private readonly ProductsContext _dbContext;
 
-        public CatalogueCreateCommand(ILogger<CatalogueCreateCommand> logger, CatalogueContext dbContext)
+        public CatalogueCreateCommand(ILogger<CatalogueCreateCommand> logger, ProductsContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;

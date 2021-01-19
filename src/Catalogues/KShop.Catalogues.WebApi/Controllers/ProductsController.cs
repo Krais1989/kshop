@@ -1,4 +1,4 @@
-﻿using KShop.Catalogues.Persistence;
+﻿using KShop.Products.Persistence;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.WebApi.Controllers
+namespace KShop.Products.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -16,9 +16,9 @@ namespace KShop.Catalogues.WebApi.Controllers
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
-        private readonly CatalogueContext _context;
+        private readonly ProductsContext _context;
 
-        public ProductsController(ILogger<ProductsController> logger, IPublishEndpoint pubEndpoint, CatalogueContext context)
+        public ProductsController(ILogger<ProductsController> logger, IPublishEndpoint pubEndpoint, ProductsContext context)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;

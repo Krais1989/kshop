@@ -1,12 +1,12 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.Contracts.Orders;
-using KShop.Orders.Domain.Activities;
 using KShop.Orders.Domain.Handlers;
 using KShop.Orders.Domain.Sagas;
 using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
 using KShop.ServiceBus;
 using MassTransit;
+using MassTransit.Conductor;
 using MassTransit.Definition;
 using MassTransit.Saga;
 using MediatR;
@@ -55,7 +55,7 @@ namespace KShop.Orders.WebApi
             services.AddMassTransit(busConfig =>
             {
                 busConfig.SetKebabCaseEndpointNameFormatter();
-                busConfig.AddActivitiesFromNamespaceContaining<OrderCreateActivity>();
+                //busConfig.AddActivitiesFromNamespaceContaining<OrderCreateActivity>();
                 //x.AddSagas(typeof(OrderSagaStateMachine).Assembly);
                 //x.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
 
@@ -67,8 +67,8 @@ namespace KShop.Orders.WebApi
                         redisConfig.KeyPrefix = "markettest";
                     });
 
-                busConfig.AddRequestClient<CheckOrderSagaRequest>();
-                busConfig.AddRequestClient<OrderCreateSagaRequest>();
+                busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
+                busConfig.AddRequestClient<OrderCreate_SagaRequest>();
 
                 busConfig.UsingRabbitMq((ctx, cfg) =>
                 {
@@ -80,7 +80,10 @@ namespace KShop.Orders.WebApi
 
                     //var endpointNameFormatter = ctx.GetRequiredService<IEndpointNameFormatter>();
                     //EndpointConvention.Map<OrderSagaStateMachine>(new Uri($"queue:{endpointNameFormatter.Consumer<>}"))
-
+                    //var options = new ServiceInstanceOptions();
+                    //cfg.ServiceInstance(options, instance => {
+                    //    instance.ConfigureEndpoints(ctx);
+                    //});
                     /* ��������! ������������� ������������� ��������� ��� ���� ������������������ ����������/���/�������� ��������� ��������� ��������� */
                     cfg.ConfigureEndpoints(ctx);
                 });

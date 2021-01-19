@@ -1,8 +1,8 @@
 using FluentValidation.AspNetCore;
-using KShop.Catalogues.Domain.Consumers;
-using KShop.Catalogues.Domain.Mediators;
-using KShop.Catalogues.Domain.Validators;
-using KShop.Catalogues.Persistence;
+using KShop.Products.Domain.Consumers;
+using KShop.Products.Domain.Mediators;
+using KShop.Products.Domain.Validators;
+using KShop.Products.Persistence;
 using KShop.ServiceBus;
 using MassTransit;
 using MassTransit.Definition;
@@ -24,7 +24,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.WebApi
+namespace KShop.Products.WebApi
 {
     public class Startup
     {
@@ -40,7 +40,7 @@ namespace KShop.Catalogues.WebApi
         {
             var entryName = Assembly.GetEntryAssembly().FullName;
 
-            services.AddDbContext<CatalogueContext>(db =>
+            services.AddDbContext<ProductsContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
                 db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
@@ -52,7 +52,7 @@ namespace KShop.Catalogues.WebApi
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
-                x.AddConsumers(typeof(OrderReserveConsumer).Assembly);
+                x.AddConsumers(typeof(ProductsReserveConsumer).Assembly);
                 x.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
@@ -67,10 +67,10 @@ namespace KShop.Catalogues.WebApi
             });
             services.AddMassTransitHostedService();
 
-            services.AddMediatR(typeof(OrderReserveMediatorHandler).Assembly);
+            services.AddMediatR(typeof(ProductsReserveMediatorHandler).Assembly);
 
             services.AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderReserveFluentValidator).Assembly));
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ProductsReserveFluentValidator).Assembly));
 
             services.AddMarketTestSwagger(Configuration);
         }

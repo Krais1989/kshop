@@ -1,26 +1,27 @@
-﻿using KShop.Catalogues.Persistence;
+﻿using KShop.Products.Persistence;
 using KShop.Communications.Contracts.Orders;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
+using KShop.Communications.Contracts.Products;
 
-namespace KShop.Catalogues.Domain.Consumers
+namespace KShop.Products.Domain.Consumers
 {
-    public class OrderReserveCompensationConsumer : IConsumer<IOrderReserveCompensationEvent>
+    public class ProductsReserveCompensationConsumer : IConsumer<ProductsReserveCompensation_BusEvent>
     {
-        private readonly ILogger<OrderReserveConsumer> _logger;
-        private readonly CatalogueContext _dbContext;
+        private readonly ILogger<ProductsReserveConsumer> _logger;
+        private readonly ProductsContext _dbContext;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderReserveCompensationConsumer(ILogger<OrderReserveConsumer> logger, CatalogueContext dbContext, IPublishEndpoint publishEndpoint)
+        public ProductsReserveCompensationConsumer(ILogger<ProductsReserveConsumer> logger, ProductsContext dbContext, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _dbContext = dbContext;
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<IOrderReserveCompensationEvent> context)
+        public async Task Consume(ConsumeContext<ProductsReserveCompensation_BusEvent> context)
         {
             var msg = context.Message;
             _logger.LogInformation($"Compensate Reservation: {msg.OrderID}");

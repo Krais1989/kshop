@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.UnitTests
+namespace KShop.Products.UnitTests
 {
     [TestFixture]
     public class CreateOrderSataTests

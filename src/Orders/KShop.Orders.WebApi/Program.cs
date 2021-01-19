@@ -14,7 +14,16 @@ namespace KShop.Orders.WebApi
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, "");
+                throw;
+            }
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

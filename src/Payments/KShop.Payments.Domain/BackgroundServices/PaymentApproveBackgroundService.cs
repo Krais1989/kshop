@@ -1,4 +1,6 @@
-﻿using KShop.Communications.Contracts.Orders;
+﻿using KShop.Communications.Contracts.Enums;
+using KShop.Communications.Contracts.Invoices;
+using KShop.Communications.Contracts.Orders;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;
@@ -66,7 +68,10 @@ namespace KShop.Payments.Domain.BackgroundServices
             foreach (var payment in pendingPayments)
             {
                 await _mediator.Send(new PaymentApproveMediatorRequest() { PaymentID = payment.ID });
-                await publishEndpoint.Publish<IOrderPaySuccessEvent>(new { OrderID = payment.OrderID });
+                await publishEndpoint.Publish(new InvoiceStatusChanged_BusEvent { 
+                    OrderID = payment.OrderID,
+                    InvoiceStatus = EInvoiceStatus.Paid
+                });
             }            
         }
 

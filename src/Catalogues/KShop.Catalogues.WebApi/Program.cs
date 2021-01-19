@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace KShop.Catalogues.WebApi
+namespace KShop.Products.WebApi
 {
     public class Program
     {

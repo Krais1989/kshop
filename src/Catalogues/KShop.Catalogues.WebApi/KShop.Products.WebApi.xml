@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>KShop.Catalogues.WebApi</name>
+        <name>KShop.Products.WebApi</name>
     </assembly>
     <members>
     </members>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Communications.Contracts.Orders
+namespace KShop.Communications.Contracts.Orders_old
 {
     /// <summary>
     /// Событие для отмены заказа

@@ -31,7 +31,7 @@
   
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Catalogues\KShop.Catalogues.Persistence\KShop.Catalogues.Persistence.csproj" />
+    <ProjectReference Include="..\..\Catalogues\KShop.Catalogues.Persistence\KShop.Products.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

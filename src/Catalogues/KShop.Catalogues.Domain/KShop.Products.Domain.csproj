@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
     <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
-    <ProjectReference Include="..\KShop.Catalogues.Persistence\KShop.Catalogues.Persistence.csproj" />
+    <ProjectReference Include="..\KShop.Catalogues.Persistence\KShop.Products.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

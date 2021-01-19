@@ -2,7 +2,6 @@
 using GreenPipes;
 using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.ValueObjects;
-using KShop.Orders.Domain.Activities;
 using MassTransit;
 using MassTransit.Definition;
 using MassTransit.Saga;
@@ -15,10 +14,9 @@ namespace KShop.Orders.Domain.Sagas
     public class OrderSagaState : SagaStateMachineInstance, ISagaVersion
     {
         public int CurrentState { get; set; }
-
         public Guid CorrelationId { get; set; }
         public int Version { get; set; }
-        public IEnumerable<ProductStack> OrderPositions { get; set; }
+        public Dictionary<int, int> OrderPositions { get; set; }
     }
 
     public class OrderSagaStateMachineDefinition
@@ -31,7 +29,17 @@ namespace KShop.Orders.Domain.Sagas
 
         protected override void ConfigureSaga(IReceiveEndpointConfigurator endpointConfigurator, ISagaConfigurator<OrderSagaState> sagaConfigurator)
         {
-            sagaConfigurator.UseMessageRetry(e => e.Intervals(500, 5000, 10000));
+            //sagaConfigurator.UseCircuitBreaker(e => {
+            //    e.ActiveThreshold = 10;
+            //    e.TrackingPeriod = TimeSpan.FromSeconds(10);
+
+            //    e.ResetInterval = TimeSpan.FromSeconds(10);
+            //    e.TripThreshold = 10;
+            //});
+            sagaConfigurator.UseMessageRetry(e =>
+            {
+                e.Intervals(500, 5000, 10000);
+            });
             sagaConfigurator.UseInMemoryOutbox();
         }
     }
@@ -40,102 +48,79 @@ namespace KShop.Orders.Domain.Sagas
     {
         private readonly ILogger<OrderSagaStateMachine> _logger;
 
-        public State Reserving { get; private set; }
+        /// <summary>
+        /// Создание платежа
+        /// </summary>
+        public State Creating { get; private set; }
+        /// <summary>
+        /// Оплата 
+        /// </summary>
         public State Processing { get; private set; }
-        public Event<IOrderCreateSagaRequest> OrderCreateRequest { get; private set; }
-        public Event<IOrderReserveSuccessEvent> OrderReserveSuccess { get; private set; }
-        public Event<IOrderReserveFailureEvent> OrderReserveFailure { get; private set; }
-        public Event<IOrderPaySuccessEvent> OrderPaySuccess { get; private set; }
-        public Event<IOrderPayFailureEvent> OrderPayFailure { get; private set; }
+        /// <summary>
+        /// Доставка
+        /// </summary>
+        public State Shipping { get; private set; }
 
-
-        public Event<Fault<IOrderReserveEvent>> FaultTest { get; private set; }
-
-        public Event<CheckOrderSagaRequest> OrderCheckRequested { get; private set; }
+        public Event<OrderCreate_SagaRequest> OrderCreateSagaRequest { get; private set; }
+        public Event<OrderGetStatus_SagaRequest> OrderGetStatusSagaRequest { get; private set; }
 
         public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger)
         //public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger, IBus bus)
         {
             _logger = logger;
 
-            InstanceState(x => x.CurrentState, Reserving, Processing);
-            Event(() => OrderCreateRequest, x =>
+            InstanceState(x => x.CurrentState, Creating, Processing, Shipping);
+            Event(() => OrderCreateSagaRequest, x =>
             {
                 x.InsertOnInitial = true;
                 x.SelectId(x => Guid.NewGuid());
                 x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
             });
 
-            Event(() => OrderReserveSuccess, x => x.CorrelateById(ctx => ctx.Message.OrderID));
-            Event(() => OrderReserveFailure, x => x.CorrelateById(ctx => ctx.Message.OrderID));
-            Event(() => OrderPaySuccess, x => x.CorrelateById(ctx => ctx.Message.OrderID));
-            Event(() => OrderPayFailure, x => x.CorrelateById(ctx => ctx.Message.OrderID));
-
-            //Event(() => FaultTest, x => x.CorrelateById(m => m.));
-            Event(() => FaultTest, x => x.CorrelateById(m => m.Message.Message.OrderID));
-
-            Event(() => OrderCheckRequested, x =>
+            Event(() => OrderGetStatusSagaRequest, x =>
             {
                 x.CorrelateById(ctx => ctx.Message.OrderID);
                 x.OnMissingInstance(cfg =>
                     cfg.ExecuteAsync(async ctx =>
-                        await ctx.RespondAsync<IOrderNotFoundResponse>(
-                            new
-                            {
-                                OrderID = ctx.Message.OrderID
-                            }))
-                    );
+                        await ctx.RespondAsync(new OrderGetStatus_SagaResponse(-1, "Missing Saga Instance"))));
             });
 
             DuringAny(
-                When(OrderCheckRequested)
-                    .RespondAsync(async x => await x.Init<ICheckOrderSagaResponse>(
-                        new CheckOrderSagaResponse()
-                        {
-                            OrderID = x.Instance.CorrelationId,
-                            State = x.Instance.CurrentState
-                        })));
+                When(OrderGetStatusSagaRequest)
+                    .RespondAsync(async x => await x.Init<OrderGetStatus_SagaResponse>(
+                        new OrderGetStatus_SagaResponse(x.Instance.CurrentState))));
 
 
             //Initially(
             //    When(OrderCreateRequest)
+            //        .Activity(x => x.OfType<OrderCreateActivity>())
+            //        .PublishAsync(async x => await x.Init<IOrderReserveEvent>(new
+            //        {
+            //            OrderID = x.Instance.CorrelationId,
+            //            Positions = x.Instance.OrderPositions
+            //        }))
             //        .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(
-            //            new
-            //            {
-            //                OrderID = x.Data.OrderID,
-            //                IsSuccess = true
-            //            }))); ;
+            //            new OrderCreateSagaResponse() { OrderID = x.Instance.CorrelationId, IsSuccess = true }))
+            //        .TransitionTo(Reserving));
 
-            Initially(
-                When(OrderCreateRequest)
-                    .Activity(x => x.OfType<OrderCreateActivity>())
-                    .PublishAsync(async x => await x.Init<IOrderReserveEvent>(new
-                    {
-                        OrderID = x.Instance.CorrelationId,
-                        Positions = x.Instance.OrderPositions
-                    }))
-                    .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(
-                        new OrderCreateSagaResponse() { OrderID = x.Instance.CorrelationId, IsSuccess = true }))
-                    .TransitionTo(Reserving));
+            //During(Reserving,
+            //    When(OrderReserveSuccess)
+            //        .Activity(x => x.OfType<OrderReserveSuccessActivity>())
+            //        .PublishAsync(async x => await x.Init<IOrderPayEvent>(new { OrderID = x.Data.OrderID, Price = 10 }))
+            //        .TransitionTo(Processing),
+            //    When(OrderReserveFailure)
+            //        .Activity(x => x.OfType<OrderReserveFailureActivity>())
+            //        .Finalize());
 
-            During(Reserving,
-                When(OrderReserveSuccess)
-                    .Activity(x => x.OfType<OrderReserveSuccessActivity>())
-                    .PublishAsync(async x => await x.Init<IOrderPayEvent>(new { OrderID = x.Data.OrderID, Price = 10 }))
-                    .TransitionTo(Processing),
-                When(OrderReserveFailure)
-                    .Activity(x => x.OfType<OrderReserveFailureActivity>())
-                    .Finalize());
+            //During(Processing,
+            //    When(OrderPaySuccess)
+            //        .Activity(x => x.OfType<OrderPaySuccessActivity>())
+            //        .Finalize(),
+            //    When(OrderPayFailure)
+            //        .Activity(x => x.OfType<OrderPayFailureActivity>())
+            //        .PublishAsync(async x => await x.Init<IOrderReserveCompensationEvent>(new { OrderID = x.Data.OrderID }))
+            //        .Finalize());
 
-            During(Processing,
-                When(OrderPaySuccess)
-                    .Activity(x => x.OfType<OrderPaySuccessActivity>())
-                    .Finalize(),
-                When(OrderPayFailure)
-                    .Activity(x => x.OfType<OrderPayFailureActivity>())
-                    .PublishAsync(async x => await x.Init<IOrderReserveCompensationEvent>(new { OrderID = x.Data.OrderID }))
-                    .Finalize());
-            
         }
     }
 }

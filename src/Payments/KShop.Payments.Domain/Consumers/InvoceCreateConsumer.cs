@@ -1,4 +1,5 @@
-﻿using KShop.Communications.Contracts.Orders;
+﻿using KShop.Communications.Contracts.Invoices;
+using KShop.Communications.Contracts.Orders;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;
@@ -16,20 +17,20 @@ namespace KShop.Payments.Domain.Consumers
     /// <summary>
     /// Обработки событий 
     /// </summary>
-    public class OrderPayEventConsumer : IConsumer<IOrderPayEvent>
+    public class InvoceCreateConsumer : IConsumer<InvoiceCreate_BusRequest>
     {
-        private readonly ILogger<OrderPayEventConsumer> _logger;
+        private readonly ILogger<InvoceCreateConsumer> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
         private readonly IMediator _mediator;
 
-        public OrderPayEventConsumer(ILogger<OrderPayEventConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
+        public InvoceCreateConsumer(ILogger<InvoceCreateConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<IOrderPayEvent> context)
+        public async Task Consume(ConsumeContext<InvoiceCreate_BusRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
             try
@@ -40,10 +41,11 @@ namespace KShop.Payments.Domain.Consumers
                     OrderID = context.Message.OrderID,
                     Price = context.Message.Price,
                 });
+                await context.RespondAsync(new InvoiceCreate_BusResponse());
             }
             catch (Exception e)
             {
-                await _pubEndpoint.Publish(new OrderPayFailureEvent() { OrderID = context.Message.OrderID });
+                await context.RespondAsync(new InvoiceCreate_BusResponse(false, e.Message));
             }
         }
     }

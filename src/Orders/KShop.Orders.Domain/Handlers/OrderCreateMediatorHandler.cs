@@ -22,7 +22,7 @@ namespace KShop.Orders.Domain.Handlers
     public class OrderCreateMediatorRequest : IRequest<OrderCreateMediatorResponse>
     {
         public int CustomerID { get; set; }
-        public IEnumerable<ProductStack> Positions { get; set; }
+        public IDictionary<int, int> Positions { get; set; }
 
     }
     public class OrderCreateMediatorHandler : IRequestHandler<OrderCreateMediatorRequest, OrderCreateMediatorResponse>
@@ -52,7 +52,7 @@ namespace KShop.Orders.Domain.Handlers
                 CustomerID = request.CustomerID,
                 Status = Order.EStatus.Initial,
                 Positions = request.Positions.Select(e =>
-                    new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity })
+                    new OrderPosition() { ProductID = e.Key, Quantity = e.Value })
             };
             _context.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);

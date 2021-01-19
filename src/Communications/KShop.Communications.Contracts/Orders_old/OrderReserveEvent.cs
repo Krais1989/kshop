@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KShop.Communications.Contracts.Orders
+namespace KShop.Communications.Contracts.Orders_old
 {
     public interface IOrderReserveEvent
     {

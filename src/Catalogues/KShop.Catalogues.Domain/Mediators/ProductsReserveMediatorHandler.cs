@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using KShop.Catalogues.Domain.Exceptions;
-using KShop.Catalogues.Domain.Validators;
-using KShop.Catalogues.Persistence;
-using KShop.Catalogues.Persistence.Entities;
+using KShop.Products.Domain.Exceptions;
+using KShop.Products.Domain.Validators;
+using KShop.Products.Persistence;
+using KShop.Products.Persistence.Entities;
 using KShop.Communications.Contracts.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,43 +14,42 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Catalogues.Domain.Mediators
+namespace KShop.Products.Domain.Mediators
 {
-    public class OrderReserveMediatorResponse
+    public class ProductsReserveMediatorResponse
     {
-
     }
-    public class OrderReserveMediatorRequest : IRequest<OrderReserveMediatorResponse>
+    public class ProductsReserveMediatorRequest : IRequest<ProductsReserveMediatorResponse>
     {
         public Guid OrderID { get; set; }
-        public IEnumerable<ProductStack> Positions { get; set; }
+        public IDictionary<int, int> Positions { get; set; }
     }
-    public class OrderReserveMediatorHandler : IRequestHandler<OrderReserveMediatorRequest, OrderReserveMediatorResponse>
+    public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>
     {
-        private readonly ILogger<OrderReserveMediatorHandler> _logger;
-        private readonly IValidator<OrderReserveFluentValidatorDto> _validator;
-        private readonly CatalogueContext _catalogueContext;
+        private readonly ILogger<ProductsReserveMediatorHandler> _logger;
+        private readonly IValidator<ProductsReserveFluentValidatorDto> _validator;
+        private readonly ProductsContext _catalogueContext;
 
-        public OrderReserveMediatorHandler(
-            ILogger<OrderReserveMediatorHandler> logger,
-            IValidator<OrderReserveFluentValidatorDto> validator,
-            CatalogueContext catalogueContext)
+        public ProductsReserveMediatorHandler(
+            ILogger<ProductsReserveMediatorHandler> logger,
+            IValidator<ProductsReserveFluentValidatorDto> validator,
+            ProductsContext catalogueContext)
         {
             _logger = logger;
             _validator = validator;
             _catalogueContext = catalogueContext;
         }
 
-        public async Task<OrderReserveMediatorResponse> Handle(OrderReserveMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<ProductsReserveMediatorResponse> Handle(ProductsReserveMediatorRequest request, CancellationToken cancellationToken)
         {
             /* NOTE: Возможно стоит вынести резервирование продуктов заказа в отдельный механизм */
 
             /* TODO: применить  изоляции к ProductReserves, чтобы избежать конфликтов */
 
-            var validatorDto = new OrderReserveFluentValidatorDto() { };
+            var validatorDto = new ProductsReserveFluentValidatorDto() { };
             _validator.Validate(validatorDto);
 
-            var orderProdIds = request.Positions.Select(pos => pos.ProductID).ToList();
+            var orderProdIds = request.Positions.Select(pos => pos.Key).ToList();
             var stockProdPositions = await _catalogueContext.ProductPositions.Where(e => orderProdIds.Contains(e.ProductID)).ToListAsync();
 
             /* Группировка всех позиций по продукту с расчёт общего количества */
@@ -61,7 +60,7 @@ namespace KShop.Catalogues.Domain.Mediators
             /* Проверка наличия резервируемого товара в нужном количестве */
             foreach (var orderPos in request.Positions)
             {
-                if (!availableProductsGrouped.ContainsKey(orderPos.ProductID) || availableProductsGrouped[orderPos.ProductID] < orderPos.Quantity)
+                if (!availableProductsGrouped.ContainsKey(orderPos.Key) || availableProductsGrouped[orderPos.Key] < orderPos.Value)
                 {
                     throw new OrderReserveException(request.OrderID);
                 }
@@ -76,8 +75,8 @@ namespace KShop.Catalogues.Domain.Mediators
                 new ProductReserve()
                 {
                     OrderID = request.OrderID,
-                    ProductID = e.ProductID,
-                    Quantity = e.Quantity,
+                    ProductID = e.Key,
+                    Quantity = e.Value,
                     ReserveDate = DateTime.UtcNow,
                     Status = ProductReserve.EStatus.Reserved
                 });
@@ -88,7 +87,7 @@ namespace KShop.Catalogues.Domain.Mediators
             await _catalogueContext.ProductReserves.AddRangeAsync(reserves, cancToken);
             await _catalogueContext.SaveChangesAsync(cancToken);
 
-            return new OrderReserveMediatorResponse();
+            return new ProductsReserveMediatorResponse() { };
         }
     }
 }

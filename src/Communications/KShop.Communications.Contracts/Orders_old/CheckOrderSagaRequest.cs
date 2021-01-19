@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Communications.Contracts.Orders
+namespace KShop.Communications.Contracts.Orders_old
 {
     public interface ICheckOrderSagaRequest
     {

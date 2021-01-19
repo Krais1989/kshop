@@ -1,4 +1,5 @@
-﻿using KShop.Catalogues.Persistence;
+﻿
+using KShop.Products.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace MarketCLI
     public class CatalogueDeleteCommand : IBaseCommandAsync
     {
         private readonly ILogger<CatalogueDeleteCommand> _logger;
-        private readonly CatalogueContext _dbContext;
+        private readonly ProductsContext _dbContext;
 
-        public CatalogueDeleteCommand(ILogger<CatalogueDeleteCommand> logger, CatalogueContext dbContext)
+        public CatalogueDeleteCommand(ILogger<CatalogueDeleteCommand> logger, ProductsContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;
