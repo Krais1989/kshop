@@ -42,7 +42,7 @@ namespace KShop.Products.Domain.Consumers
                     OrderID = context.Message.OrderID,
                     Positions = context.Message.Positions
                 });
-                                
+
                 await _publishEndpoint.Publish(new ProductsReserveSuccess_BusEvent()
                 {
                     CorrelationID = context.Message.CorrelationID

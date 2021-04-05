@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Shipments.WebApi", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Shipments.UnitTests", "Shipments\KShop.Shipments.UnitTests\KShop.Shipments.UnitTests.csproj", "{29B6E853-4AC6-41CA-BD27-57DAF2A45162}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{DEAECF87-859D-436C-83AC-951949861998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

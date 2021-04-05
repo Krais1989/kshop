@@ -74,8 +74,8 @@ namespace KShop.Payments.WebApi
                 });
 
 
-            });
-            services.AddMassTransitHostedService();
+            })
+                .AddMassTransitHostedService();
 
             services.AddMediatR(typeof(PaymentCreateMediatorHandler).Assembly);
 

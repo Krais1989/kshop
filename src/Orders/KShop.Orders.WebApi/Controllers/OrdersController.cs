@@ -53,7 +53,7 @@ namespace KShop.Orders.WebApi.Controllers
             var orderCreateRequest = new OrderCreate_SagaRequest
             {
                 CustomerID = 1,
-                Positions = dto.Positions.ToDictionary(e => e.ProductID, e => e.Quantity)
+                Positions = dto.Positions
             };
 
             var response = await _createOrderClient.GetResponse<OrderCreate_SagaRequest>(orderCreateRequest);

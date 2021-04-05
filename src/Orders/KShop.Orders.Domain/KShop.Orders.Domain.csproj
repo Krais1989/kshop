@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Activities\" />
-    <Folder Include="Consumers\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
 

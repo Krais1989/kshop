@@ -18,6 +18,12 @@ namespace KShop.Orders.Domain.Handlers
     }
     public class OrderSetStatusMediatorRequest : IRequest<OrderSetStatusMediatorResponse>
     {
+        public OrderSetStatusMediatorRequest(Guid orderID, Order.EStatus newStatus)
+        {
+            OrderID = orderID;
+            NewStatus = newStatus;
+        }
+
         public Guid OrderID { get; set; }
         public Order.EStatus NewStatus { get; set; }
     }
@@ -46,6 +52,7 @@ namespace KShop.Orders.Domain.Handlers
 
             var order = await _orderContext.Orders.FindAsync(request.OrderID);
             order.Status = request.NewStatus;
+            order.StatusDate = DateTime.UtcNow;
             await _orderContext.SaveChangesAsync();
 
             return new OrderSetStatusMediatorResponse();

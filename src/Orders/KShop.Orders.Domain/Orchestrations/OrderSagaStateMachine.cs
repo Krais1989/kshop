@@ -16,7 +16,7 @@ namespace KShop.Orders.Domain.Sagas
         public int CurrentState { get; set; }
         public Guid CorrelationId { get; set; }
         public int Version { get; set; }
-        public Dictionary<int, int> OrderPositions { get; set; }
+        public Dictionary<int, int> OrderPositions { get; set; } = new Dictionary<int, int>();
     }
 
     public class OrderSagaStateMachineDefinition
@@ -51,7 +51,7 @@ namespace KShop.Orders.Domain.Sagas
         /// <summary>
         /// Создание платежа
         /// </summary>
-        public State Creating { get; private set; }
+        public State Reserving { get; private set; }
         /// <summary>
         /// Оплата 
         /// </summary>
@@ -59,25 +59,27 @@ namespace KShop.Orders.Domain.Sagas
         /// <summary>
         /// Доставка
         /// </summary>
-        public State Shipping { get; private set; }
+        public State Shipping { get; private set; } 
 
-        public Event<OrderCreate_SagaRequest> OrderCreateSagaRequest { get; private set; }
-        public Event<OrderGetStatus_SagaRequest> OrderGetStatusSagaRequest { get; private set; }
+        public Event<OrderCreate_SagaRequest> OrderCreate_SagaRequest { get; private set; }
+        public Event<OrderGetStatus_SagaRequest> OrderGetStatus_SagaRequest { get; private set; }
+
+        public Event<>
 
         public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger)
         //public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger, IBus bus)
         {
             _logger = logger;
 
-            InstanceState(x => x.CurrentState, Creating, Processing, Shipping);
-            Event(() => OrderCreateSagaRequest, x =>
+            InstanceState(x => x.CurrentState, Reserving, Processing, Shipping);
+            Event(() => OrderCreate_SagaRequest, x =>
             {
                 x.InsertOnInitial = true;
                 x.SelectId(x => Guid.NewGuid());
                 x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
             });
 
-            Event(() => OrderGetStatusSagaRequest, x =>
+            Event(() => OrderGetStatus_SagaRequest, x =>
             {
                 x.CorrelateById(ctx => ctx.Message.OrderID);
                 x.OnMissingInstance(cfg =>
@@ -86,7 +88,7 @@ namespace KShop.Orders.Domain.Sagas
             });
 
             DuringAny(
-                When(OrderGetStatusSagaRequest)
+                When(OrderGetStatus_SagaRequest)
                     .RespondAsync(async x => await x.Init<OrderGetStatus_SagaResponse>(
                         new OrderGetStatus_SagaResponse(x.Instance.CurrentState))));
 

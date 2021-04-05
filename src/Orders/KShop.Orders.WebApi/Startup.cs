@@ -1,6 +1,8 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.Contracts.Orders;
+using KShop.Orders.Domain.Consumers;
 using KShop.Orders.Domain.Handlers;
+using KShop.Orders.Domain.RoutingSlips;
 using KShop.Orders.Domain.Sagas;
 using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
@@ -55,20 +57,28 @@ namespace KShop.Orders.WebApi
             services.AddMassTransit(busConfig =>
             {
                 busConfig.SetKebabCaseEndpointNameFormatter();
+                busConfig.AddRabbitMqMessageScheduler();
+
+                busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
+                busConfig.AddConsumers(typeof(CreateOrderRoutingSlipConsumer).Assembly);
+
+                busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
+                busConfig.AddRequestClient<OrderCreate_SagaRequest>();
+                busConfig.AddRequestClient<CreateOrder_RoutingSlipRequest>();
+
                 //busConfig.AddActivitiesFromNamespaceContaining<OrderCreateActivity>();
                 //x.AddSagas(typeof(OrderSagaStateMachine).Assembly);
                 //x.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
 
-                busConfig.AddSagaStateMachine<OrderSagaStateMachine, OrderSagaState>(typeof(OrderSagaStateMachineDefinition))
-                    //.InMemoryRepository();
-                    .RedisRepository(Configuration.GetConnectionString("RedisConnection"), redisConfig =>
-                    {
-                        redisConfig.ConcurrencyMode = MassTransit.RedisIntegration.ConcurrencyMode.Optimistic;
-                        redisConfig.KeyPrefix = "markettest";
-                    });
+                //busConfig.AddSagaStateMachine<OrderSagaStateMachine, OrderSagaState>(typeof(OrderSagaStateMachineDefinition))
+                //    //.InMemoryRepository();
+                //    .RedisRepository(Configuration.GetConnectionString("RedisConnection"), redisConfig =>
+                //    {
+                //        redisConfig.ConcurrencyMode = MassTransit.RedisIntegration.ConcurrencyMode.Optimistic;
+                //        redisConfig.KeyPrefix = "markettest";
+                //    });
 
-                busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
-                busConfig.AddRequestClient<OrderCreate_SagaRequest>();
+
 
                 busConfig.UsingRabbitMq((ctx, cfg) =>
                 {
@@ -77,6 +87,8 @@ namespace KShop.Orders.WebApi
                         host.Username(rabbinCon.Username);
                         host.Password(rabbinCon.Password);
                     });
+
+                    cfg.UseRabbitMqMessageScheduler();
 
                     //var endpointNameFormatter = ctx.GetRequiredService<IEndpointNameFormatter>();
                     //EndpointConvention.Map<OrderSagaStateMachine>(new Uri($"queue:{endpointNameFormatter.Consumer<>}"))
@@ -89,8 +101,8 @@ namespace KShop.Orders.WebApi
                 });
 
 
-            });
-            services.AddMassTransitHostedService();
+            }).AddMassTransitHostedService();
+
 
             services.AddMediatR(typeof(OrderCreateMediatorHandler).Assembly);
 

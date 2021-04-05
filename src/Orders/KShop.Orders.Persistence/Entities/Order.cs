@@ -27,7 +27,7 @@ namespace KShop.Orders.Persistence.Entities
             /// </summary>
             Completed = 4,
             /// <summary>
-            /// Ошибка оплаты
+            /// Ошибка обработки
             /// </summary>
             Failed = 5,
             /// <summary>
@@ -45,8 +45,11 @@ namespace KShop.Orders.Persistence.Entities
         /// Получатель заказа
         /// </summary>
         public int CustomerID { get; set; }
+
         public EStatus Status { get; set; }
 
+        public DateTime CreateDate { get; set; }
+        public DateTime StatusDate { get; set; }
         public IEnumerable<OrderPosition> Positions { get; set; }
     }
 

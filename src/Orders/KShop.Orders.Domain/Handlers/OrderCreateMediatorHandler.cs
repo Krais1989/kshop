@@ -51,6 +51,8 @@ namespace KShop.Orders.Domain.Handlers
             {
                 CustomerID = request.CustomerID,
                 Status = Order.EStatus.Initial,
+                CreateDate = DateTime.UtcNow,
+                StatusDate = DateTime.UtcNow,
                 Positions = request.Positions.Select(e =>
                     new OrderPosition() { ProductID = e.Key, Quantity = e.Value })
             };
