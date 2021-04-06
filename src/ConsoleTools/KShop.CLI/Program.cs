@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 using Serilog;
 using System;
 using System.IO;
@@ -76,7 +77,8 @@ namespace MarketCLI
             services.AddDbContext<ProductsContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+                //db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+                db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
             });
 
             services.AddTransient<CatalogueCreateCommand>();

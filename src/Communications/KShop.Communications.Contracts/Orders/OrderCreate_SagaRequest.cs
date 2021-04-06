@@ -7,12 +7,14 @@ namespace KShop.Communications.Contracts.Orders
     public class OrderCreate_SagaRequest
     {
         public int CustomerID { get; set; }
-        public IDictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
+        public Dictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
     }
 
     public class OrderCreate_SagaResponse
     {
         public Guid OrderID { get; set; }
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; }
     }
 
     public class OrderGetStatus_SagaRequest

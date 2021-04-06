@@ -1,21 +1,31 @@
 ﻿using Automatonymous;
 using GreenPipes;
 using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.Products;
 using KShop.Communications.Contracts.ValueObjects;
+using KShop.Orders.Domain.RoutingSlips;
 using MassTransit;
+using MassTransit.Courier;
+using MassTransit.Courier.Contracts;
 using MassTransit.Definition;
 using MassTransit.Saga;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace KShop.Orders.Domain.Sagas
 {
-    public class OrderSagaState : SagaStateMachineInstance, ISagaVersion
+
+    public class OrderSagaState : SagaStateMachineInstance//, ISagaVersion
     {
-        public int CurrentState { get; set; }
         public Guid CorrelationId { get; set; }
-        public int Version { get; set; }
+
+
+        public Guid OrderID { get; set; }
+        public int CustomerID { get; set; }
+        public int CurrentState { get; set; }
+        //public int Version { get; set; }
         public Dictionary<int, int> OrderPositions { get; set; } = new Dictionary<int, int>();
     }
 
@@ -36,50 +46,40 @@ namespace KShop.Orders.Domain.Sagas
             //    e.ResetInterval = TimeSpan.FromSeconds(10);
             //    e.TripThreshold = 10;
             //});
-            sagaConfigurator.UseMessageRetry(e =>
-            {
-                e.Intervals(500, 5000, 10000);
-            });
+            //sagaConfigurator.UseMessageRetry(e =>
+            //{
+            //    e.Intervals(500, 5000, 10000, 1000, 1000);
+            //});
             sagaConfigurator.UseInMemoryOutbox();
         }
     }
 
-    public class OrderSagaStateMachine : MassTransitStateMachine<OrderSagaState>
+    public class OrderSagaStateMachine
+        : MassTransitStateMachine<OrderSagaState>
     {
         private readonly ILogger<OrderSagaStateMachine> _logger;
+        private readonly IEndpointNameFormatter _nameFormatter;
 
-        /// <summary>
-        /// Создание платежа
-        /// </summary>
-        public State Reserving { get; private set; }
-        /// <summary>
-        /// Оплата 
-        /// </summary>
-        public State Processing { get; private set; }
-        /// <summary>
-        /// Доставка
-        /// </summary>
-        public State Shipping { get; private set; } 
-
-        public Event<OrderCreate_SagaRequest> OrderCreate_SagaRequest { get; private set; }
-        public Event<OrderGetStatus_SagaRequest> OrderGetStatus_SagaRequest { get; private set; }
-
-        public Event<>
-
-        public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger)
-        //public OrderSagaStateMachine(ILogger<OrderSagaStateMachine> logger, IBus bus)
+        public OrderSagaStateMachine(
+            ILogger<OrderSagaStateMachine> logger,
+            IEndpointNameFormatter nameFormatter)
         {
             _logger = logger;
+            _nameFormatter = nameFormatter;
 
-            InstanceState(x => x.CurrentState, Reserving, Processing, Shipping);
-            Event(() => OrderCreate_SagaRequest, x =>
+            //InstanceState(x => x.CurrentState, OrderCreation, ProductsReservation, OrderShipping);
+            InstanceState(x => x.CurrentState);
+
+
+            // ! NULL EXCEPTION !
+            Event(() => OrderCreate, x =>
             {
-                x.InsertOnInitial = true;
-                x.SelectId(x => Guid.NewGuid());
-                x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
+                //x.InsertOnInitial = true;
+                //x.SelectId(x => Guid.NewGuid());
+                //x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
             });
 
-            Event(() => OrderGetStatus_SagaRequest, x =>
+            Event(() => OrderGetStatus, x =>
             {
                 x.CorrelateById(ctx => ctx.Message.OrderID);
                 x.OnMissingInstance(cfg =>
@@ -87,42 +87,70 @@ namespace KShop.Orders.Domain.Sagas
                         await ctx.RespondAsync(new OrderGetStatus_SagaResponse(-1, "Missing Saga Instance"))));
             });
 
+            Event(() => RoutingSlip_Compelted, x =>
+            {
+                x.CorrelateById(ctx => ctx.Message.TrackingNumber);
+            });
+
+            Event(() => RoutingSlip_Faulted, x =>
+            {
+                x.CorrelateById(ctx => ctx.Message.TrackingNumber);
+            });
+
             DuringAny(
-                When(OrderGetStatus_SagaRequest)
+                When(OrderGetStatus)
                     .RespondAsync(async x => await x.Init<OrderGetStatus_SagaResponse>(
                         new OrderGetStatus_SagaResponse(x.Instance.CurrentState))));
 
+            Initially(
+                When(OrderCreate)
+                .ThenAsync(async x =>
+                {
+                    //var q1Name = _nameFormatter.ExecuteActivity<OrderInitialization_RoutingSlipActivity, OrderInitialization_RoutingSlipActivity_Args>();
+                    //var builder = new RoutingSlipBuilder(Guid.NewGuid());
+                    //builder.AddActivity("CreateOrder", new Uri($"query:{q1Name}"));
+                    //builder.AddVariable("CustomerID", x.Data.CustomerID);
+                    //builder.AddVariable("Positions", x.Data.Positions);
 
-            //Initially(
-            //    When(OrderCreateRequest)
-            //        .Activity(x => x.OfType<OrderCreateActivity>())
-            //        .PublishAsync(async x => await x.Init<IOrderReserveEvent>(new
-            //        {
-            //            OrderID = x.Instance.CorrelationId,
-            //            Positions = x.Instance.OrderPositions
-            //        }))
-            //        .RespondAsync(async x => await x.Init<IOrderCreateSagaResponse>(
-            //            new OrderCreateSagaResponse() { OrderID = x.Instance.CorrelationId, IsSuccess = true }))
-            //        .TransitionTo(Reserving));
+                    //var rs = builder.Build();
+                    //await x.CreateConsumeContext().Execute(rs);
 
-            //During(Reserving,
-            //    When(OrderReserveSuccess)
-            //        .Activity(x => x.OfType<OrderReserveSuccessActivity>())
-            //        .PublishAsync(async x => await x.Init<IOrderPayEvent>(new { OrderID = x.Data.OrderID, Price = 10 }))
-            //        .TransitionTo(Processing),
-            //    When(OrderReserveFailure)
-            //        .Activity(x => x.OfType<OrderReserveFailureActivity>())
-            //        .Finalize());
+                    //await _bus.Execute(rs);
 
-            //During(Processing,
-            //    When(OrderPaySuccess)
-            //        .Activity(x => x.OfType<OrderPaySuccessActivity>())
-            //        .Finalize(),
-            //    When(OrderPayFailure)
-            //        .Activity(x => x.OfType<OrderPayFailureActivity>())
-            //        .PublishAsync(async x => await x.Init<IOrderReserveCompensationEvent>(new { OrderID = x.Data.OrderID }))
-            //        .Finalize());
+                })
+                .RespondAsync(async x =>
+                {
+                    return new OrderCreate_SagaResponse() { IsSuccess = true };
+                })
+                .TransitionTo(OrderCreation)
+                );
 
+            During(OrderCreation,
+                When(RoutingSlip_Compelted)
+                .ThenAsync(async x =>
+                {
+                    _logger.LogInformation($"Routing Slip Completed");
+                    //x.Instance.OrderID = x.
+                    //x.RespondAsync()
+                })
+                .TransitionTo(OrderShipping));
+        }
+
+        public State OrderCreation { get; private set; }
+        public State ProductsReservation { get; private set; }
+        public State OrderShipping { get; private set; }
+
+        public Event<RoutingSlipCompleted> RoutingSlip_Compelted { get; private set; }
+        public Event<RoutingSlipFaulted> RoutingSlip_Faulted { get; private set; }
+
+        public Event<OrderCreate_SagaRequest> OrderCreate { get; private set; }
+
+        public Event<OrderGetStatus_SagaRequest> OrderGetStatus { get; private set; }
+
+
+        private void Initialize()
+        {
+            
         }
     }
 }

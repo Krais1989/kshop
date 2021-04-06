@@ -16,7 +16,8 @@ namespace KShop.Orders.WebApi
         {
             try
             {
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+                host.Run();
             }
             catch (Exception e)
             {

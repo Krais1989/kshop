@@ -44,7 +44,14 @@ namespace KShop.Orders.WebApi.Controllers
                 await _getOrderStatusClient.GetResponse<OrderGetStatus_SagaRequest, OrderGetStatus_SagaResponse>(
                     new OrderGetStatus_SagaRequest { OrderID = orderId });
 
-            return response.IsCompletedSuccessfully ? Ok(await response) : NotFound(await err);
+            if (response.IsCompletedSuccessfully)
+            {
+                return Ok(await response);
+            }
+            else
+            {
+                return NotFound(await err);
+            }
         }
 
         [HttpPost("[action]")]

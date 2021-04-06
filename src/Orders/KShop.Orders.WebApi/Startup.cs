@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 using Swagger;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,9 @@ namespace KShop.Orders.WebApi
             services.AddDbContext<OrderContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+                //db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+
+                db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
             });
 
             var rabbinCon = new RabbitConnection();
@@ -57,51 +60,42 @@ namespace KShop.Orders.WebApi
             services.AddMassTransit(busConfig =>
             {
                 busConfig.SetKebabCaseEndpointNameFormatter();
-                busConfig.AddRabbitMqMessageScheduler();
-
-                busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
-                busConfig.AddConsumers(typeof(CreateOrderRoutingSlipConsumer).Assembly);
+                //busConfig.AddRabbitMqMessageScheduler();
 
                 busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
                 busConfig.AddRequestClient<OrderCreate_SagaRequest>();
-                busConfig.AddRequestClient<CreateOrder_RoutingSlipRequest>();
 
-                //busConfig.AddActivitiesFromNamespaceContaining<OrderCreateActivity>();
-                //x.AddSagas(typeof(OrderSagaStateMachine).Assembly);
-                //x.AddConsumersFromNamespaceContaining<ConsumerAnchor>();
+                //busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
+                //busConfig.AddConsumers(typeof(OrderCreate_RequestConsumer).Assembly);
+                //busConfig.AddSagas(typeof(OrderSagaStateMachine).Assembly);
 
-                //busConfig.AddSagaStateMachine<OrderSagaStateMachine, OrderSagaState>(typeof(OrderSagaStateMachineDefinition))
-                //    //.InMemoryRepository();
-                //    .RedisRepository(Configuration.GetConnectionString("RedisConnection"), redisConfig =>
-                //    {
-                //        redisConfig.ConcurrencyMode = MassTransit.RedisIntegration.ConcurrencyMode.Optimistic;
-                //        redisConfig.KeyPrefix = "markettest";
-                //    });
+                busConfig
+                    .AddSagaStateMachine<OrderSagaStateMachine, OrderSagaState>(typeof(OrderSagaStateMachineDefinition))
+                    .InMemoryRepository();
+                //.RedisRepository(Configuration.GetConnectionString("RedisConnection"), redisConfig =>
+                //{
+                //    redisConfig.ConcurrencyMode = MassTransit.RedisIntegration.ConcurrencyMode.Optimistic;
+                //    redisConfig.KeyPrefix = "markettest";
+                //});
 
+                // busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
+                busConfig.AddConsumers(typeof(OrderCreate_RequestConsumer).Assembly);
 
 
                 busConfig.UsingRabbitMq((ctx, cfg) =>
                 {
+
                     cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
                     {
                         host.Username(rabbinCon.Username);
                         host.Password(rabbinCon.Password);
                     });
 
-                    cfg.UseRabbitMqMessageScheduler();
-
-                    //var endpointNameFormatter = ctx.GetRequiredService<IEndpointNameFormatter>();
-                    //EndpointConvention.Map<OrderSagaStateMachine>(new Uri($"queue:{endpointNameFormatter.Consumer<>}"))
-                    //var options = new ServiceInstanceOptions();
-                    //cfg.ServiceInstance(options, instance => {
-                    //    instance.ConfigureEndpoints(ctx);
-                    //});
-                    /* ��������! ������������� ������������� ��������� ��� ���� ������������������ ����������/���/�������� ��������� ��������� ��������� */
+                    //cfg.UseRabbitMqMessageScheduler();
                     cfg.ConfigureEndpoints(ctx);
                 });
-
-
-            }).AddMassTransitHostedService();
+            });
+            services.AddMassTransitHostedService();
 
 
             services.AddMediatR(typeof(OrderCreateMediatorHandler).Assembly);

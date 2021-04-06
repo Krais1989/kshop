@@ -17,20 +17,20 @@ namespace KShop.Payments.Domain.Consumers
     /// <summary>
     /// Обработки событий 
     /// </summary>
-    public class InvoceCreateConsumer : IConsumer<InvoiceCreate_BusRequest>
+    public class PaymentPendingConsumer : IConsumer<PaymentPending_BusRequest>
     {
-        private readonly ILogger<InvoceCreateConsumer> _logger;
+        private readonly ILogger<PaymentPendingConsumer> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
         private readonly IMediator _mediator;
 
-        public InvoceCreateConsumer(ILogger<InvoceCreateConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
+        public PaymentPendingConsumer(ILogger<PaymentPendingConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<InvoiceCreate_BusRequest> context)
+        public async Task Consume(ConsumeContext<PaymentPending_BusRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
             try
@@ -41,11 +41,16 @@ namespace KShop.Payments.Domain.Consumers
                     OrderID = context.Message.OrderID,
                     Price = context.Message.Price,
                 });
-                await context.RespondAsync(new InvoiceCreate_BusResponse());
+                //await context.RespondAsync(new InvoiceCreate_BusResponse());
             }
             catch (Exception e)
             {
-                await context.RespondAsync(new InvoiceCreate_BusResponse(false, e.Message));
+                await context.RespondAsync(new PaymentProceedFailure()
+                {
+                    CorrelationID = context.CorrelationId.Value,
+                    Reason = PaymentProceedFailure.EReason.InternalError,
+                    Message = e.Message
+                });
             }
         }
     }

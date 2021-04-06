@@ -1,4 +1,5 @@
-﻿using KShop.Orders.Domain.Consumers;
+﻿using KShop.Communications.Contracts.Orders;
+using KShop.Orders.Domain.Consumers;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,13 +16,14 @@ namespace KShop.Orders.WebApi.Controllers
     public class OrderTestController : ControllerBase
     {
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<CreateOrder_RoutingSlipRequest> _createOrderClient;
+        private readonly IRequestClient<OrderCreate_SagaRequest> _createOrderClient;
 
-        public OrderTestController(IPublishEndpoint publishEndpoint, IRequestClient<CreateOrder_RoutingSlipRequest> createOrderClient)
+        public OrderTestController(IPublishEndpoint publishEndpoint, IRequestClient<OrderCreate_SagaRequest> createOrderClient)
         {
             _publishEndpoint = publishEndpoint;
             _createOrderClient = createOrderClient;
         }
+
 
         // GET api/<OrderTestController>/5
         [HttpGet("{id}")]
@@ -34,17 +36,21 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpGet("[action]")]
         public async ValueTask<IActionResult> PostTest()
         {
-            var response = await _createOrderClient.GetResponse<CreateOrderSuccess_RoutingSlipMessage, CreateOrderFailure_RoutingSlipMessage>(
-                new CreateOrder_RoutingSlipRequest()
+            var response = await _createOrderClient.GetResponse<OrderCreate_SagaResponse>(
+                new OrderCreate_SagaRequest()
                 {
-
+                    CustomerID = 111,
+                    //Positions = new Dictionary<int,int>()
                 });
 
-            if (response.Item1 != null)
-                return Ok((await response.Item1).Message);
-            if (response.Item2 != null)
-                return Problem((await response.Item2).Message.ErrorMessage);
-            return Ok("ERROR Response is empty! ");
+            if (response.Message.IsSuccess)
+            {
+                return Ok(response.Message);
+            }
+            else
+            {
+                return Problem(response.Message.Message);
+            }
         }
     }
 }

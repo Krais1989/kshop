@@ -68,9 +68,10 @@ namespace KShop.Payments.Domain.BackgroundServices
             foreach (var payment in pendingPayments)
             {
                 await _mediator.Send(new PaymentApproveMediatorRequest() { PaymentID = payment.ID });
-                await publishEndpoint.Publish(new InvoiceStatusChanged_BusEvent { 
+                await publishEndpoint.Publish(new ExternalPaymentStatusChanged
+                { 
                     OrderID = payment.OrderID,
-                    InvoiceStatus = EInvoiceStatus.Paid
+                    NewStatus = EInvoiceStatus.Paid
                 });
             }            
         }

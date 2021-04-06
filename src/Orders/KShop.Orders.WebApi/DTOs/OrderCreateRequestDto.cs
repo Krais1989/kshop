@@ -5,6 +5,6 @@ namespace KShop.Orders.WebApi.DTOs
 {
     public class OrderCreateRequestDto
     {
-        public IDictionary<int,int> Positions { get; set; }
+        public Dictionary<int,int> Positions { get; set; }
     }
 }

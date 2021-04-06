@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 using Swagger;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,9 @@ namespace KShop.Products.WebApi
             services.AddDbContext<ProductsContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+                //db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+
+                db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
             });
 
             var rabbinCon = new RabbitConnection();
