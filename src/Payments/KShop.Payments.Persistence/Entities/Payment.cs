@@ -76,6 +76,7 @@ namespace KShop.Payments.Persistence.Entities
         {
             Status = newStatus;
             StatusDate = DateTime.UtcNow;
+            if (Logs == null) throw new Exception("Payments Logs not tracking! Cant add");
             Logs.Add(new PaymentLog() { ModifyDate = StatusDate, Status = Status, Message = logMessage });
         }
     }

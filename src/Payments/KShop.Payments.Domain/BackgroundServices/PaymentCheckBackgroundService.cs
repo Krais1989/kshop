@@ -44,16 +44,18 @@ namespace KShop.Payments.Domain.BackgroundServices
                     var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                     var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
                     var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                    
+
                     var pendingPayments = await dbContext.Payments.AsNoTracking()
                         .Where(e => e.Status == EPaymentStatus.Pending)
+                        .Where(e => !string.IsNullOrEmpty(e.ExternalPaymentID))
                         .ToListAsync();
 
                     foreach (var payment in pendingPayments)
                     {
-                        var payReq = new PaymentExternalPayMediatorRequest() { 
-                            PlatformType = payment.PaymentPlatformType, 
-                            ExternalPaymentID = payment.ExternalPaymentID 
+                        var payReq = new PaymentExternalPayMediatorRequest()
+                        {
+                            PlatformType = payment.PaymentPlatformType,
+                            ExternalPaymentID = payment.ExternalPaymentID
                         };
                         await mediator.Send(payReq);
                         //await publishEndpoint.Publish(new ExternalPaymentStatusChanged
