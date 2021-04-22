@@ -14,4 +14,13 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Platforms\Mock\" />
+    <Folder Include="Platforms\Yookassa\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -26,7 +26,7 @@ namespace KShop.Payments.Persistence
             base.OnConfiguring(optionsBuilder);
             //optionsBuilder.UseMySql("Server=127.0.0.1;Port=3308;Database=db_payments;Uid=asd;Pwd=asd;", new MySqlServerVersion(new Version(8, 0)));
 
-            var constr = "Server=127.0.0.1;Port=3307;Database=db_orders;Uid=asd;Pwd=asd;";
+            var constr = "Server=127.0.0.1;Port=3308;Database=db_payments;Uid=asd;Pwd=asd;";
             optionsBuilder.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
         }
 

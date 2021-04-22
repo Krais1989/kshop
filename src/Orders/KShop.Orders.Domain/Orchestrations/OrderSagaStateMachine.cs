@@ -4,6 +4,7 @@ using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.Products;
 using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Domain.RoutingSlips;
+using KShop.Orders.Domain.RoutingSlips.OrderInitialization;
 using MassTransit;
 using MassTransit.Courier;
 using MassTransit.Courier.Contracts;
@@ -72,14 +73,16 @@ namespace KShop.Orders.Domain.Sagas
 
 
             // ! NULL EXCEPTION !
-            Event(() => OrderCreate, x =>
+            Event(() => OrderCreate_SagaRequest, x =>
             {
-                //x.InsertOnInitial = true;
-                //x.SelectId(x => Guid.NewGuid());
+                x.CorrelateById(ctx => ctx.Message.OrderID);
+                x.InsertOnInitial = true;
+                x.SelectId(x => x.Message.OrderID);
                 //x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.CorrelationId ?? Guid.NewGuid() });
+                x.SetSagaFactory(context => new OrderSagaState() { CorrelationId = context.Message.OrderID });
             });
 
-            Event(() => OrderGetStatus, x =>
+            Event(() => OrderGetStatus_SagaRequest, x =>
             {
                 x.CorrelateById(ctx => ctx.Message.OrderID);
                 x.OnMissingInstance(cfg =>
@@ -98,41 +101,18 @@ namespace KShop.Orders.Domain.Sagas
             });
 
             DuringAny(
-                When(OrderGetStatus)
+                When(OrderGetStatus_SagaRequest)
                     .RespondAsync(async x => await x.Init<OrderGetStatus_SagaResponse>(
                         new OrderGetStatus_SagaResponse(x.Instance.CurrentState))));
 
             Initially(
-                When(OrderCreate)
-                .ThenAsync(async x =>
-                {
-                    //var q1Name = _nameFormatter.ExecuteActivity<OrderInitialization_RoutingSlipActivity, OrderInitialization_RoutingSlipActivity_Args>();
-                    //var builder = new RoutingSlipBuilder(Guid.NewGuid());
-                    //builder.AddActivity("CreateOrder", new Uri($"query:{q1Name}"));
-                    //builder.AddVariable("CustomerID", x.Data.CustomerID);
-                    //builder.AddVariable("Positions", x.Data.Positions);
-
-                    //var rs = builder.Build();
-                    //await x.CreateConsumeContext().Execute(rs);
-
-                    //await _bus.Execute(rs);
-
-                })
-                .RespondAsync(async x =>
-                {
-                    return new OrderCreate_SagaResponse() { IsSuccess = true };
-                })
-                .TransitionTo(OrderCreation)
-                );
+                When(OrderCreate_SagaRequest)
+                .ThenAsync(OnSagaCreateAsync)
+                .TransitionTo(OrderCreation));
 
             During(OrderCreation,
                 When(RoutingSlip_Compelted)
-                .ThenAsync(async x =>
-                {
-                    _logger.LogInformation($"Routing Slip Completed");
-                    //x.Instance.OrderID = x.
-                    //x.RespondAsync()
-                })
+                .ThenAsync(OnRoutingSlipCompletedAsync)
                 .TransitionTo(OrderShipping));
         }
 
@@ -143,14 +123,38 @@ namespace KShop.Orders.Domain.Sagas
         public Event<RoutingSlipCompleted> RoutingSlip_Compelted { get; private set; }
         public Event<RoutingSlipFaulted> RoutingSlip_Faulted { get; private set; }
 
-        public Event<OrderCreate_SagaRequest> OrderCreate { get; private set; }
+        public Event<OrderCreate_SagaRequest> OrderCreate_SagaRequest { get; private set; }
 
-        public Event<OrderGetStatus_SagaRequest> OrderGetStatus { get; private set; }
+        public Event<OrderGetStatus_SagaRequest> OrderGetStatus_SagaRequest { get; private set; }
 
 
-        private void Initialize()
+        private async Task OnSagaCreateAsync(BehaviorContext<OrderSagaState, OrderCreate_SagaRequest> bc)
         {
+            bc.Instance.OrderID = bc.Data.OrderID;
+
+            /* отправка события в консумер создания RS */
+            /* 1. Новые события */
+
+            //await bc.Publish(new OrderPlacingEvent());
+
             
+            
+
+            var q1Name = _nameFormatter.ExecuteActivity<OrderCreate_RoutingSlipActivity, OrderCreate_RoutingSlipActivity_Args>();
+            var builder = new RoutingSlipBuilder(Guid.NewGuid());
+            builder.AddActivity("CreateOrder", new Uri($"query:{q1Name}"));
+            builder.AddVariable("CustomerID", bc.Data.CustomerID);
+            builder.AddVariable("Positions", bc.Data.Positions);
+
+            var rs = builder.Build();
+            //await bc.CreateConsumeContext().Execute(rs);
+
+            await bc.RespondAsync(new OrderCreate_SagaResponse() { IsSuccess = true, OrderID = bc.Instance.OrderID });
+        }
+
+        private async Task OnRoutingSlipCompletedAsync(BehaviorContext<OrderSagaState, RoutingSlipCompleted> bc)
+        {
+            _logger.LogInformation($"Routing Slip Completed");
         }
     }
 }

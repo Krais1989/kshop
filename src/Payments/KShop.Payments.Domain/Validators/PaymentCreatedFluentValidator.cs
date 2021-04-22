@@ -6,13 +6,13 @@ using System.Text;
 namespace KShop.Payments.Domain.Validators
 {
 
-    public class PaymentRejectValidatorDto
+    public class PaymentCreatedValidatorDto
     {
     }
 
-    public class PaymentRejectFluentValidator : AbstractValidator<PaymentRejectValidatorDto>
+    public class PaymentCreatedFluentValidator : AbstractValidator<PaymentCreatedValidatorDto>
     {
-        public PaymentRejectFluentValidator()
+        public PaymentCreatedFluentValidator()
         {
         }
     }

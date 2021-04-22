@@ -59,6 +59,7 @@ namespace KShop.Orders.WebApi.Controllers
         {
             var orderCreateRequest = new OrderCreate_SagaRequest
             {
+                OrderID = Guid.NewGuid(),
                 CustomerID = 1,
                 Positions = dto.Positions
             };

@@ -1,0 +1,64 @@
+
+[Errors]
+
+	Null reference exception при инициализации OrderSagaStateMachine
+		Проблема в событии стартующем State Machine
+			Для инициализирующих событий так же нужно указать правила корелляции
+
+
+[Features]
+
+	Automatonyous State Machine
+		Машина состояний позволяет определять сложную логику реакции на события
+		Консистентно
+
+	RoutingSlip в MassTransit
+		Позволяет создавать транзакционные цепочки
+		Содержит базовый функционал для компенсаций
+		Не консистентно - все данные хранятся в сообщении
+
+	Совместное использование RoutingSlip и StateMachine
+		https://stackoverflow.com/questions/46543260/how-do-i-execute-a-routing-slip-from-a-saga	
+		Вместо прямого запуска RS из SM рекомендуется создать отдельный Consumer, запускающий RS.
+		Так же рекомендуется создавать отдельную SM под RS, это позволит:
+			1. Сохранить чистоту основной саги, оставив там лишь основные бизнес-события
+			2. Добавлять в RS retry по рассписанию, обеспечить resilence транзакционной модели
+
+		Серия лекций по теме
+			https://www.youtube.com/watch?v=LxzZs1o8Aco		- MassTransit S03E05 - Futures via State Machine
+			https://www.youtube.com/watch?v=Xv1-53Y381o		- MassTransit S03E06 - Introducing Durable Futures
+			https://www.youtube.com/watch?v=xBdHnBaWQgI		- MassTransit S03E07 - Durable Futures (con't) and Application Insights
+			https://www.youtube.com/watch?v=k8H5Pwjpvbs		- MassTransit S03E08 - Joining Durable Futures
+			https://www.youtube.com/watch?v=w57gZkaiIt4		- MassTransit S03E09 - Durable Futures Major Refactoring
+
+
+	Трекер RoutingSlip на основе StateMachine
+		Используется для мониторинга событий RoutingSlip с последующей генерацией событий кастомных событий бизнес-логики
+
+		1. Базовая сага (StateMachine) пушит событие для создания RoutingSlip
+		2. Создать консумеры запускающие соответствующие им RoutingSlip
+		3. Создать базовый класс Routing Slip
+			Будет содержать информацию по всем активити RoutingSlip, а так же выполняет функцию билдера
+
+		4. Создать базовый класс трекинга RoutingSlip (BaseRoutingSlipTracker)
+			Содержит общую логики по отлавливанию базовых событий RoutingSlip
+			Содержит логику фильтрации событий RoutingSlip по TrackingNumber (по трекеру)
+
+		5. Для каждого создаваемого RoutingSlip наследовать отдельный класс-трекер
+			В ответ на общие события, пушит бизнес-события конкретного типа, например OrderPlacingComplete
+			Эти события затем удобно отлавливать в основном workflow
+			По идее, можно не использовать конкретный трекер для кастомных событий.
+				Для каждого RoutingSlip сгенерировать отдельный Guid
+				Для каждого RoutingSlip создать по набору событий (Event<RoutingSlipComplete> и тд), настрои корреляцию по Guid выше
+
+			Пример событий: 
+				OrderPlacingCourierTracker
+					Отлавливает события
+						RoutingSlipComplete
+						RoutingSlipFailure
+					Пушит события 
+						OrderPlacingComplete
+						OrderPlacingFailure
+					
+		Было подозрение, что необязательно пушить кастомные типы событий, тк каждый RS имеет уникальный ID, по которому можно проводить корреляцию с событиями основной саги.
+		Тем не менее, иметь кастомный тип события полезно для передачи информации из выполненной RS, например ID созданного заказа и тд.

@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.Contracts.Orders;
+using KShop.Communications.ServiceBus;
 using KShop.Orders.Domain.Consumers;
 using KShop.Orders.Domain.Handlers;
 using KShop.Orders.Domain.RoutingSlips;
@@ -59,8 +60,9 @@ namespace KShop.Orders.WebApi
 
             services.AddMassTransit(busConfig =>
             {
-                busConfig.SetKebabCaseEndpointNameFormatter();
-                //busConfig.AddRabbitMqMessageScheduler();
+                busConfig.ApplyKShopMassTransitConfiguration();
+                //busConfig.SetKebabCaseEndpointNameFormatter();
+                busConfig.AddRabbitMqMessageScheduler();
 
                 busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
                 busConfig.AddRequestClient<OrderCreate_SagaRequest>();
@@ -84,6 +86,7 @@ namespace KShop.Orders.WebApi
 
                 busConfig.UsingRabbitMq((ctx, cfg) =>
                 {
+                    cfg.ApplyKShopBusConfiguration();
 
                     cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
                     {
@@ -91,7 +94,7 @@ namespace KShop.Orders.WebApi
                         host.Password(rabbinCon.Password);
                     });
 
-                    //cfg.UseRabbitMqMessageScheduler();
+                    cfg.UseRabbitMqMessageScheduler();
                     cfg.ConfigureEndpoints(ctx);
                 });
             });

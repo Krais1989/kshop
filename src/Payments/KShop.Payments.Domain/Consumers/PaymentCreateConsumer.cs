@@ -14,23 +14,22 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Consumers
 {
-    /// <summary>
-    /// Обработки событий 
-    /// </summary>
-    public class PaymentPendingConsumer : IConsumer<PaymentPending_BusRequest>
+
+
+    public class PaymentCreateConsumer : IConsumer<PaymentCreateBusRequest>
     {
-        private readonly ILogger<PaymentPendingConsumer> _logger;
-        private readonly IPublishEndpoint _pubEndpoint;
+        private readonly ILogger<PaymentCreateConsumer> _logger;
         private readonly IMediator _mediator;
 
-        public PaymentPendingConsumer(ILogger<PaymentPendingConsumer> logger, IPublishEndpoint pubEndpoint, IMediator mediator)
+        public PaymentCreateConsumer(
+            ILogger<PaymentCreateConsumer> logger,
+            IMediator mediator)
         {
             _logger = logger;
-            _pubEndpoint = pubEndpoint;
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<PaymentPending_BusRequest> context)
+        public async Task Consume(ConsumeContext<PaymentCreateBusRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
             try
@@ -40,17 +39,22 @@ namespace KShop.Payments.Domain.Consumers
                 {
                     OrderID = context.Message.OrderID,
                     Price = context.Message.Price,
+                    PaymentPlatform = context.Message.PaymentPlatform
                 });
                 //await context.RespondAsync(new InvoiceCreate_BusResponse());
             }
             catch (Exception e)
             {
-                await context.RespondAsync(new PaymentProceedFailure()
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    CorrelationID = context.CorrelationId.Value,
-                    Reason = PaymentProceedFailure.EReason.InternalError,
-                    Message = e.Message
-                });
+                    await context.RespondAsync(new PaymentProceedFailure()
+                    {
+                        CorrelationID = context.CorrelationId.Value,
+                        Reason = PaymentProceedFailure.EReason.InternalError,
+                        Message = e.Message
+                    });
+                }
+
             }
         }
     }

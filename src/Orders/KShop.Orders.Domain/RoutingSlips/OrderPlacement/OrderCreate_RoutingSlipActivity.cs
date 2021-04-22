@@ -7,20 +7,20 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.RoutingSlips
+namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
 {
     public class OrderInitialization_RoutingSlipActivity_Log
     {
         public Guid? OrderID { get; set; }
     }
 
-    public class OrderInitialization_RoutingSlipActivity_Args
+    public class OrderCreate_RoutingSlipActivity_Args
     {
         public int CustomerID { get; set; }
     }
 
-    public class OrderInitialization_RoutingSlipActivity
-        : IActivity<OrderInitialization_RoutingSlipActivity_Args, OrderInitialization_RoutingSlipActivity_Log>
+    public class OrderCreate_RoutingSlipActivity
+        : IActivity<OrderCreate_RoutingSlipActivity_Args, OrderInitialization_RoutingSlipActivity_Log>
     {
         private readonly ILogger _logger;
         private readonly IPublishEndpoint _pub;
@@ -28,7 +28,7 @@ namespace KShop.Orders.Domain.RoutingSlips
         private readonly IRequestClient<OrderCreate_BusRequest> _clExecute;
         private readonly IRequestClient<OrderCreateCompensate_BusRequest> _clCompensate;
 
-        public OrderInitialization_RoutingSlipActivity(ILogger logger, IPublishEndpoint pub, IRequestClient<OrderCreate_BusRequest> clExecute, IRequestClient<OrderCreateCompensate_BusRequest> clCompensate)
+        public OrderCreate_RoutingSlipActivity(ILogger logger, IPublishEndpoint pub, IRequestClient<OrderCreate_BusRequest> clExecute, IRequestClient<OrderCreateCompensate_BusRequest> clCompensate)
         {
             _logger = logger;
             _pub = pub;
@@ -52,7 +52,7 @@ namespace KShop.Orders.Domain.RoutingSlips
             return context.Compensated();
         }
 
-        public async Task<ExecutionResult> Execute(ExecuteContext<OrderInitialization_RoutingSlipActivity_Args> context)
+        public async Task<ExecutionResult> Execute(ExecuteContext<OrderCreate_RoutingSlipActivity_Args> context)
         {
             var response = await _clExecute.GetResponse<OrderCreate_BusResponse>(new OrderCreate_BusRequest() {
                 CorrelationID = context.CorrelationId.Value,

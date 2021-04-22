@@ -23,4 +23,8 @@
     <ProjectReference Include="..\KShop.Payments.Domain\KShop.Payments.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Yookassa\" />
+  </ItemGroup>
+
 </Project>

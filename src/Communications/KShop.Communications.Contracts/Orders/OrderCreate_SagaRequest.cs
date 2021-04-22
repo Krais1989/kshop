@@ -6,8 +6,9 @@ namespace KShop.Communications.Contracts.Orders
 {
     public class OrderCreate_SagaRequest
     {
+        public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
-        public Dictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
+        public IDictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
     }
 
     public class OrderCreate_SagaResponse

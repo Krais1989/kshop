@@ -36,11 +36,13 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpGet("[action]")]
         public async ValueTask<IActionResult> PostTest()
         {
+            var orderId = Guid.NewGuid();
             var response = await _createOrderClient.GetResponse<OrderCreate_SagaResponse>(
                 new OrderCreate_SagaRequest()
                 {
+                    OrderID = orderId,
                     CustomerID = 111,
-                    //Positions = new Dictionary<int,int>()
+                    Positions = new Dictionary<int,int>()
                 });
 
             if (response.Message.IsSuccess)
