@@ -1,5 +1,4 @@
-﻿using KShop.Communications.Contracts.Invoices;
-using KShop.Communications.Contracts.Orders;
+﻿using KShop.Communications.Contracts.Orders;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;

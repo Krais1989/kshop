@@ -70,7 +70,7 @@ namespace KShop.Payments.Persistence.Entities
 
         public Money Money { get; set; }
 
-        public ICollection<PaymentLog> Logs { get; set; }
+        public ICollection<PaymentLog> Logs { get; set; } = new List<PaymentLog>();
 
         public void SetStatus(EPaymentStatus newStatus, string logMessage = null)
         {

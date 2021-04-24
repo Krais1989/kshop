@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Communications.Contracts.Payments;
 using KShop.Communications.ServiceBus;
 using KShop.Payments.Domain.BackgroundServices;
 using KShop.Payments.Domain.Consumers;
@@ -79,9 +80,9 @@ namespace KShop.Payments.WebApi
                     cfg.ConfigureEndpoints(ctx);
                 });
 
-
-            })
-                .AddMassTransitHostedService();
+                x.AddRequestClient<PaymentCreateBusRequest>();
+                x.AddRequestClient<PaymentCancelBusRequest>();
+            }).AddMassTransitHostedService();
 
             services.AddMediatR(typeof(PaymentCreateMediatorHandler).Assembly);
 

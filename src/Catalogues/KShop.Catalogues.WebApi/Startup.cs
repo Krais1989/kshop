@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Communications.ServiceBus;
 using KShop.Products.Domain.Consumers;
 using KShop.Products.Domain.Mediators;
 using KShop.Products.Domain.Validators;
@@ -54,7 +55,7 @@ namespace KShop.Products.WebApi
 
             services.AddMassTransit(x =>
             {
-                x.SetKebabCaseEndpointNameFormatter();
+                x.ApplyKShopMassTransitConfiguration();
                 x.AddConsumers(typeof(ProductsReserveConsumer).Assembly);
                 x.UsingRabbitMq((ctx, cfg) =>
                 {

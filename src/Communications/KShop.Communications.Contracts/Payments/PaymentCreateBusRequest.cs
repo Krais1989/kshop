@@ -3,43 +3,39 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Communications.Contracts.Invoices
+namespace KShop.Communications.Contracts.Payments
 {
     /// <summary>
     /// Выставить чек
     /// </summary>
-    public class PaymentCreateBusRequest : ICorrelationalMessage
+    public class PaymentCreateBusRequest
     {
         public EPaymentPlatformType PaymentPlatform { get; set; }
-        public Guid CorrelationID { get; set; }
         public Guid OrderID { get; set; }
         public decimal Price { get; set; }
+    }
+
+    public class PaymentCreateBusResponse
+    {
+        public Guid? PaymentID { get; set; }
+        public string ErrorMessage { get; set; }
+
+        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
 
     /// <summary>
     /// Отмена платежа
     /// </summary>
-    public class PaymentCancelBusRequest : ICorrelationalMessage
+    public class PaymentCancelBusRequest
     {
-        public Guid CorrelationID { get; set; }
+        public Guid PaymentID { get; set; }
     }
 
-
-    public class PaymentProceedSuccess : ICorrelationalMessage
+    public class PaymentCancelBusResponse
     {
-        public Guid CorrelationID { get; set; }
+        public string ErrorMessage { get; set; }
+
+        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
 
-    public class PaymentProceedFailure : ICorrelationalMessage
-    {
-        public enum EReason
-        {
-            InternalError,
-            Timeout
-        }
-
-        public Guid CorrelationID { get; set; }
-        public EReason Reason { get; set; }
-        public string Message { get; set; }
-    }
 }

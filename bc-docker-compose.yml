@@ -102,7 +102,6 @@ services:
             kshop_network:
                 aliases:
                 - adminer
-    
     log_seq:
         image: datalust/seq:latest
         restart: always
@@ -110,8 +109,8 @@ services:
             HOST_PATH_TO_SEQ: '/data'
             ACCEPT_EULA: 'Y'
         ports: 
-            - 5080:80
-            - 5341:5341
+            - '5080:80'
+            - '5341:5341'
         volumes:
             - vol-log_seq:/data
         networks:
@@ -120,64 +119,52 @@ services:
                 - log_seq
     
     log_elasticsearch:
-        restart: always
-        #container_name: log_elasticsearch
+        container_name: log_elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
         ports:
-            - 9200:9200
-            - 9300:9300
+            - '9200:9200'
+            # - "9300:9300"            
         environment:
-            - xpack.security.enabled=false
-            - discovery.type=single-node
-            # - node.name=es01
-            # - cluster.name=es-docker-cluster
-            # - discovery.type=single-node
-            # - bootstrap.memory_lock=true
-            # - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
-            # - "ELASTIC_PASSWORD:changeme"
-
-            #- xpack.security.enabled=true                    
+            node.name: kshop-log-es
+            cluster.name: kshop-log-es-cluster
+            discovery.type: single-node  
+            bootstrap.memory_lock: "true"
+            ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+            # ELASTIC_PASSWORD: "asd"
+                      
         volumes:
-            - vol-log_elastic:/usr/share/elasticsearch/data
-            #- ./configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - type: volume
+              source: vol-log_elastic
+              target: /usr/share/elasticsearch/data
+            - type: bind
+              source: ./configs/elasticsearch.yml
+              target: /usr/share/elasticsearch.yml
+              read_only: true
         networks:
             kshop_network:
                 aliases:
                 - log_elasticsearch
-                
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 65536
-                hard: 65536
-
-        mem_limit: 4g
             
     log_kibana:
-        restart: always
-        #container_name: log_kibana    
+        container_name: log_kibana    
         image: docker.elastic.co/kibana/kibana:7.12.0        
         ports:
-            - 5601:5601
+            - "5601:5601"        
         environment:
-            #ELASTICSEARCH_URL: "http://log_elasticsearch:9200"
-            ELASTICSEARCH_HOSTS: "http://log_elasticsearch:9200"
-            #elasticsearch.hosts: "http://log_elasticsearch:9200"
-            ELASTICSEARCH_USERNAME: "kibana"
-            ELASTICSEARCH_PASSWORD: "changeme"
-
-
+            ELASTICSEARCH_URL: http://log_elasticsearch:9200
+            ELASTICSEARCH_HOSTS: http://log_elasticsearch:9200        
         depends_on:
             - log_elasticsearch   
-        # volumes:
-        #     - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml
+        volumes:
+            - type: bind
+              source: ./configs/kibana.yml
+              target: /usr/share/kibana/config/kibana.yml
+              read_only: true
+
         networks:
             kshop_network:
                 aliases:
                 - log_kibana
-        mem_limit: 1g
 
 networks:
     kshop_network:

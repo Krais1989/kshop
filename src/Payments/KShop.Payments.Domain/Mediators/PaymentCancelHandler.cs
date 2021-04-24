@@ -48,7 +48,6 @@ namespace KShop.Payments.Domain.Mediators
 
             var payment = await _paymentsContext.Payments.Include(e => e.Logs)
                 .FirstOrDefaultAsync(e => e.ID == request.PaymentID);
-
             payment.SetStatus(EPaymentStatus.Canceled);
             await _paymentsContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation($"\t\t>>> {payment.ID} {payment.Status} {payment.StatusDate} ");

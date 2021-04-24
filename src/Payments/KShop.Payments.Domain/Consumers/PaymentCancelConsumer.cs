@@ -1,4 +1,4 @@
-﻿using KShop.Communications.Contracts.Invoices;
+﻿using KShop.Communications.Contracts.Payments;
 using KShop.Payments.Domain.Mediators;
 using MassTransit;
 using MediatR;
@@ -30,19 +30,23 @@ namespace KShop.Payments.Domain.Consumers
             {
                 var result = await _mediator.Send(new PaymentCancelMediatorRequest()
                 {
-                    PaymentID = context.Message.CorrelationID
+                    PaymentID = context.Message.PaymentID
                 });
-                //await context.RespondAsync(new InvoiceCreate_BusResponse());
+
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
+                {
+                    await context.RespondAsync(new PaymentCancelBusResponse()
+                    {
+                    });
+                }
             }
             catch (Exception e)
             {
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    await context.RespondAsync(new PaymentProceedFailure()
+                    await context.RespondAsync(new PaymentCancelBusResponse()
                     {
-                        CorrelationID = context.CorrelationId.Value,
-                        Reason = PaymentProceedFailure.EReason.InternalError,
-                        Message = e.Message
+                        ErrorMessage = e.Message
                     });
                 }
             }

@@ -1,5 +1,4 @@
-﻿using KShop.Communications.Contracts.Invoices;
-using KShop.Communications.Contracts.Payments;
+﻿using KShop.Communications.Contracts.Payments;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Domain.Providers.Mock.DTOs;
 using KShop.Payments.Persistence.Entities;
@@ -47,32 +46,44 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         private readonly ILogger<MockPaymentController> _logger;
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IRequestClient<PaymentCreateBusRequest> _createClient;
+        private readonly IRequestClient<PaymentCancelBusRequest> _cancelClient;
 
         public MockPaymentController(
             ILogger<MockPaymentController> logger,
             IMediator mediator,
-            IPublishEndpoint publishEndpoint)
+            IPublishEndpoint publishEndpoint,
+            IRequestClient<PaymentCreateBusRequest> createClient,
+            IRequestClient<PaymentCancelBusRequest> cancelClient)
         {
             _logger = logger;
             _mediator = mediator;
             _publishEndpoint = publishEndpoint;
+            _createClient = createClient;
+            _cancelClient = cancelClient;
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ThrowException(string msg)
+        {
+            throw new Exception(msg);
+            return Ok();
         }
 
         /* Тестовая логика, Payment создаётся только через консумер, тк является частью саги */
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentTest([FromBody] MockPaymentCreateRequestApiDto dto)
         {
-            var paymentId = Guid.NewGuid();
-
             var createBusReq = new PaymentCreateBusRequest()
             {
-                CorrelationID = paymentId,
                 PaymentPlatform = EPaymentPlatformType.Mock,
                 OrderID = dto.OrderID,
                 Price = dto.Price,
             };
-            await _publishEndpoint.Publish(createBusReq);
-            return Ok();
+
+            var result = await _createClient.GetResponse<PaymentCreateBusResponse>(createBusReq);
+
+            return Ok(result.Message);
         }
 
         /// <summary>
@@ -86,18 +97,18 @@ namespace KShop.Payments.WebApi.Controllers.Mock
                 PaymentID = dto.PaymentID
             };
             var statusResp = await _mediator.Send(statusReq);
-
             return Ok(statusResp);
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> CancelPayment([FromBody] MockCancelPaymentRequestApiDto dto)
         {
-            var cancelReq = new PaymentCancelBusRequest() {
-                CorrelationID = dto.PaymentID
+            var cancelReq = new PaymentCancelBusRequest()
+            {
+                PaymentID = dto.PaymentID
             };
-            await _publishEndpoint.Publish(cancelReq);
-            return Ok();
+            var cancelResp = await _cancelClient.GetResponse<PaymentCancelBusResponse>(cancelReq);
+            return Ok(cancelResp);
         }
 
         /// <summary>
