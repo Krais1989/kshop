@@ -11,7 +11,6 @@ using KShop.Payments.Domain.Consumers;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Domain.Validators;
 using KShop.Payments.Persistence;
-using KShop.Payments.WebApi.Middlewares;
 using KShop.ServiceBus;
 using KShop.Tracing;
 using MassTransit;
@@ -231,9 +230,6 @@ namespace KShop.Payments.WebApi
             // app.UseMetricsTextEndpoint();
             // app.UseEnvInfoEndpoint();
 
-
-            app.UseMiddleware<RequestLogEnrichMiddleware>();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -255,8 +251,6 @@ namespace KShop.Payments.WebApi
             {
                 endpoints.MapControllers();
             });
-
-
 
         }
     }

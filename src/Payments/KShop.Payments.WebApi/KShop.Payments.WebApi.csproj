@@ -32,7 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="BackgroundServices\" />
     <Folder Include="Controllers\Yookassa\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>
