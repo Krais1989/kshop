@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Mediators
 {
-
     public class PaymentCreateMediatorResponse
     {
         public Guid PaymentID { get; set; }

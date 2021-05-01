@@ -153,31 +153,139 @@ services:
                 soft: 65536
                 hard: 65536
 
-        mem_limit: 4g
+        mem_limit: 2g
             
     log_kibana:
         restart: always
         #container_name: log_kibana    
-        image: docker.elastic.co/kibana/kibana:7.12.0        
+        image: docker.elastic.co/kibana/kibana:7.12.0
         ports:
             - 5601:5601
         environment:
             #ELASTICSEARCH_URL: "http://log_elasticsearch:9200"
             ELASTICSEARCH_HOSTS: "http://log_elasticsearch:9200"
-            #elasticsearch.hosts: "http://log_elasticsearch:9200"
             ELASTICSEARCH_USERNAME: "kibana"
             ELASTICSEARCH_PASSWORD: "changeme"
-
-
         depends_on:
             - log_elasticsearch   
-        # volumes:
+        # volumes:  
         #     - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml
         networks:
             kshop_network:
                 aliases:
                 - log_kibana
+
+    # metr_influxdb2:
+    #     restart: always
+    #     image: influxdb:2.0.4
+    #     ports:
+    #         - 8086:8086
+    #     environment: 
+    #         - DOCKER_INFLUXDB_INIT_USERNAME=influx
+    #         - DOCKER_INFLUXDB_INIT_PASSWORD=asdasdasd
+    #         - DOCKER_INFLUXDB_INIT_ORG=kshop
+    #         - DOCKER_INFLUXDB_INIT_BUCKET=appmetrics
+    #     volumes:
+    #         - vol-metr_influxdb2:/var/lib/influxdb2
+    #     networks:
+    #         kshop_network:
+    #             aliases:
+    #             - metr_influxdb2
+    #     mem_limit: 1g
+
+    metr_influxdb:
+        restart: always
+        image: influxdb:1.8
+        ports:
+            - 8086:8086
+            - 8088:8088
+        environment: 
+            INFLUXDB_HTTP_AUTH_ENABLED: "true"
+            INFLUXDB_ADMIN_USER: influx
+            INFLUXDB_ADMIN_PASSWORD: asdasdasd
+            INFLUX_DB: db_kshop_metrics
+            # Подставляется при авторизации в CLI
+            
+            INFLUX_USERNAME: influx
+            INFLUX_PASSWORD: asdasdasd
+
+            INFLUXDB_REPORTING_DISABLED: "false"
+            INFLUXDB_BIND_ADDRESS: 0.0.0.0:8088
+            # Мониторинг самого InfluxDb
+            INFLUXDB_MONITOR_STORE_ENABLED: "true"
+            INFLUXDB_MONITOR_STORE_DATABASE: _internal
+            INFLUXDB_MONITOR_STORE_INTERVAL: 10s
+
+        volumes:
+            - vol-metr_influxdb:/var/lib/influxdb
+        networks:
+            kshop_network:
+                aliases:
+                - metr_influxdb
+        ulimits:
+            nofile:
+                soft: 65536
+                hard: 65536
         mem_limit: 1g
+
+    metr_chronograf:
+        restart: always
+        image: chronograf:1.8
+        ports:
+            - 8888:8888
+        environment:
+            - INFLUXDB_URL=http://metr_influxdb:8086
+            - INFLUXDB_USERNAME=influx
+            - INFLUXDB_PASSWORD=asdasdasd
+        volumes:
+            - vol-metr_chronograf:/var/lib/chronograf
+        depends_on: 
+            - metr_influxdb
+        networks:
+            kshop_network:
+                aliases:
+                - metr_chronograf
+
+    metr_grafana:
+        restart: always
+        image: grafana/grafana
+        ports:
+            - 3000:3000
+        environment: 
+            - GF_SECURITY_ADMIN_USER=grafana
+            - GF_SECURITY_ADMIN_PASSWORD=asdasdasd
+        depends_on: 
+            - metr_influxdb
+        volumes:
+            - vol-metr_grafana:/var/lib/grafana
+        networks:
+            kshop_network:
+                aliases:
+                - metr_grafana
+
+    trace_jaeger:
+        restart: always
+        image: jaegertracing/all-in-one
+        ports: 
+            - 5775:5775/udp # zipkin.thrift - deprecated
+            - 6831:6831/udp # accept jaeger.thrift over compact thrift protocol
+            - 6832:6832/udp # accept jaeger.thrift over binary thrift protocol
+            - 5778:5778     # serve configs
+            - 16686:16686   # serve frontend
+            - 14268:14268   # accept jaeger.thrift directly from clients
+            - 14250:14250   # accept model.proto
+            - 9411:9411     # Zipkin compatible endpoint (optional)
+        environment: 
+            COLLECTOR_ZIPKIN_HOST_PORT: 9411
+            # SPAN_STORAGE_TYPE: elasticsearch
+            # ES_SERVER_URLS: http://log_elasticsearch:9200
+        # volumes:
+        #     - vol-trace_jaeger:
+
+        networks: 
+            kshop_network:
+                aliases: 
+                - trace_jaeger
 
 networks:
     kshop_network:
@@ -191,4 +299,8 @@ volumes:
     vol-log_seq: {}
     vol-redis: {}
     vol-log_elastic: {}
-    
+    vol-metr_influxdb: {}
+    vol-metr_influxdb2: {}
+    vol-metr_grafana: {}
+    vol-metr_chronograf: {}
+    #vol-trace_jaeger: {}

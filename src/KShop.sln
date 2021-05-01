@@ -66,6 +66,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\docs\Journal.txt = ..\docs\Journal.txt
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Tracing", "Shared\KShop.Tracing\KShop.Tracing.csproj", "{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,10 @@ Global
 		{29B6E853-4AC6-41CA-BD27-57DAF2A45162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29B6E853-4AC6-41CA-BD27-57DAF2A45162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29B6E853-4AC6-41CA-BD27-57DAF2A45162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +183,7 @@ Global
 		{BCE57CDB-9B0F-4715-AE64-B68CCE7E2B1A} = {C40C0E21-18D4-487D-B33A-116BBC1DFB43}
 		{447E4A06-9F0D-49A8-A06D-C3FECA8E1B67} = {C40C0E21-18D4-487D-B33A-116BBC1DFB43}
 		{29B6E853-4AC6-41CA-BD27-57DAF2A45162} = {C40C0E21-18D4-487D-B33A-116BBC1DFB43}
+		{60E829F3-DC4C-4A1D-B26A-DFC3AC4F4529} = {ACA406ED-A661-472F-968D-62F09D734778}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42DFB36-0387-4155-910C-9F61C0961023}
