@@ -62,10 +62,12 @@ namespace KShop.Orders.WebApi
             {
                 busConfig.ApplyKShopMassTransitConfiguration();
                 //busConfig.SetKebabCaseEndpointNameFormatter();
-                busConfig.AddRabbitMqMessageScheduler();
 
-                busConfig.AddRequestClient<OrderGetStatus_SagaRequest>();
-                busConfig.AddRequestClient<OrderCreate_SagaRequest>();
+                //busConfig.AddRabbitMqMessageScheduler();
+                busConfig.AddDelayedMessageScheduler();
+
+                busConfig.AddRequestClient<OrderGetStatusSagaRequest>();
+                busConfig.AddRequestClient<OrderPlacingSagaRequest>();
 
                 //busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
                 //busConfig.AddConsumers(typeof(OrderCreate_RequestConsumer).Assembly);
@@ -81,7 +83,7 @@ namespace KShop.Orders.WebApi
                 //});
 
                 // busConfig.AddActivities(typeof(OrderCreateCourierActivity).Assembly);
-                busConfig.AddConsumers(typeof(OrderCreate_RequestConsumer).Assembly);
+                busConfig.AddConsumers(typeof(OrderCreateSvcRequestConsumer).Assembly);
 
 
                 busConfig.UsingRabbitMq((ctx, cfg) =>
@@ -94,7 +96,7 @@ namespace KShop.Orders.WebApi
                         host.Password(rabbinCon.Password);
                     });
 
-                    cfg.UseRabbitMqMessageScheduler();
+                    cfg.UseDelayedMessageScheduler();
                     cfg.ConfigureEndpoints(ctx);
                 });
             });

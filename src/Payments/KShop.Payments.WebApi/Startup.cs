@@ -103,8 +103,8 @@ namespace KShop.Payments.WebApi
                     cfg.ConfigureEndpoints(ctx);
                 });
 
-                x.AddRequestClient<PaymentCreateBusRequest>();
-                x.AddRequestClient<PaymentCancelBusRequest>();
+                x.AddRequestClient<PaymentCreateSvcRequest>();
+                x.AddRequestClient<PaymentCancelSvcRequest>();
             }).AddMassTransitHostedService();
         }
 

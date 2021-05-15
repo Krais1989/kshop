@@ -21,14 +21,14 @@ namespace KShop.Orders.WebApi.Controllers
         private readonly ILogger<OrdersController> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
         private readonly OrderContext _orderContext;
-        private readonly IRequestClient<OrderGetStatus_SagaRequest> _getOrderStatusClient;
-        private readonly IRequestClient<OrderCreate_SagaRequest> _createOrderClient;
+        private readonly IRequestClient<OrderGetStatusSagaRequest> _getOrderStatusClient;
+        private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
 
         public OrdersController(ILogger<OrdersController> logger,
                                 IPublishEndpoint pubEndpoint,
                                 OrderContext orderContext,
-                                IRequestClient<OrderGetStatus_SagaRequest> getOrderStatusClient,
-                                IRequestClient<OrderCreate_SagaRequest> createOrderClient)
+                                IRequestClient<OrderGetStatusSagaRequest> getOrderStatusClient,
+                                IRequestClient<OrderPlacingSagaRequest> createOrderClient)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
@@ -41,8 +41,8 @@ namespace KShop.Orders.WebApi.Controllers
         public async ValueTask<IActionResult> Get(Guid orderId)
         {
             var (response, err) =
-                await _getOrderStatusClient.GetResponse<OrderGetStatus_SagaRequest, OrderGetStatus_SagaResponse>(
-                    new OrderGetStatus_SagaRequest { OrderID = orderId });
+                await _getOrderStatusClient.GetResponse<OrderGetStatusSagaRequest, OrderGetStatusSagaResponse>(
+                    new OrderGetStatusSagaRequest { OrderID = orderId });
 
             if (response.IsCompletedSuccessfully)
             {
@@ -57,14 +57,14 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpPost("[action]")]
         public async ValueTask<ActionResult> Create([FromBody] OrderCreateRequestDto dto)
         {
-            var orderCreateRequest = new OrderCreate_SagaRequest
+            var orderCreateRequest = new OrderPlacingSagaRequest
             {
                 OrderID = Guid.NewGuid(),
                 CustomerID = 1,
                 Positions = dto.Positions
             };
 
-            var response = await _createOrderClient.GetResponse<OrderCreate_SagaRequest>(orderCreateRequest);
+            var response = await _createOrderClient.GetResponse<OrderPlacingSagaRequest>(orderCreateRequest);
             return Ok(response.Message);
         }
 

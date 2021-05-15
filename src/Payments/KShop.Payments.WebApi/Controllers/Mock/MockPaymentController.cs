@@ -46,15 +46,15 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         private readonly ILogger<MockPaymentController> _logger;
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<PaymentCreateBusRequest> _createClient;
-        private readonly IRequestClient<PaymentCancelBusRequest> _cancelClient;
+        private readonly IRequestClient<PaymentCreateSvcRequest> _createClient;
+        private readonly IRequestClient<PaymentCancelSvcRequest> _cancelClient;
 
         public MockPaymentController(
             ILogger<MockPaymentController> logger,
             IMediator mediator,
             IPublishEndpoint publishEndpoint,
-            IRequestClient<PaymentCreateBusRequest> createClient,
-            IRequestClient<PaymentCancelBusRequest> cancelClient)
+            IRequestClient<PaymentCreateSvcRequest> createClient,
+            IRequestClient<PaymentCancelSvcRequest> cancelClient)
         {
             _logger = logger;
             _mediator = mediator;
@@ -74,14 +74,14 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentTest([FromBody] MockPaymentCreateRequestApiDto dto)
         {
-            var createBusReq = new PaymentCreateBusRequest()
+            var createBusReq = new PaymentCreateSvcRequest()
             {
                 PaymentPlatform = EPaymentPlatformType.Mock,
                 OrderID = dto.OrderID,
                 Price = dto.Price,
             };
 
-            var result = await _createClient.GetResponse<PaymentCreateBusResponse>(createBusReq);
+            var result = await _createClient.GetResponse<PaymentCreateSvcResponse>(createBusReq);
 
             return Ok(result.Message);
         }
@@ -103,11 +103,11 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         [HttpPost("[action]")]
         public async Task<IActionResult> CancelPayment([FromBody] MockCancelPaymentRequestApiDto dto)
         {
-            var cancelReq = new PaymentCancelBusRequest()
+            var cancelReq = new PaymentCancelSvcRequest()
             {
                 PaymentID = dto.PaymentID
             };
-            var cancelResp = await _cancelClient.GetResponse<PaymentCancelBusResponse>(cancelReq);
+            var cancelResp = await _cancelClient.GetResponse<PaymentCancelSvcResponse>(cancelReq);
             return Ok(cancelResp);
         }
 

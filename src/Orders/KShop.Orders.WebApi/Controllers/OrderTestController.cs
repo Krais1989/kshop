@@ -16,9 +16,9 @@ namespace KShop.Orders.WebApi.Controllers
     public class OrderTestController : ControllerBase
     {
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<OrderCreate_SagaRequest> _createOrderClient;
+        private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
 
-        public OrderTestController(IPublishEndpoint publishEndpoint, IRequestClient<OrderCreate_SagaRequest> createOrderClient)
+        public OrderTestController(IPublishEndpoint publishEndpoint, IRequestClient<OrderPlacingSagaRequest> createOrderClient)
         {
             _publishEndpoint = publishEndpoint;
             _createOrderClient = createOrderClient;
@@ -37,8 +37,8 @@ namespace KShop.Orders.WebApi.Controllers
         public async ValueTask<IActionResult> PostTest()
         {
             var orderId = Guid.NewGuid();
-            var response = await _createOrderClient.GetResponse<OrderCreate_SagaResponse>(
-                new OrderCreate_SagaRequest()
+            var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(
+                new OrderPlacingSagaRequest()
                 {
                     OrderID = orderId,
                     CustomerID = 111,

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Consumers
 {
-    public class PaymentCreateConsumer : IConsumer<PaymentCreateBusRequest>
+    public class PaymentCreateConsumer : IConsumer<PaymentCreateSvcRequest>
     {
         private readonly ILogger<PaymentCreateConsumer> _logger;
         private readonly IMediator _mediator;
@@ -27,7 +27,7 @@ namespace KShop.Payments.Domain.Consumers
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<PaymentCreateBusRequest> context)
+        public async Task Consume(ConsumeContext<PaymentCreateSvcRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
 
@@ -43,7 +43,7 @@ namespace KShop.Payments.Domain.Consumers
 
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    await context.RespondAsync(new PaymentCreateBusResponse()
+                    await context.RespondAsync(new PaymentCreateSvcResponse()
                     {
                         PaymentID = result.PaymentID
                     });
@@ -53,7 +53,7 @@ namespace KShop.Payments.Domain.Consumers
             {
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    await context.RespondAsync(new PaymentCreateBusResponse()
+                    await context.RespondAsync(new PaymentCreateSvcResponse()
                     {
                         ErrorMessage = e.Message
                     });

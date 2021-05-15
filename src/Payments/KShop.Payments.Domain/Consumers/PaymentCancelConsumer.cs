@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Consumers
 {
-    public class PaymentCancelConsumer : IConsumer<PaymentCancelBusRequest>
+    public class PaymentCancelConsumer : IConsumer<PaymentCancelSvcRequest>
     {
         private readonly ILogger<PaymentCancelConsumer> _logger;
         private readonly IMediator _mediator;
@@ -22,7 +22,7 @@ namespace KShop.Payments.Domain.Consumers
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<PaymentCancelBusRequest> context)
+        public async Task Consume(ConsumeContext<PaymentCancelSvcRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
 
@@ -35,7 +35,7 @@ namespace KShop.Payments.Domain.Consumers
 
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    await context.RespondAsync(new PaymentCancelBusResponse()
+                    await context.RespondAsync(new PaymentCancelSvcResponse()
                     {
                     });
                 }
@@ -44,7 +44,7 @@ namespace KShop.Payments.Domain.Consumers
             {
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {
-                    await context.RespondAsync(new PaymentCancelBusResponse()
+                    await context.RespondAsync(new PaymentCancelSvcResponse()
                     {
                         ErrorMessage = e.Message
                     });

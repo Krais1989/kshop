@@ -9,4 +9,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Swagger\KShop.Swagger.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />
+    <ProjectReference Include="..\KShop.Shipments.Domain\KShop.Shipments.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Activities\" />
-    <Folder Include="Exceptions\" />
+    <Compile Remove="Activities\**" />
+    <EmbeddedResource Remove="Activities\**" />
+    <None Remove="Activities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="OrderCancelling\" />
+    <Folder Include="OrderCreation\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
