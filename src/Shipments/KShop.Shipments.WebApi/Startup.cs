@@ -1,12 +1,16 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.ServiceBus;
+using KShop.Metrics;
 using KShop.ServiceBus;
-using KShop.Shipments.Domain.ExternalServices;
-using KShop.Shipments.Domain.ShipmentProcessing.BackgroundServices;
-using KShop.Shipments.Domain.ShipmentProcessing.Consumers;
-using KShop.Shipments.Domain.ShipmentProcessing.Mediators;
-using KShop.Shipments.Domain.ShipmentProcessing.Validators;
+using KShop.Shipments.Domain.BackgroundServices;
+using KShop.Shipments.Domain.Consumers;
+using KShop.Shipments.Domain.ExternalShipmentProviders;
+using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
+using KShop.Shipments.Domain.ExternalShipmentProviders.Mocking;
+using KShop.Shipments.Domain.Mediators;
+using KShop.Shipments.Domain.Validators;
 using KShop.Shipments.Persistence;
+using KShop.Tracing;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +35,8 @@ namespace KShop.Shipments.WebApi
 {
     public class Startup
     {
+        private string EntryAssemblyName => Assembly.GetEntryAssembly().FullName;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,56 +47,39 @@ namespace KShop.Shipments.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var entryName = Assembly.GetEntryAssembly().FullName;
-
             services.AddDbContext<ShipmentContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
-            });
-
-            var rabbinCon = new RabbitConnection();
-            Configuration.GetSection("RabbitConnection").Bind(rabbinCon);
-
-            services.AddMassTransit(busConfig =>
-            {
-                busConfig.ApplyKShopMassTransitConfiguration();
-                busConfig.AddDelayedMessageScheduler();
-
-                //busConfig.AddRequestClient<OrderGetStatusSagaRequest>();
-                //busConfig.AddRequestClient<OrderPlacingSagaRequest>();
-
-                busConfig.AddConsumers(typeof(ShipmentCreateSvcConsumer).Assembly);
-
-
-                busConfig.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.ApplyKShopBusConfiguration();
-
-                    cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
-                    {
-                        host.Username(rabbinCon.Username);
-                        host.Password(rabbinCon.Password);
-                    });
-
-                    cfg.UseDelayedMessageScheduler();
-                    cfg.ConfigureEndpoints(ctx);
+                db.UseMySql(constr, x => {
+                    x.ServerVersion(new ServerVersion(new Version(8, 0)));
+                    x.EnableRetryOnFailure(10, TimeSpan.FromSeconds(10), null);
                 });
             });
 
-            services.AddMassTransitHostedService();
+            services.AddKShopMassTransitRabbitMq(Configuration,
+                busServices =>
+                {
+                    busServices.AddConsumers(typeof(ShipmentCreateSvcConsumer).Assembly);
+                },
+                (busContext, rabbigConfig) =>
+                {
 
+                });
+
+            services.AddKShopMetrics(Configuration);
+            services.AddKShopTracing(Configuration);
+            services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(ShipmentCreateMediatorHandler).Assembly);
 
-            services.AddMarketTestSwagger(Configuration);
 
             services.AddHostedService<ShipmentInitBackgroundService>();
             services.AddHostedService<ShipmentCheckBackgroundService>();
             services.AddHostedService<ShipmentCancellingBackgroundService>();
 
-            services.AddSingleton<IExternalShipmentService, MockExternallShipmentService>();
+            services.AddSingleton<IExternalShipmentServiceProvider, MockExternallShipmentProvider>();
 
             services.AddControllers()
+                .AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ShipmentCreateFluentValidator).Assembly));
         }
 

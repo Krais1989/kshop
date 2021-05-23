@@ -9,13 +9,9 @@ namespace KShop.Communications.Contracts.Orders
     /// </summary>
     public class OrderPlacingRSRequest
     {
-        /// <summary>
-        /// Guid для инициализациия Routing Slip
-        /// </summary>
-        public Guid TrackingNumber { get; set; }
-        public Guid OrderID { get; set; }
+        public Guid SubmissionID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> Positions { get; set; }
+        public OrderPositionsMap Positions { get; set; }
     }
     //public class OrderPlacingRSResponse
     //{

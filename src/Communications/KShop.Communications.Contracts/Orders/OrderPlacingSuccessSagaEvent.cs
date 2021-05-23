@@ -10,6 +10,6 @@ namespace KShop.Communications.Contracts.Orders
     {
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
+        public OrderPositionsMap Positions { get; set; }
     }
 }

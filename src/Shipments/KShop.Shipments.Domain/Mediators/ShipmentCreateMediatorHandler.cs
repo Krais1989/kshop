@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using KShop.Shipments.Domain.ShipmentProcessing.Validators;
+using KShop.Shipments.Domain.Validators;
 using KShop.Shipments.Persistence;
 using KShop.Shipments.Persistence.Entities;
 using MediatR;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ShipmentProcessing.Mediators
+namespace KShop.Shipments.Domain.Mediators
 {
 
     public class ShipmentCreateMediatorResponse

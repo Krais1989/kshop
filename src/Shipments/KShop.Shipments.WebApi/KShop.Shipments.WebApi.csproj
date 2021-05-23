@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Metrics\KShop.Metrics.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Swagger\KShop.Swagger.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />
     <ProjectReference Include="..\KShop.Shipments.Domain\KShop.Shipments.Domain.csproj" />

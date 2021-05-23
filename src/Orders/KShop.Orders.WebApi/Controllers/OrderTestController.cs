@@ -36,23 +36,24 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpGet("[action]")]
         public async ValueTask<IActionResult> PostTest()
         {
-            var orderId = Guid.NewGuid();
-            var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(
-                new OrderPlacingSagaRequest()
-                {
-                    OrderID = orderId,
-                    CustomerID = 111,
-                    Positions = new Dictionary<int,int>()
-                });
+            //TODO: вынести генерацию OrderID из контроллера
+            var msg = new OrderPlacingSagaRequest()
+            {
+                OrderID = Guid.NewGuid(),
+                CustomerID = 111,
+                Positions = new OrderPositionsMap()
+            };
+            await _publishEndpoint.Publish(msg);
 
-            if (response.Message.IsSuccess)
-            {
-                return Ok(response.Message);
-            }
-            else
-            {
-                return Problem(response.Message.Message);
-            }
+            //var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(
+            //    new OrderPlacingSagaRequest()
+            //    {
+            //        OrderID = Guid.NewGuid(),
+            //        CustomerID = 111,
+            //        Positions = new OrderPositionsMap()
+            //    });
+
+            return Ok(msg);
         }
     }
 }

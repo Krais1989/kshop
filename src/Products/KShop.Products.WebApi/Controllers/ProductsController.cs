@@ -33,9 +33,9 @@ namespace KShop.Products.WebApi.Controllers
             _context = context;
             _mediator = mediator;
         }
-
+        
         [HttpGet("{productId}")]
-        public async ValueTask<IActionResult> Get(int productId)
+        public async ValueTask<IActionResult> Get(ulong productId)
         {
             var result = await _context.Products.Include(e => e.Positions).AsNoTracking().FirstOrDefaultAsync(e => e.ID == productId);
             return Ok(result);

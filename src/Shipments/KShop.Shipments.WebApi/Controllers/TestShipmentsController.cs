@@ -1,4 +1,4 @@
-﻿using KShop.Shipments.Domain.ShipmentProcessing.Mediators;
+﻿using KShop.Shipments.Domain.Mediators;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

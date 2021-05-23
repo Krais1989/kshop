@@ -9,7 +9,7 @@ namespace KShop.Communications.Contracts.Orders
     /// </summary>
     public class OrderPlacingCompletedRSEvent
     {
-        public Guid TrackingNumber { get; set; }
+        public Guid SubmissionID { get; set; }
         public DateTime TimeStamp { get; set; }
 
 
@@ -22,7 +22,7 @@ namespace KShop.Communications.Contracts.Orders
     /// </summary>
     public class OrderPlacingFaultedRSEvent
     {
-        public Guid TrackingNumber { get; set; }
+        public Guid SubmissionID { get; set; }
         public DateTime TimeStamp { get; set; }
     }
 }

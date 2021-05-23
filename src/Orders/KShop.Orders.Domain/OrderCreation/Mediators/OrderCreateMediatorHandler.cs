@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
@@ -21,8 +22,9 @@ namespace KShop.Orders.Domain.Handlers
     }
     public class OrderCreateMediatorRequest : IRequest<OrderCreateMediatorResponse>
     {
+        public Guid? OrderID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> Positions { get; set; }
+        public OrderPositionsMap Positions { get; set; }
 
     }
     public class OrderCreateMediatorHandler : IRequestHandler<OrderCreateMediatorRequest, OrderCreateMediatorResponse>
@@ -47,16 +49,17 @@ namespace KShop.Orders.Domain.Handlers
 
             var validatorDto = new OrderCreateFluentValidatorDto() { };
             _validator.Validate(validatorDto);
+
             var entity = new Order
             {
+                ID = request.OrderID ?? default,
                 CustomerID = request.CustomerID,
-                Status = Order.EStatus.Initial,
                 CreateDate = DateTime.UtcNow,
-                StatusDate = DateTime.UtcNow,
-                Positions = request.Positions.Select(e =>
-                    new OrderPosition() { ProductID = e.Key, Quantity = e.Value })
+                Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }),
+                Logs = new List<OrderLog>()
             };
-            _context.Add(entity);
+            entity.SetStatus(Order.EStatus.Initial);
+            await _context.AddAsync(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return new OrderCreateMediatorResponse() { OrderID = entity.ID };
         }

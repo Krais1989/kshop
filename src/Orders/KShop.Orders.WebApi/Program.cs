@@ -33,6 +33,12 @@ namespace KShop.Orders.WebApi
                 {
                     webBuilder.UseStartup<Startup>();
                 })
+                .ConfigureServices((ctx, services)=> { 
+                    
+                })
+                .ConfigureAppConfiguration((hostCtx, confBuilder)=> { 
+
+                })
                 .UseSerilog((context, log) => { log.ReadFrom.Configuration(context.Configuration); });
     }
 }

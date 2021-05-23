@@ -29,6 +29,7 @@ namespace KShop.Orders.Domain.Consumers
             {
                 var createOrder = new OrderCreateMediatorRequest()
                 {
+                    OrderID = context.Message.OrderID,
                     CustomerID = context.Message.CustomerID,
                     Positions = context.Message.Positions
                 };
@@ -37,8 +38,6 @@ namespace KShop.Orders.Domain.Consumers
 
                 await context.RespondAsync(new OrderCreateSvcResponse()
                 {
-                    CorrelationID = context.CorrelationId.Value,
-                    IsSuccess = true,
                     OrderID = res.OrderID
                 });
             }
@@ -46,10 +45,7 @@ namespace KShop.Orders.Domain.Consumers
             {
                 await context.RespondAsync(new OrderCreateSvcResponse()
                 {
-                    CorrelationID = context.CorrelationId.Value,
-                    IsSuccess = false,
-                    OrderID = null,
-                    Message = e.Message
+                    ErrorMessage = e.Message
                 });
             }
         }

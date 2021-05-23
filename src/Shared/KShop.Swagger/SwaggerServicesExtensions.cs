@@ -15,7 +15,7 @@ namespace Swagger
         /// Интеграция Swagger
         /// Загружает OpenApiInfo из конфига SwaggerSettings 
         /// </summary>
-        public static void AddMarketTestSwagger(this IServiceCollection services, IConfiguration config, string sectionName = "SwaggerSettings")
+        public static void AddKShopSwagger(this IServiceCollection services, IConfiguration config, string sectionName = "SwaggerSettings")
         {
             var openApiInfo = config.GetSection(sectionName)?.Get<OpenApiInfo>();
 

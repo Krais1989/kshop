@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KShop.Communications.Contracts.Orders;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace KShop.Communications.Contracts.Products
     {
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> OrderPositions { get; set; }
+        public OrderPositionsMap OrderPositions { get; set; }
     }
 
     public class ProductsReserveSvcResponse : ICorrelationalMessage

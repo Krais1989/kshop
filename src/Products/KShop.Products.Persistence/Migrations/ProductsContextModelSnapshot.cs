@@ -19,9 +19,9 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.Product", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<ulong>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint unsigned");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
@@ -36,15 +36,15 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductPosition", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<ulong>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint unsigned");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
+                    b.Property<ulong>("ProductID")
+                        .HasColumnType("bigint unsigned");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<uint>("Quantity")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("ID");
 
@@ -55,9 +55,15 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductReserve", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<ulong>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("CompleteDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("CustomerID")
                         .HasColumnType("int");
@@ -65,14 +71,11 @@ namespace KShop.Products.Persistence.Migrations
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
+                    b.Property<ulong>("ProductID")
+                        .HasColumnType("bigint unsigned");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReserveDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<uint>("Quantity")
+                        .HasColumnType("int unsigned");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint unsigned");

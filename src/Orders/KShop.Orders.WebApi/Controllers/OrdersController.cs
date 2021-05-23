@@ -40,18 +40,17 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpGet("{orderId}")]
         public async ValueTask<IActionResult> Get(Guid orderId)
         {
-            var (response, err) =
-                await _getOrderStatusClient.GetResponse<OrderGetStatusSagaRequest, OrderGetStatusSagaResponse>(
-                    new OrderGetStatusSagaRequest { OrderID = orderId });
+            var response = await _getOrderStatusClient.GetResponse<OrderGetStatusSagaResponse>(
+                    new OrderGetStatusSagaRequest
+                    {
+                        OrderID = orderId
+                    });
 
-            if (response.IsCompletedSuccessfully)
-            {
-                return Ok(await response);
-            }
+            
+            if (response.Message.IsSuccess)
+                return Ok(response.Message.Status);
             else
-            {
-                return NotFound(await err);
-            }
+                return NotFound(response.Message);
         }
 
         [HttpPost("[action]")]
@@ -59,7 +58,6 @@ namespace KShop.Orders.WebApi.Controllers
         {
             var orderCreateRequest = new OrderPlacingSagaRequest
             {
-                OrderID = Guid.NewGuid(),
                 CustomerID = 1,
                 Positions = dto.Positions
             };

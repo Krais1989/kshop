@@ -10,7 +10,7 @@ namespace KShop.Communications.Contracts.Payments
     /// </summary>
     public class PaymentCreateSvcRequest
     {
-        public EPaymentPlatformType PaymentPlatform { get; set; }
+        public EPaymentProvider PaymentPlatform { get; set; }
         public Guid OrderID { get; set; }
         public decimal Price { get; set; }
     }

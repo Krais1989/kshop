@@ -40,26 +40,60 @@ namespace KShop.Orders.Persistence.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<ulong>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<byte>("NewStatus")
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("OrderLog");
+                });
+
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
+                {
+                    b.Property<ulong>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<Guid>("OrderID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<ulong>("ProductID")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<uint>("Quantity")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("ID");
 
                     b.HasIndex("OrderID");
 
                     b.ToTable("OrderPositions");
+                });
+
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
+                {
+                    b.HasOne("KShop.Orders.Persistence.Entities.Order", "Order")
+                        .WithMany("Logs")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>

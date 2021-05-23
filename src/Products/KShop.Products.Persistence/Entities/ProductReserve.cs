@@ -13,15 +13,23 @@ namespace KShop.Products.Persistence.Entities
             NotEnough
         }
 
-        public int ID { get; set; }
-        public int ProductID { get; set; }
-        public int Quantity { get; set; }
+        public ulong ID { get; set; }
+        public ulong ProductID { get; set; }
+        public uint Quantity { get; set; }
+
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
 
-        public DateTime ReserveDate { get; set; }
-        public EStatus Status { get; set; }
+        /// <summary>
+        /// Дата создания резерва
+        /// </summary>
+        public DateTime CreateDate { get; set; }
+        /// <summary>
+        /// Дата завершения резерва (удачное, отмена, ошибка)
+        /// </summary>
+        public DateTime CompleteDate { get; set; }
 
+        public EStatus Status { get; set; }
 
         public Product Product { get; set; }
     }

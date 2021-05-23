@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace KShop.Communications.Contracts.Orders
 {
+
     /// <summary>
     /// Запрос на инициализации саги создания заказа
     /// </summary>
@@ -11,7 +11,7 @@ namespace KShop.Communications.Contracts.Orders
     {
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> Positions { get; set; } = new Dictionary<int, int>();
+        public OrderPositionsMap Positions { get; set; }
     }
 
     /// <summary>
@@ -19,8 +19,8 @@ namespace KShop.Communications.Contracts.Orders
     /// </summary>
     public class OrderPlacingSagaResponse
     {
-        public Guid OrderID { get; set; }
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
+
 }

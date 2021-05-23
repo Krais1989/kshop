@@ -1,5 +1,5 @@
 ﻿using KShop.Communications.Contracts.Shipments;
-using KShop.Shipments.Domain.ShipmentProcessing.Mediators;
+using KShop.Shipments.Domain.Mediators;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ShipmentProcessing.Consumers
+namespace KShop.Shipments.Domain.Consumers
 {
     public class ShipmentCreateSvcConsumer : IConsumer<ShipmentCreateSvcRequest>
     {

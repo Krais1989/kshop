@@ -1,10 +1,12 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.ServiceBus;
-using KShop.Products.Domain.Consumers;
-using KShop.Products.Domain.Mediators;
-using KShop.Products.Domain.Validators;
+using KShop.Metrics;
+using KShop.Products.Domain.ProductsReservation.Consumers;
+using KShop.Products.Domain.ProductsReservation.Mediators;
+using KShop.Products.Domain.ProductsReservation.Validators;
 using KShop.Products.Persistence;
 using KShop.ServiceBus;
+using KShop.Tracing;
 using MassTransit;
 using MassTransit.Definition;
 using MediatR;
@@ -30,6 +32,8 @@ namespace KShop.Products.WebApi
 {
     public class Startup
     {
+        private string EntryAssemblyName => Assembly.GetEntryAssembly().FullName;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,13 +44,9 @@ namespace KShop.Products.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var entryName = Assembly.GetEntryAssembly().FullName;
-
             services.AddDbContext<ProductsContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                //db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
-
                 db.UseMySql(constr,
                     x =>
                     {
@@ -55,42 +55,31 @@ namespace KShop.Products.WebApi
                     });
             });
 
-            var rabbinCon = new RabbitConnection();
-            Configuration.GetSection("RabbitConnection").Bind(rabbinCon);
-
-            services.AddMassTransit(x =>
-            {
-                x.ApplyKShopMassTransitConfiguration();
-                x.AddDelayedMessageScheduler();
-
-                x.AddConsumers(typeof(ProductsReserveConsumer).Assembly);
-
-                x.UsingRabbitMq((ctx, cfg) =>
+            services.AddKShopMassTransitRabbitMq(Configuration,
+                busServices =>
                 {
-                    cfg.ApplyKShopBusConfiguration();
-                    cfg.Host(rabbinCon.HostName, rabbinCon.Port, rabbinCon.VirtualHost, entryName, host =>
-                    {
-                        host.Username(rabbinCon.Username);
-                        host.Password(rabbinCon.Password);
-                    });
+                    busServices.AddConsumers(typeof(ProductsReservationSvcRequestConsumer).Assembly);
+                },
+                (busContext, rabbigConfig) =>
+                {
 
-                    cfg.UseDelayedMessageScheduler();
-                    cfg.ConfigureEndpoints(ctx);
                 });
-            });
-            services.AddMassTransitHostedService();
 
+            services.AddKShopMetrics(Configuration);
+            services.AddKShopTracing(Configuration);
+            services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(ProductsReserveMediatorHandler).Assembly);
 
             services.AddControllers()
+                .AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ProductsReserveFluentValidator).Assembly));
-
-            services.AddMarketTestSwagger(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMetricsAllMiddleware();
+            app.UseMetricsAllEndpoints();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

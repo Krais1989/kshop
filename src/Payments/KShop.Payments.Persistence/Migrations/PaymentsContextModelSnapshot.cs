@@ -29,7 +29,7 @@ namespace KShop.Payments.Persistence.Migrations
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("PaymentPlatformType")
+                    b.Property<int>("PaymentProvider")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")

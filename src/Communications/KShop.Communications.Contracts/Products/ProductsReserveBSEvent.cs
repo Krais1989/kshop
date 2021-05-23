@@ -13,6 +13,6 @@ namespace KShop.Communications.Contracts.Products
         /// <summary>
         /// Зарезервированные продукты <product_id, quantity>
         /// </summary>
-        public IDictionary<int, int> ReservedProducts { get; set; }
+        public IDictionary<ulong, uint> ReservedProducts { get; set; }
     }
 }

@@ -51,16 +51,18 @@ namespace KShop.Orders.Persistence.Entities
         public DateTime CreateDate { get; set; }
         public DateTime StatusDate { get; set; }
         public IEnumerable<OrderPosition> Positions { get; set; }
-    }
+        public ICollection<OrderLog> Logs { get; set; }
 
-    public class OrderPosition
-    {
-        public int ID { get; set; }
-        public Guid OrderID { get; set; }
-        public int ProductID { get; set; }
-        public int Quantity { get; set; }
-
-
-        public Order Order { get; set; }
+        public void SetStatus(EStatus newStatus, string logMessage = null)
+        {
+            Status = newStatus;
+            StatusDate = DateTime.UtcNow;
+            if (Logs == null) throw new Exception($"Order Logs not tracking! {ID}");
+            Logs.Add(new OrderLog() {
+                StatusDate = StatusDate,
+                NewStatus = Status, 
+                Message = logMessage
+            });
+        }
     }
 }

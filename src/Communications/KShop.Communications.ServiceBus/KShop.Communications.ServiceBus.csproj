@@ -11,5 +11,9 @@
     <PackageReference Include="MassTransit.Redis" Version="7.1.8" />
     <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />
+  </ItemGroup>
   
 </Project>

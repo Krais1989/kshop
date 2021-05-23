@@ -21,7 +21,7 @@ namespace KShop.Communications.ServiceBus
         /// Конфигурация шины
         /// </summary>
         /// <param name="conf"></param>
-        public static void ApplyKShopBusConfiguration(this IBusFactoryConfigurator conf)
+        public static void KShopApplyBusConfiguration(this IBusFactoryConfigurator conf)
         {
             var entityNameFormatter = conf.MessageTopology.EntityNameFormatter;
             conf.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter(entityNameFormatter));

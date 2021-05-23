@@ -68,6 +68,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Products.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Products.WebApi", "Products\KShop.Products.WebApi\KShop.Products.WebApi.csproj", "{8ED2C4AC-1C40-4A34-B112-0084AFD8A77E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KShop.Metrics", "Shared\KShop.Metrics\KShop.Metrics.csproj", "{46AF91CD-D093-43D8-810C-0EB68B289450}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +160,10 @@ Global
 		{8ED2C4AC-1C40-4A34-B112-0084AFD8A77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ED2C4AC-1C40-4A34-B112-0084AFD8A77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ED2C4AC-1C40-4A34-B112-0084AFD8A77E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46AF91CD-D093-43D8-810C-0EB68B289450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46AF91CD-D093-43D8-810C-0EB68B289450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46AF91CD-D093-43D8-810C-0EB68B289450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46AF91CD-D093-43D8-810C-0EB68B289450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +190,7 @@ Global
 		{6B3090C6-EA6A-4A7F-8470-16965B8D32FA} = {6961129A-47C5-485D-945C-2BA0DD2AE8FE}
 		{4EEEA8C2-EDB4-43B8-8D47-10DB99FCDF06} = {6961129A-47C5-485D-945C-2BA0DD2AE8FE}
 		{8ED2C4AC-1C40-4A34-B112-0084AFD8A77E} = {6961129A-47C5-485D-945C-2BA0DD2AE8FE}
+		{46AF91CD-D093-43D8-810C-0EB68B289450} = {ACA406ED-A661-472F-968D-62F09D734778}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42DFB36-0387-4155-910C-9F61C0961023}

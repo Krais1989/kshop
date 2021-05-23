@@ -93,7 +93,7 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
                 foreach (var orderId in reserving.Keys)
                 {
                     var res_positions = reserving[orderId];
-                    var reserved_products = new Dictionary<int, int>();
+                    var reserved_products = new Dictionary<ulong, uint>();
                     foreach (var res_pos in res_positions)
                     {
                         await ResilientTransaction<ProductsContext>
@@ -104,14 +104,14 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
                                 {
                                     db_positions.Quantity -= res_pos.Quantity;
                                     res_pos.Status = ProductReserve.EStatus.Reserved;
-                                    res_pos.ReserveDate = DateTime.UtcNow;
+                                    res_pos.CompleteDate = DateTime.UtcNow;
 
                                     reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
                                 }
                                 else
                                 {
                                     res_pos.Status = ProductReserve.EStatus.NotEnough;
-                                    res_pos.ReserveDate = DateTime.UtcNow;
+                                    res_pos.CompleteDate = DateTime.UtcNow;
                                 }
 
                                 db_context.ProductPositions.Update(db_positions);

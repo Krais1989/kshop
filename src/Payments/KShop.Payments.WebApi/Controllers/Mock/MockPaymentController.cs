@@ -1,6 +1,6 @@
 ﻿using KShop.Communications.Contracts.Payments;
+using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
 using KShop.Payments.Domain.Mediators;
-using KShop.Payments.Domain.Providers.Mock.DTOs;
 using KShop.Payments.Persistence.Entities;
 using MassTransit;
 using MediatR;
@@ -76,7 +76,7 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         {
             var createBusReq = new PaymentCreateSvcRequest()
             {
-                PaymentPlatform = EPaymentPlatformType.Mock,
+                PaymentPlatform = EPaymentProvider.Mock,
                 OrderID = dto.OrderID,
                 Price = dto.Price,
             };
@@ -122,18 +122,16 @@ namespace KShop.Payments.WebApi.Controllers.Mock
             switch (dto.Status)
             {
                 case EMockPaymentExternalStatus.Paid:
-                    var payReq = new PaymentExternalPayMediatorRequest()
+                    var payReq = new PaymentSetPaidByExternalIDMediatorRequest()
                     {
-                        ExternalPaymentID = dto.ExternalPaymentID,
-                        PlatformType = EPaymentPlatformType.Mock
+                        ExternalPaymentID = dto.ExternalPaymentID
                     };
                     var payResp = await _mediator.Send(payReq);
                     break;
                 case EMockPaymentExternalStatus.Canceled:
-                    var cancelReq = new PaymentExternalCancelMediatorRequest()
+                    var cancelReq = new PaymentSetCanceledByExternalIDMediatorRequest
                     {
-                        ExternalPaymentID = dto.ExternalPaymentID,
-                        PaymentPlatformType = EPaymentPlatformType.Mock
+                        ExternalPaymentID = dto.ExternalPaymentID
                     };
                     var cancelResp = await _mediator.Send(cancelReq);
                     break;

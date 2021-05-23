@@ -16,6 +16,22 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
 
     public class ProductsReserveMediatorResponse
     {
+        public ProductsReserveMediatorResponse(IDictionary<ulong, ulong> reservationData)
+        {
+            ReservationData = reservationData;
+        }
+
+        public ProductsReserveMediatorResponse(string errorMessage)
+        {
+            ErrorMessage = errorMessage;
+        }
+
+        /// <summary>
+        /// Данные в формате <id_продукта, id_резерва>
+        /// </summary>
+        public IDictionary<ulong, ulong> ReservationData { get; private set; }
+        public string ErrorMessage { get; private set; }
+        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
     /// <summary>
     /// Запрос на резервацию заказа
@@ -24,7 +40,7 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
     {
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
-        public IDictionary<int, int> OrderPositions { get; set; }
+        public IDictionary<ulong, uint> OrderPositions { get; set; }
     }
     public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>
     {
@@ -54,13 +70,15 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
                     OrderID = request.OrderID,
                     ProductID = prodId,
                     Quantity = request.OrderPositions[prodId],
-                    ReserveDate = DateTime.UtcNow,
+                    CreateDate = DateTime.UtcNow,
                     Status = ProductReserve.EStatus.Pending
                 });
 
             await _context.ProductReserves.AddRangeAsync(reserves);
 
-            return new ProductsReserveMediatorResponse();
+            var reservationData = reserves.ToDictionary(e => e.ProductID, e => e.ID);
+
+            return new ProductsReserveMediatorResponse(reservationData);
         }
     }
 }

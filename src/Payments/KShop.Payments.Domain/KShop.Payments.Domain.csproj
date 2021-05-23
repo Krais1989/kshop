@@ -17,8 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Providers\Yookassa\DTOs\" />
+    <Folder Include="ExternalPaymentProviders\Yookassa\DTOs\" />
+    <Folder Include="PaymentCancelling\Validators\" />
+    <Folder Include="PaymentChecking\Consumers\" />
+    <Folder Include="PaymentChecking\Exceptions\" />
+    <Folder Include="PaymentProcessing\Activities\" />
+    <Folder Include="PaymentProcessing\Consumers\" />
+    <Folder Include="PaymentProcessing\Sagas\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>

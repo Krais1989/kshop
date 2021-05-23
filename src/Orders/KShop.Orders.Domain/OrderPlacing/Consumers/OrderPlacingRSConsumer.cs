@@ -57,27 +57,32 @@ namespace KShop.Orders.Domain.Consumers
 
             var builder = new RoutingSlipBuilder(Guid.NewGuid());
 
+
             /**/
-            builder.AddSubscription(context.ReceiveContext.InputAddress,
+            builder.AddSubscription(context.SourceAddress,
                 RoutingSlipEvents.Completed,
                 RoutingSlipEventContents.All,
                 x => x.Send(new OrderPlacingCompletedRSEvent
                 {
+                    SubmissionID = context.Message.SubmissionID
                 }));
 
-            builder.AddSubscription(context.ReceiveContext.InputAddress,
+            builder.AddSubscription(context.SourceAddress,
                 RoutingSlipEvents.Faulted,
                 RoutingSlipEventContents.All,
                 x => x.Send(new OrderPlacingFaultedRSEvent
                 {
+                    SubmissionID = context.Message.SubmissionID
                 }));
 
-            builder.AddVariable("OrderID", Guid.Empty); // общая переменная routing slip
+
+            builder.AddVariable("OrderID", context.Message.SubmissionID); // общая переменная routing slip
             builder.AddVariable("CustomerID", context.Message.CustomerID); // общая переменная routing slip
             builder.AddVariable("Positions", context.Message.Positions); // общая переменная routing slip
             builder.AddVariable(nameof(ConsumeContext.RequestId), context.RequestId);
             builder.AddVariable(nameof(ConsumeContext.ResponseAddress), context.ResponseAddress);
             builder.AddVariable("Request", context.Message);
+
 
             builder.AddActivity(nameof(OrderCreateRSActivity), new Uri($"exchange:{createActivity}"),
                 new OrderCreateRSActivityArgs
@@ -87,7 +92,6 @@ namespace KShop.Orders.Domain.Consumers
             builder.AddActivity(nameof(ProductsReserveRSActivity), new Uri($"exchange:{reserveActivity}"),
                 new ProductsReserveRSActivityArgs
                 {
-
                 });
             return builder.Build();
         }

@@ -1,4 +1,6 @@
-﻿using KShop.Shipments.Domain.ExternalServices;
+﻿
+using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
+using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
 using KShop.Shipments.Persistence;
 using KShop.Shipments.Persistence.Entities;
 using MassTransit;
@@ -12,7 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ShipmentProcessing.BackgroundServices
+namespace KShop.Shipments.Domain.BackgroundServices
 {
     /// <summary>
     /// Процедура отмены доставки во внешнем сервисе
@@ -21,12 +23,12 @@ namespace KShop.Shipments.Domain.ShipmentProcessing.BackgroundServices
     {
         private readonly ILogger<ShipmentCancellingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IExternalShipmentService _externalShipment;
+        private readonly IExternalShipmentServiceProvider _externalShipment;
 
         public ShipmentCancellingBackgroundService(
             ILogger<ShipmentCancellingBackgroundService> logger,
             IServiceScopeFactory scopeFactory,
-            IExternalShipmentService externalShipment)
+            IExternalShipmentServiceProvider externalShipment)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;

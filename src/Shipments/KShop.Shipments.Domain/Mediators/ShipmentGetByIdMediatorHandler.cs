@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ShipmentProcessing.Mediators
+namespace KShop.Shipments.Domain.Mediators
 {
 
     public class ShipmentGetByIdResponse

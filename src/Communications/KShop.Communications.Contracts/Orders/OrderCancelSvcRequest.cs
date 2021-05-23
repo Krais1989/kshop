@@ -10,10 +10,8 @@ namespace KShop.Communications.Contracts.Orders
         public Guid OrderID { get; set; }
     }
 
-    public class OrderCancelSvcResponse
+    public class OrderCancelSvcResponse : BaseResponse
     {
         public Guid? OrderID { get; set; }
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
     }
 }

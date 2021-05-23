@@ -13,8 +13,4 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
-  </ItemGroup>
-
 </Project>
