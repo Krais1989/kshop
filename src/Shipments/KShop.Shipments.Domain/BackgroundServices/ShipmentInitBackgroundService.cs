@@ -1,10 +1,11 @@
 ﻿
+using KShop.Communications.Contracts.Shipments;
 using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
 using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
 using KShop.Shipments.Persistence;
 using KShop.Shipments.Persistence.Entities;
 using MassTransit;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,16 +27,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
     {
         private readonly ILogger<ShipmentInitBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IExternalShipmentServiceProvider _externalShipment;
 
         public ShipmentInitBackgroundService(
             ILogger<ShipmentInitBackgroundService> logger,
-            IServiceScopeFactory scopeFactory,
-            IExternalShipmentServiceProvider externalShipment)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _externalShipment = externalShipment;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -47,26 +45,35 @@ namespace KShop.Shipments.Domain.BackgroundServices
                 var db_context = scope.ServiceProvider.GetRequiredService<ShipmentContext>();
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var shipment_provider = scope.ServiceProvider.GetRequiredService<IExternalShipmentServiceProvider>();
 
                 var init_shipments = await db_context.Shipments.Where(e => e.Status == EShipmentStatus.Initializing).ToListAsync();
 
                 foreach (var shipment in init_shipments)
                 {
-                    var response = await _externalShipment.CreateShipmentAsync(
-                        new ExternalShipmentCreateRequest()
-                        {
-                            OrderID = shipment.OrderID,
-                            SourceAddress = "",
-                            DestinationAddress = ""
-                        });
+                    try
+                    {
+                        var response = await shipment_provider.CreateShipmentAsync(
+                            new ExternalShipmentCreateRequest()
+                            {
+                                OrderID = shipment.OrderID,
+                                SourceAddress = "",
+                                DestinationAddress = ""
+                            });
 
-                    shipment.PendingDate = DateTime.UtcNow;
-                    shipment.Status = EShipmentStatus.Pending;
-                    shipment.ExternalID = response.ExternalShipmnentID;
+                        shipment.PendingDate = DateTime.UtcNow;
+                        shipment.Status = EShipmentStatus.Pending;
+                        shipment.ExternalID = response.ExternalShipmnentID;
+
+                        await db_context.SaveChangesAsync();
+
+                        await pub_endpoint.Publish(new ShipmentCreateSuccessSvcEvent(shipment.OrderID, shipment.ID));
+                    }
+                    catch (Exception e)
+                    {
+                        await pub_endpoint.Publish(new ShipmentCreateFaultSvcEvent(shipment.OrderID, e));
+                    }
                 }
-
-                await db_context.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }

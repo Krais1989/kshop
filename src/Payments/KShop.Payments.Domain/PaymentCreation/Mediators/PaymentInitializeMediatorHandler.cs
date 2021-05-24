@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using KShop.Communications.Contracts.Payments;
+using KShop.Communications.Contracts.ValueObjects;
 using KShop.Payments.Domain.Validators;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;
@@ -21,7 +22,7 @@ namespace KShop.Payments.Domain.Mediators
     {
         public EPaymentProvider PaymentPlatform { get; set; }
         public Guid OrderID { get; set; }
-        public decimal Price { get; set; }
+        public Money Price { get; set; }
     }
     public class PaymentInitializeMediatorHandler : IRequestHandler<PaymentInitializeMediatorRequest, PaymentInitializeMediatorResponse>
     {

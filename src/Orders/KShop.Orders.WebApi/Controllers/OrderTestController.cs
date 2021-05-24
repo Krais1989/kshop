@@ -1,7 +1,12 @@
 ﻿using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.Payments;
+using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Domain.Consumers;
+using KShop.Orders.Persistence;
+using KShop.Orders.Persistence.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +22,16 @@ namespace KShop.Orders.WebApi.Controllers
     {
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
+        private readonly OrderContext _orderContext;
 
-        public OrderTestController(IPublishEndpoint publishEndpoint, IRequestClient<OrderPlacingSagaRequest> createOrderClient)
+        public OrderTestController(
+            IPublishEndpoint publishEndpoint,
+            IRequestClient<OrderPlacingSagaRequest> createOrderClient,
+            OrderContext orderContext)
         {
             _publishEndpoint = publishEndpoint;
             _createOrderClient = createOrderClient;
+            _orderContext = orderContext;
         }
 
 
@@ -41,7 +51,9 @@ namespace KShop.Orders.WebApi.Controllers
             {
                 OrderID = Guid.NewGuid(),
                 CustomerID = 111,
-                Positions = new OrderPositionsMap()
+                Positions = new OrderPositionsMap(),
+                Price = new Money(200),
+                PaymentProvider = EPaymentProvider.Mock
             };
             await _publishEndpoint.Publish(msg);
 
@@ -55,5 +67,6 @@ namespace KShop.Orders.WebApi.Controllers
 
             return Ok(msg);
         }
+
     }
 }

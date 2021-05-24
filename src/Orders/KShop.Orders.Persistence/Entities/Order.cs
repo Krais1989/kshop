@@ -55,12 +55,20 @@ namespace KShop.Orders.Persistence.Entities
 
         public void SetStatus(EStatus newStatus, string logMessage = null)
         {
+            if (Status != EStatus.Initial && Status == newStatus)
+            {
+                throw new Exception($"Exception while changing to same status ({newStatus})! OrderID: {ID}");
+            }
+
             Status = newStatus;
             StatusDate = DateTime.UtcNow;
-            if (Logs == null) throw new Exception($"Order Logs not tracking! {ID}");
-            Logs.Add(new OrderLog() {
+            if (Logs == null) // throw new Exception($"Order Logs not tracking! {ID}");
+                Logs = new List<OrderLog>();
+
+            Logs.Add(new OrderLog()
+            {
                 StatusDate = StatusDate,
-                NewStatus = Status, 
+                NewStatus = Status,
                 Message = logMessage
             });
         }

@@ -4,15 +4,22 @@ using System.Text;
 
 namespace KShop.Communications.Contracts.Products
 {
+
     /// <summary>
     /// Сообщение внутреннего обработчика о состоянии резервации 
     /// </summary>
-    public class ProductsReserveBSEvent
+    public class ProductsReserveSuccessEvent
     {
         public Guid OrderID { get; set; }
         /// <summary>
         /// Зарезервированные продукты <product_id, quantity>
         /// </summary>
-        public IDictionary<ulong, uint> ReservedProducts { get; set; }
+        public ProductsReserveMap ReservedProducts { get; set; }
+
+        public ProductsReserveSuccessEvent(Guid orderID, ProductsReserveMap reservedProducts)
+        {
+            OrderID = orderID;
+            ReservedProducts = reservedProducts;
+        }
     }
 }

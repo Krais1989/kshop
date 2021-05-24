@@ -13,25 +13,25 @@ using System.Threading.Tasks;
 namespace KShop.Shipments.Domain.Mediators
 {
 
-    public class ShipmentCreateMediatorResponse
+    public class ShipmentInitializeMediatorResponse
     {
         public Guid ShipmentID { get; set; }
         public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
         public string ErrorMessage { get; set; }
     }
-    public class ShipmentCreateMediatorRequest : IRequest<ShipmentCreateMediatorResponse>
+    public class ShipmentInitializeMediatorRequest : IRequest<ShipmentInitializeMediatorResponse>
     {
         public Guid OrderID { get; set; }
     }
-    public class ShipmentCreateMediatorHandler : IRequestHandler<ShipmentCreateMediatorRequest, ShipmentCreateMediatorResponse>
+    public class ShipmentInitializeMediatorHandler : IRequestHandler<ShipmentInitializeMediatorRequest, ShipmentInitializeMediatorResponse>
     {
-        private readonly ILogger<ShipmentCreateMediatorHandler> _logger;
+        private readonly ILogger<ShipmentInitializeMediatorHandler> _logger;
         private readonly IValidator<ShipmentCreateFluentValidatorDto> _validator;
 
         private readonly ShipmentContext _shipmentContext;
 
-        public ShipmentCreateMediatorHandler(
-            ILogger<ShipmentCreateMediatorHandler> logger,
+        public ShipmentInitializeMediatorHandler(
+            ILogger<ShipmentInitializeMediatorHandler> logger,
             IValidator<ShipmentCreateFluentValidatorDto> validator,
             ShipmentContext shipmentContext)
         {
@@ -40,7 +40,7 @@ namespace KShop.Shipments.Domain.Mediators
             _shipmentContext = shipmentContext;
         }
 
-        public async Task<ShipmentCreateMediatorResponse> Handle(ShipmentCreateMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<ShipmentInitializeMediatorResponse> Handle(ShipmentInitializeMediatorRequest request, CancellationToken cancellationToken)
         {
             var validatorDto = new ShipmentCreateFluentValidatorDto() { };
             _validator.Validate(validatorDto);
@@ -55,7 +55,7 @@ namespace KShop.Shipments.Domain.Mediators
             await _shipmentContext.AddAsync(shipment);
             await _shipmentContext.SaveChangesAsync();
 
-            return new ShipmentCreateMediatorResponse()
+            return new ShipmentInitializeMediatorResponse()
             {
                 ShipmentID = shipment.ID
             };

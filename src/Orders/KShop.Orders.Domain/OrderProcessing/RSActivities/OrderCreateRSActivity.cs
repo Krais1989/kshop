@@ -18,6 +18,7 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
     {
         public Guid? OrderID { get; set; }
         public int CustomerID { get; set; }
+        public OrderPositionsMap OrderPositions { get; set; }
     }
 
     public class OrderCreateRSActivity
@@ -47,7 +48,8 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
                 new OrderCreateSvcRequest()
                 {
                     OrderID = context.Arguments.OrderID,
-                    CustomerID = context.Arguments.CustomerID
+                    CustomerID = context.Arguments.CustomerID,
+                    Positions = context.Arguments.OrderPositions
                 });
 
             if (response.Message.IsSuccess)
@@ -66,10 +68,7 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
 
         public async Task<CompensationResult> Compensate(CompensateContext<OrderCreateRSActivityLog> context)
         {
-            var response = await _clCancel.GetResponse<OrderCancelSvcResponse>(new OrderCancelSvcRequest()
-            {
-                OrderID = context.Log.OrderID.Value
-            });
+            var response = await _clCancel.GetResponse<OrderCancelSvcResponse>(new OrderCancelSvcRequest(context.Log.OrderID.Value));
 
             if (response.Message.IsSuccess)
             {

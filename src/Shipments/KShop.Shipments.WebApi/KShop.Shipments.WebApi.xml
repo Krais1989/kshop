@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KShop.Shipments.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:KShop.Shipments.WebApi.Controllers.ExternalShipmentsController.ExternalServiceCallback">
+            <summary>
+            Метод вызываемый внешней системой при изменениях статуса доставки
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:KShop.Shipments.WebApi.Controllers.TestShipmentsController">
+            <summary>
+            Контроллер для внутреннего тестирования
+            Содержит логику, которая в боевом режиме исполняется консумерами через шину
+            </summary>
+        </member>
+    </members>
+</doc>

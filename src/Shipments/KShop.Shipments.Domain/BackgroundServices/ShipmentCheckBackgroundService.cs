@@ -3,7 +3,7 @@ using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
 using KShop.Shipments.Persistence;
 using KShop.Shipments.Persistence.Entities;
 using MassTransit;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,15 +22,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
     {
         private readonly ILogger<ShipmentCheckBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IExternalShipmentServiceProvider _externalShipment;
 
         public ShipmentCheckBackgroundService(
             ILogger<ShipmentCheckBackgroundService> logger,
-            IServiceScopeFactory scopeFactory, IExternalShipmentServiceProvider externalShipment)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _externalShipment = externalShipment;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -42,12 +40,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var shipment_provider = scope.ServiceProvider.GetRequiredService<IExternalShipmentServiceProvider>();
 
                 var pending_shipments = await db_context.Shipments.Where(e => e.Status == EShipmentStatus.Pending).ToListAsync();
 
                 foreach (var shipment in pending_shipments)
                 {
-                    var response = await _externalShipment.GetShipmentStatusAsync(
+                    var response = await shipment_provider.GetShipmentStatusAsync(
                         new ExternalShipmentGetStatusRequest()
                         {
                             ExternalShipmnentID = shipment.ExternalID

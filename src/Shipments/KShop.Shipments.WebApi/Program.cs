@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,13 @@ namespace KShop.Shipments.WebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .ConfigureServices((ctx, services) => {
+
+                })
+                .ConfigureAppConfiguration((hostCtx, confBuilder) => {
+
+                })
+                .UseSerilog((context, log) => { log.ReadFrom.Configuration(context.Configuration); });
     }
 }

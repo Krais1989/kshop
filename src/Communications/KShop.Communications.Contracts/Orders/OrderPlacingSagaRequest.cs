@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KShop.Communications.Contracts.Payments;
+using KShop.Communications.Contracts.ValueObjects;
+using System;
 using System.Text;
 
 namespace KShop.Communications.Contracts.Orders
@@ -12,6 +14,8 @@ namespace KShop.Communications.Contracts.Orders
         public Guid OrderID { get; set; }
         public int CustomerID { get; set; }
         public OrderPositionsMap Positions { get; set; }
+        public EPaymentProvider PaymentProvider { get; set; }
+        public Money Price { get; set; }
     }
 
     /// <summary>

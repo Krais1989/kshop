@@ -27,16 +27,23 @@ namespace KShop.Products.Domain.ProductsReservation.Consumers
             {
                 var productsReserve = new ProductsReserveMediatorRequest()
                 {
-                    CustomerID = context.Message.CustomerID
+                    CustomerID = context.Message.CustomerID,
+                    OrderID = context.Message.OrderID,
+                    OrderPositions = context.Message.OrderPositions
                 };
 
                 var res = await _mediator.Send(productsReserve);
 
-                await context.RespondAsync(new ProductsReserveMediatorResponse(res.ReservationData));
+                await context.RespondAsync(new ProductsReserveSvcResponse
+                {
+                    ProductsReserves = res.ReservationData
+                });
             }
             catch (Exception e)
             {
-                await context.RespondAsync(new ProductsReserveMediatorResponse(e.Message));
+                await context.RespondAsync(new ProductsReserveSvcResponse { 
+                    ErrorMessage = e.Message
+                });
             }
         }
     }

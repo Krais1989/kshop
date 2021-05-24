@@ -70,7 +70,7 @@ namespace KShop.Payments.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Payments.Persistence.Entities.Payment", b =>
                 {
-                    b.OwnsOne("KShop.Payments.Persistence.Entities.Money", "Money", b1 =>
+                    b.OwnsOne("KShop.Communications.Contracts.ValueObjects.Money", "Money", b1 =>
                         {
                             b1.Property<Guid>("PaymentID")
                                 .HasColumnType("char(36)");

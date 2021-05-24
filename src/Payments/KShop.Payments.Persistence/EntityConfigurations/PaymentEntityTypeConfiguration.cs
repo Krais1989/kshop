@@ -1,4 +1,5 @@
-﻿using KShop.Payments.Persistence.Entities;
+﻿using KShop.Communications.Contracts.ValueObjects;
+using KShop.Payments.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

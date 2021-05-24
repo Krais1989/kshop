@@ -25,16 +25,13 @@ namespace KShop.Payments.Domain.BackgroundServices
     {
         private readonly ILogger<PaymentCheckingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ICommonPaymentProvider _paymentProvider;
 
         public PaymentCheckingBackgroundService(
             ILogger<PaymentCheckingBackgroundService> logger,
-            IServiceScopeFactory scopeFactory,
-            ICommonPaymentProvider paymentProvider)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _paymentProvider = paymentProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,6 +45,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var payment_provider = scope.ServiceProvider.GetRequiredService<ICommonPaymentProvider>();
 
                 var pending_payments = await db_context.Payments
                     .Where(e => e.Status == EPaymentStatus.Pending)
@@ -58,7 +56,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 foreach (var payment in pending_payments)
                 {
                     _logger.LogWarning($"Check: {payment.ID} \tOrder: {payment.OrderID}");
-                    var provider_result = await _paymentProvider.GetStatusAsync(
+                    var provider_result = await payment_provider.GetStatusAsync(
                         new CommonPaymentProviderGetStatusRequest
                         {
                             Provider = payment.PaymentProvider

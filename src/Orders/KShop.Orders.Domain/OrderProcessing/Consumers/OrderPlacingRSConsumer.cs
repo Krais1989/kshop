@@ -1,6 +1,7 @@
 ﻿
 using Automatonymous.Requests;
 using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.Products;
 using KShop.Orders.Domain.OrderPlacing.Activities;
 using KShop.Orders.Domain.RoutingSlips;
 using KShop.Orders.Domain.RoutingSlips.OrderInitialization;
@@ -27,26 +28,31 @@ namespace KShop.Orders.Domain.Consumers
     {
         private readonly ILogger<OrderPlacingRSConsumer> _logger;
         private readonly IEndpointNameFormatter _formatter;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public OrderPlacingRSConsumer(
             ILogger<OrderPlacingRSConsumer> logger,
-            IEndpointNameFormatter formatter)
+            IEndpointNameFormatter formatter,
+            IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _formatter = formatter;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task Consume(ConsumeContext<OrderPlacingRSRequest> context)
         {
-            var msgData = JsonSerializer.Serialize(context.Message);
-            _logger.LogInformation($"{nameof(OrderPlacingRSConsumer)} consumes: {msgData}");
-
-            var rs = CreateRoutingSlip(context);
-            await context.Execute(rs);
-
-            if (context.ResponseAddress != null)
+            try
             {
+                var msgData = JsonSerializer.Serialize(context.Message);
+                _logger.LogInformation($"{nameof(OrderPlacingRSConsumer)} consumes: {msgData}");
 
+                var rs = CreateRoutingSlip(context);
+                await context.Execute(rs);
+            }
+            catch (Exception e)
+            {
+                await _publishEndpoint.Publish(new ProductsReserveFaultEvent(context.Message.OrderID, e));
             }
         }
 
@@ -62,23 +68,20 @@ namespace KShop.Orders.Domain.Consumers
             builder.AddSubscription(context.SourceAddress,
                 RoutingSlipEvents.Completed,
                 RoutingSlipEventContents.All,
-                x => x.Send(new OrderPlacingCompletedRSEvent
+                x => x.Send(new OrderReservingCompletedRSEvent
                 {
-                    SubmissionID = context.Message.SubmissionID
+                    OrderID = context.Message.OrderID
                 }));
 
             builder.AddSubscription(context.SourceAddress,
                 RoutingSlipEvents.Faulted,
                 RoutingSlipEventContents.All,
-                x => x.Send(new OrderPlacingFaultedRSEvent
-                {
-                    SubmissionID = context.Message.SubmissionID
-                }));
+                x => x.Send(new ProductsReserveFaultEvent(context.Message.OrderID)));
 
 
-            builder.AddVariable("OrderID", context.Message.SubmissionID); // общая переменная routing slip
+            builder.AddVariable("OrderID", context.Message.OrderID); // общая переменная routing slip
             builder.AddVariable("CustomerID", context.Message.CustomerID); // общая переменная routing slip
-            builder.AddVariable("Positions", context.Message.Positions); // общая переменная routing slip
+            builder.AddVariable("OrderPositions", context.Message.OrderPositions); // общая переменная routing slip
             builder.AddVariable(nameof(ConsumeContext.RequestId), context.RequestId);
             builder.AddVariable(nameof(ConsumeContext.ResponseAddress), context.ResponseAddress);
             builder.AddVariable("Request", context.Message);

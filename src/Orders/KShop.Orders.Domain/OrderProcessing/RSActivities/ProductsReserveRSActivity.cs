@@ -12,7 +12,7 @@ namespace KShop.Orders.Domain.OrderPlacing.Activities
 {
     public class ProductsReserveRSActivityLog
     {
-        public Guid ReserveID { get; set; }
+        public Guid OrderID { get; set; }
     }
 
     public class ProductsReserveRSActivityArgs
@@ -56,10 +56,11 @@ namespace KShop.Orders.Domain.OrderPlacing.Activities
 
             if (response.Message.IsSuccess)
             {
-                return context.Completed(new ProductsReserveRSActivityLog
-                {
-                    ReserveID = response.Message.ReserveID.Value
-                });
+                return context.Completed(
+                    new ProductsReserveRSActivityLog
+                    {
+                        OrderID = context.Arguments.OrderID
+                    });
             }
             else
             {
@@ -70,10 +71,7 @@ namespace KShop.Orders.Domain.OrderPlacing.Activities
         public async Task<CompensationResult> Compensate(CompensateContext<ProductsReserveRSActivityLog> context)
         {
             var response = await _clReserveCancel.GetResponse<ProductsReserveCancelSvcResponse>(
-                new ProductsReserveCancelSvcRequest()
-                {
-                    ReserveID = context.Log.ReserveID
-                });
+                new ProductsReserveCancelSvcRequest(context.Log.OrderID));
 
             return context.Compensated();
         }

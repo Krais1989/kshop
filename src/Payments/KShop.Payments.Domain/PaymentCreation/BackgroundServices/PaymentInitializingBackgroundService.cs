@@ -4,6 +4,7 @@ using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
 using KShop.Payments.Persistence;
 using KShop.Payments.Persistence.Entities;
 using MassTransit;
+using MassTransit.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,16 +27,13 @@ namespace KShop.Payments.Domain.BackgroundServices
     {
         private readonly ILogger<PaymentCheckingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ICommonPaymentProvider _paymentProvider;
 
         public PaymentInitializingBackgroundService(
             ILogger<PaymentCheckingBackgroundService> logger,
-            IServiceScopeFactory scopeFactory,
-            ICommonPaymentProvider paymentProvider)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _paymentProvider = paymentProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,6 +46,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 var db_context = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
+                var payment_provider = scope.ServiceProvider.GetRequiredService<ICommonPaymentProvider>();
 
                 var initilizing_payments = await db_context.Payments
                     .Where(e => e.Status == EPaymentStatus.Initializing)
@@ -56,15 +55,26 @@ namespace KShop.Payments.Domain.BackgroundServices
                 _logger.LogWarning($"Initializing payments count: {initilizing_payments.Count}");
                 foreach (var payment in initilizing_payments)
                 {
-                    _logger.LogWarning($"Initialize: {payment.ID} \tOrder: {payment.OrderID}");
-                    var provider_result = await _paymentProvider.CreateAsync(
-                        new CommonPaymentProviderCreateRequest() { 
-                            OrderID = payment.OrderID,
-                            Provider = payment.PaymentProvider
-                        });
+                    try
+                    {
+                        _logger.LogWarning($"Initialize: {payment.ID} \tOrder: {payment.OrderID}");
+                        var provider_result = await payment_provider.CreateAsync(
+                            new CommonPaymentProviderCreateRequest()
+                            {
+                                OrderID = payment.OrderID,
+                                Provider = payment.PaymentProvider
+                            });
 
-                    payment.SetStatus(EPaymentStatus.Pending);
-                    await db_context.SaveChangesAsync();
+                        payment.SetStatus(EPaymentStatus.Pending);
+                        await db_context.SaveChangesAsync();
+
+                        await pub_endpoint.Publish(new PaymentCreateSuccessSvcEvent(payment.OrderID, payment.ID));
+
+                    }
+                    catch (Exception e)
+                    {
+                        await pub_endpoint.Publish(new PaymentCreateFaultSvcEvent(payment.OrderID, e));
+                    }
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);

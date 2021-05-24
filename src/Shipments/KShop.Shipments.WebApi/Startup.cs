@@ -69,8 +69,8 @@ namespace KShop.Shipments.WebApi
             services.AddKShopMetrics(Configuration);
             services.AddKShopTracing(Configuration);
             services.AddKShopSwagger(Configuration);
-            services.AddMediatR(typeof(ShipmentCreateMediatorHandler).Assembly);
 
+            services.AddMediatR(typeof(ShipmentInitializeMediatorHandler).Assembly);
 
             services.AddHostedService<ShipmentInitBackgroundService>();
             services.AddHostedService<ShipmentCheckBackgroundService>();

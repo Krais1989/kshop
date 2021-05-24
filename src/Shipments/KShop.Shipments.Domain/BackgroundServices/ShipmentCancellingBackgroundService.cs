@@ -23,16 +23,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
     {
         private readonly ILogger<ShipmentCancellingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IExternalShipmentServiceProvider _externalShipment;
 
         public ShipmentCancellingBackgroundService(
             ILogger<ShipmentCancellingBackgroundService> logger,
-            IServiceScopeFactory scopeFactory,
-            IExternalShipmentServiceProvider externalShipment)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _externalShipment = externalShipment;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,13 +41,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
                 var db_context = scope.ServiceProvider.GetRequiredService<ShipmentContext>();
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var shipment_provider = scope.ServiceProvider.GetRequiredService<IExternalShipmentServiceProvider>();
 
                 var cancelling_shipments = await db_context.Shipments.Where(e => e.Status == EShipmentStatus.Cancelling).ToListAsync(stoppingToken);
 
                 foreach (var shipment in cancelling_shipments)
                 {
-                    await _externalShipment.CancelShipmentAsync(
+                    await shipment_provider.CancelShipmentAsync(
                         new ExternalShipmentCancelRequest
                         {
                             ExternalShipmnentID = shipment.ExternalID

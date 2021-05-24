@@ -1,4 +1,5 @@
 ﻿using KShop.Communications.Contracts.Payments;
+using KShop.Communications.Contracts.ValueObjects;
 using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
 using KShop.Payments.Domain.Mediators;
 using KShop.Payments.Persistence.Entities;
@@ -16,7 +17,7 @@ namespace KShop.Payments.WebApi.Controllers.Mock
     public class MockPaymentCreateRequestApiDto
     {
         public Guid OrderID { get; set; }
-        public decimal Price { get; set; }
+        public Money Price { get; set; }
     }
     public class MockPaymentCreateResponseApiDto
     {
@@ -46,14 +47,14 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         private readonly ILogger<MockPaymentController> _logger;
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<PaymentCreateSvcRequest> _createClient;
+        private readonly IRequestClient<PaymentCreateSvcCommand> _createClient;
         private readonly IRequestClient<PaymentCancelSvcRequest> _cancelClient;
 
         public MockPaymentController(
             ILogger<MockPaymentController> logger,
             IMediator mediator,
             IPublishEndpoint publishEndpoint,
-            IRequestClient<PaymentCreateSvcRequest> createClient,
+            IRequestClient<PaymentCreateSvcCommand> createClient,
             IRequestClient<PaymentCancelSvcRequest> cancelClient)
         {
             _logger = logger;
@@ -74,14 +75,14 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentTest([FromBody] MockPaymentCreateRequestApiDto dto)
         {
-            var createBusReq = new PaymentCreateSvcRequest()
+            var createBusReq = new PaymentCreateSvcCommand()
             {
                 PaymentPlatform = EPaymentProvider.Mock,
                 OrderID = dto.OrderID,
                 Price = dto.Price,
             };
 
-            var result = await _createClient.GetResponse<PaymentCreateSvcResponse>(createBusReq);
+            var result = await _createClient.GetResponse<PaymentCreateSuccessSvcEvent>(createBusReq);
 
             return Ok(result.Message);
         }

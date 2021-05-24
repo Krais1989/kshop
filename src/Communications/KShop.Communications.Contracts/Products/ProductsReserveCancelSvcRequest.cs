@@ -4,11 +4,21 @@ namespace KShop.Communications.Contracts.Products
 {
     public class ProductsReserveCancelSvcRequest
     {
-        public Guid ReserveID { get; set; }
+        public ProductsReserveCancelSvcRequest(Guid orderID)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; set; }
     }
 
     public class ProductsReserveCancelSvcResponse
     {
-        public Guid ReserveID { get; set; }
+        public ProductsReserveCancelSvcResponse(Guid orderID)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; set; }
     }
 }

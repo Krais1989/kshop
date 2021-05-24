@@ -92,41 +92,51 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
                 /*  */
                 foreach (var orderId in reserving.Keys)
                 {
-                    var res_positions = reserving[orderId];
-                    var reserved_products = new Dictionary<ulong, uint>();
-                    foreach (var res_pos in res_positions)
+                    try
                     {
-                        await ResilientTransaction<ProductsContext>
-                            .New(db_context)
-                            .ExecuteAsync(async () => {
-                                var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
-                                if (db_positions.Quantity >= res_pos.Quantity)
-                                {
-                                    db_positions.Quantity -= res_pos.Quantity;
-                                    res_pos.Status = ProductReserve.EStatus.Reserved;
-                                    res_pos.CompleteDate = DateTime.UtcNow;
-
-                                    reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
-                                }
-                                else
-                                {
-                                    res_pos.Status = ProductReserve.EStatus.NotEnough;
-                                    res_pos.CompleteDate = DateTime.UtcNow;
-                                }
-
-                                db_context.ProductPositions.Update(db_positions);
-                                db_context.ProductReserves.Update(res_pos);
-                                await db_context.SaveChangesAsync();
-                            });
-                    }
-
-                    /* Отправить сообщение о резервации продуктов */
-                    await publish_endpoint.Publish(
-                        new ProductsReserveBSEvent
+                        if (reserving.Count == 0)
                         {
-                            OrderID = orderId,
-                            ReservedProducts = reserved_products
-                        });
+                            var res_positions = reserving[orderId];
+                            var reserved_products = new ProductsReserveMap();
+                            foreach (var res_pos in res_positions)
+                            {
+                                await ResilientTransaction<ProductsContext>
+                                    .New(db_context)
+                                    .ExecuteAsync(async () =>
+                                    {
+                                        var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
+                                        if (db_positions.Quantity >= res_pos.Quantity)
+                                        {
+                                            db_positions.Quantity -= res_pos.Quantity;
+                                            res_pos.Status = ProductReserve.EStatus.Reserved;
+                                            res_pos.CompleteDate = DateTime.UtcNow;
+
+                                            reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
+                                        }
+                                        else
+                                        {
+                                            res_pos.Status = ProductReserve.EStatus.NotEnough;
+                                            res_pos.CompleteDate = DateTime.UtcNow;
+                                        }
+
+                                        db_context.ProductPositions.Update(db_positions);
+                                        db_context.ProductReserves.Update(res_pos);
+                                        await db_context.SaveChangesAsync();
+                                    });
+                            }
+                            /* Отправить сообщение о резервации продуктов */
+                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
+                        }
+                        else
+                        {
+                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, new ProductsReserveMap()));
+                        }
+                        
+                    }
+                    catch (Exception e)
+                    {
+                        await publish_endpoint.Publish(new ProductsReserveFaultEvent(orderId, e));
+                    }
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(1));

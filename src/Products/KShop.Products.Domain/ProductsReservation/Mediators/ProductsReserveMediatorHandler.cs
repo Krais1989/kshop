@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using KShop.Communications.Contracts.Products;
 using KShop.Products.Domain.ProductsReservation.Validators;
 using KShop.Products.Persistence;
 using KShop.Products.Persistence.Entities;
@@ -16,7 +17,7 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
 
     public class ProductsReserveMediatorResponse
     {
-        public ProductsReserveMediatorResponse(IDictionary<ulong, ulong> reservationData)
+        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData)
         {
             ReservationData = reservationData;
         }
@@ -29,7 +30,7 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
         /// <summary>
         /// Данные в формате <id_продукта, id_резерва>
         /// </summary>
-        public IDictionary<ulong, ulong> ReservationData { get; private set; }
+        public ProductsReserveMap ReservationData { get; private set; }
         public string ErrorMessage { get; private set; }
         public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
@@ -72,11 +73,12 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
                     Quantity = request.OrderPositions[prodId],
                     CreateDate = DateTime.UtcNow,
                     Status = ProductReserve.EStatus.Pending
-                });
+                }).ToList();
 
             await _context.ProductReserves.AddRangeAsync(reserves);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            var reservationData = reserves.ToDictionary(e => e.ProductID, e => e.ID);
+            var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));
 
             return new ProductsReserveMediatorResponse(reservationData);
         }

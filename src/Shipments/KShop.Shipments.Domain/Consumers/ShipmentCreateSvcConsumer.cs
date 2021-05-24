@@ -11,49 +11,35 @@ using System.Threading.Tasks;
 
 namespace KShop.Shipments.Domain.Consumers
 {
-    public class ShipmentCreateSvcConsumer : IConsumer<ShipmentCreateSvcRequest>
+    public class ShipmentCreateSvcConsumer : IConsumer<ShipmentCreateSvcCommand>
     {
         private readonly ILogger<ShipmentCreateSvcConsumer> _logger;
         private readonly IMediator _mediator;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public ShipmentCreateSvcConsumer(
             ILogger<ShipmentCreateSvcConsumer> logger,
-            IMediator mediator)
+            IMediator mediator, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _mediator = mediator;
+            _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<ShipmentCreateSvcRequest> context)
+        public async Task Consume(ConsumeContext<ShipmentCreateSvcCommand> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
 
             try
             {
-                /* Создание платежа */
-                var result = await _mediator.Send(new ShipmentCreateMediatorRequest()
+                var result = await _mediator.Send(new ShipmentInitializeMediatorRequest()
                 {
                     OrderID = context.Message.OrderID
                 });
-
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                {
-                    await context.RespondAsync(new ShipmentCreateMediatorResponse()
-                    {
-                        ShipmentID = result.ShipmentID
-                    });
-                }
             }
             catch (Exception e)
             {
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                {
-                    await context.RespondAsync(new ShipmentCreateMediatorResponse()
-                    {
-                        ErrorMessage = e.Message
-                    });
-                }
-
+                await _publishEndpoint.Publish(new ShipmentCreateFaultSvcEvent(context.Message.OrderID, e));
             }
         }
     }

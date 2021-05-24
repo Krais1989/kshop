@@ -26,7 +26,7 @@ namespace KShop.Shipments.WebApi.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateShipment([FromBody] ShipmentCreateMediatorRequest request)
+        public async Task<IActionResult> CreateShipment([FromBody] ShipmentInitializeMediatorRequest request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);

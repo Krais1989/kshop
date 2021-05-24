@@ -12,12 +12,9 @@ namespace KShop.Communications.Contracts.Products
         public OrderPositionsMap OrderPositions { get; set; }
     }
 
-    public class ProductsReserveSvcResponse : ICorrelationalMessage
+    public class ProductsReserveSvcResponse : BaseResponse
     {
-        public Guid CorrelationID { get; set; }
-        public Guid? ReserveID { get; set; }
 
-        public bool IsSuccess { get; set; }
-        public string ErrorMessage { get; set; }
+        public ProductsReserveMap ProductsReserves { get; set; }
     }
 }

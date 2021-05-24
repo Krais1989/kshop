@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KShop.Products.Persistence.Migrations
 {
     [DbContext(typeof(ProductsContext))]
-    [Migration("20210518165111_InitialCommit")]
+    [Migration("20210524184742_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -69,7 +69,7 @@ namespace KShop.Orders.WebApi
 
                     busServices.AddConsumers(typeof(OrderCreateSvcRequestConsumer).Assembly);
                     busServices
-                        .AddSagaStateMachine<OrderPlacingSagaStateMachine, OrderPlacingSagaState>(typeof(OrderPlacingSagaStateMachineDefinition))
+                        .AddSagaStateMachine<OrderProcessingSagaStateMachine, OrderProcessingSagaState>(typeof(OrderProcessingSagaStateMachineDefinition))
                         .InMemoryRepository();
                 },
                 (busContext, rabbigConfig) =>

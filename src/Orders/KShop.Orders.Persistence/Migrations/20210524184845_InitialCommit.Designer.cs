@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KShop.Orders.Persistence.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210518164949_InitialCommit")]
+    [Migration("20210524184845_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,31 @@ namespace KShop.Orders.Persistence.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
+                {
+                    b.Property<ulong>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<byte>("NewStatus")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<Guid>("OrderID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("OrderLog");
+                });
+
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
                 {
                     b.Property<ulong>("ID")
@@ -62,6 +87,15 @@ namespace KShop.Orders.Persistence.Migrations
                     b.HasIndex("OrderID");
 
                     b.ToTable("OrderPositions");
+                });
+
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
+                {
+                    b.HasOne("KShop.Orders.Persistence.Entities.Order", "Order")
+                        .WithMany("Logs")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>

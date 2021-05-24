@@ -22,15 +22,13 @@ namespace KShop.Payments.Domain.BackgroundServices
     {
         private readonly ILogger<PaymentCancellingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ICommonPaymentProvider _paymentProvider;
 
         public PaymentCancellingBackgroundService(
             ILogger<PaymentCancellingBackgroundService> logger,
-            IServiceScopeFactory scopeFactory, ICommonPaymentProvider paymentProvider)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-            _paymentProvider = paymentProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,6 +41,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 var db_context = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
                 var pub_endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
+                var payment_provider = scope.ServiceProvider.GetRequiredService<ICommonPaymentProvider>();
 
                 var cancelling_payments = await db_context.Payments
                     .Where(e => e.Status == EPaymentStatus.Cancelling)
@@ -53,7 +52,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 {
                     _logger.LogWarning($"Cancel: {payment.ID} \tOrder: {payment.OrderID}");
 
-                    var result = await _paymentProvider.CancelAsync(
+                    var result = await payment_provider.CancelAsync(
                         new CommonPaymentProviderCancelRequest
                         {
                             ExternalPaymentID = payment.ExternalPaymentID,

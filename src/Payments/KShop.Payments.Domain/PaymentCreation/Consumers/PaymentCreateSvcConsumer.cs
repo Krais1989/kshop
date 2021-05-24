@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain.Consumers
 {
-    public class PaymentCreateSvcConsumer : IConsumer<PaymentCreateSvcRequest>
+    public class PaymentCreateSvcConsumer : IConsumer<PaymentCreateSvcCommand>
     {
         private readonly ILogger<PaymentCreateSvcConsumer> _logger;
         private readonly IMediator _mediator;
@@ -27,12 +27,12 @@ namespace KShop.Payments.Domain.Consumers
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<PaymentCreateSvcRequest> context)
+        public async Task Consume(ConsumeContext<PaymentCreateSvcCommand> context)
         {
-            _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
-
             try
             {
+                _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
+
                 /* Создание платежа */
                 var result = await _mediator.Send(new PaymentInitializeMediatorRequest()
                 {
@@ -41,25 +41,13 @@ namespace KShop.Payments.Domain.Consumers
                     PaymentPlatform = context.Message.PaymentPlatform
                 });
 
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                {
-                    await context.RespondAsync(new PaymentCreateSvcResponse()
-                    {
-                        PaymentID = result.PaymentID
-                    });
-                }
+                await context.Publish(new PaymentCreateSuccessSvcEvent(context.Message.OrderID, result.PaymentID));
             }
             catch (Exception e)
             {
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                {
-                    await context.RespondAsync(new PaymentCreateSvcResponse()
-                    {
-                        ErrorMessage = e.Message
-                    });
-                }
-
+                await context.Publish(new PaymentCreateFaultSvcEvent(context.Message.OrderID, e));
             }
+
         }
     }
 }
