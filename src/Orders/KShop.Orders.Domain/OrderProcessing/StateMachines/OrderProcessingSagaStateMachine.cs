@@ -48,17 +48,20 @@ namespace KShop.Orders.Domain.Orchestrations
 
         protected override void ConfigureSaga(IReceiveEndpointConfigurator endpointConfigurator, ISagaConfigurator<OrderProcessingSagaState> sagaConfigurator)
         {
-            //sagaConfigurator.UseCircuitBreaker(e => {
+            //sagaConfigurator.UseMessageRetry(e =>
+            //{
+            //    e.Intervals(500, 5000, 10000);
+            //});
+
+            //sagaConfigurator.UseCircuitBreaker(e =>
+            //{
             //    e.ActiveThreshold = 10;
             //    e.TrackingPeriod = TimeSpan.FromSeconds(10);
 
             //    e.ResetInterval = TimeSpan.FromSeconds(10);
             //    e.TripThreshold = 10;
             //});
-            //sagaConfigurator.UseMessageRetry(e =>
-            //{
-            //    e.Intervals(500, 5000, 10000, 1000, 1000);
-            //});
+            
             base.ConfigureSaga(endpointConfigurator, sagaConfigurator);
         }
     }

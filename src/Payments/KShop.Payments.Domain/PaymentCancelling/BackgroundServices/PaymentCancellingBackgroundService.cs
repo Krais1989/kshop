@@ -47,7 +47,6 @@ namespace KShop.Payments.Domain.BackgroundServices
                     .Where(e => e.Status == EPaymentStatus.Cancelling)
                     .ToListAsync();
 
-                _logger.LogWarning($"Cancel payments count: {cancelling_payments.Count}");
                 foreach (var payment in cancelling_payments)
                 {
                     try

@@ -53,7 +53,6 @@ namespace KShop.Payments.Domain.BackgroundServices
                     .Where(e => e.Status == EPaymentStatus.Initializing)
                     .ToListAsync();
 
-                _logger.LogWarning($"Initializing payments count: {initilizing_payments.Count}");
                 foreach (var payment in initilizing_payments)
                 {
                     try

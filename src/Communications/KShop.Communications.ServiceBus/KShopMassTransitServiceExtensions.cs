@@ -1,4 +1,5 @@
-﻿using KShop.ServiceBus;
+﻿using GreenPipes;
+using KShop.ServiceBus;
 using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MassTransit.Pipeline.Filters;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KShop.Communications.ServiceBus
 {
@@ -58,6 +60,22 @@ namespace KShop.Communications.ServiceBus
 
                     if (rabbitConf != null)
                         rabbitConf(ctx, cfg);
+
+
+                    cfg.UseMessageRetry(retry =>
+                    {
+                        // Интервалы в мс: s + i*n, где s - начальный интервал, i - шаг, n - добавочный интервал после каждого шага
+                        retry.Incremental(10, TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(1000));
+                    });
+
+                    cfg.UseScheduledRedelivery(redil =>
+                    {
+                        redil.Interval(10, TimeSpan.FromMilliseconds(5000));
+                    });
+
+                    //cfg.UseInMemoryOutbox(outbox => { 
+                    //    outbox.ConcurrentMessageDelivery
+                    //});
                 });
 
             }).AddMassTransitHostedService();
@@ -65,4 +83,5 @@ namespace KShop.Communications.ServiceBus
             return services;
         }
     }
+
 }
