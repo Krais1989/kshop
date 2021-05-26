@@ -1,4 +1,5 @@
 ﻿using KShop.Communications.Contracts.Payments;
+using KShop.Communications.Contracts.ValueObjects;
 using System;
 
 namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
@@ -7,5 +8,6 @@ namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
     {
         public EPaymentProvider Provider { get; set; }
         public Guid OrderID { get; set; }
+        public Money Money { get; set; }
     }
 }

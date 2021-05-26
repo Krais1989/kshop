@@ -55,7 +55,7 @@ namespace KShop.Orders.Domain.Handlers
                 ID = request.OrderID ?? default,
                 CustomerID = request.CustomerID,
                 CreateDate = DateTime.UtcNow,
-                Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }),
+                Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }).ToList(),
                 Logs = new List<OrderLog>()
             };
             entity.SetStatus(Order.EStatus.Initial);

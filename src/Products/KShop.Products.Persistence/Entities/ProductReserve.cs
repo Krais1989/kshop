@@ -18,7 +18,7 @@ namespace KShop.Products.Persistence.Entities
         public uint Quantity { get; set; }
 
         public Guid OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public ulong CustomerID { get; set; }
 
         /// <summary>
         /// Дата создания резерва

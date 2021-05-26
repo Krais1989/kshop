@@ -39,16 +39,16 @@ namespace MarketCLI
                 switch (cmdLine)
                 {
                     case "create":
-                        cmd = Services.GetService<CatalogueCreateCommand>();
+                        cmd = Services.GetService<ProductsCreateCommand>();
                         break;
                     case "delete":
-                        cmd = Services.GetService<CatalogueDeleteCommand>();
+                        cmd = Services.GetService<ProductsDeleteCommand>();
                         break;
                     case "truncate":
-                        cmd = Services.GetService<CatalogueTruncateCommand>();
+                        cmd = Services.GetService<ProductsTruncateCommand>();
                         break;
                     case "drop tables":
-                        cmd = Services.GetService<CatalogueDropTableCommand>();
+                        cmd = Services.GetService<ProductsDropTableCommand>();
                         break;
 
                 }
@@ -82,10 +82,10 @@ namespace MarketCLI
                 db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
             });
 
-            services.AddTransient<CatalogueCreateCommand>();
-            services.AddTransient<CatalogueDeleteCommand>();
-            services.AddTransient<CatalogueDropTableCommand>();
-            services.AddTransient<CatalogueTruncateCommand>();
+            services.AddTransient<ProductsCreateCommand>();
+            services.AddTransient<ProductsDeleteCommand>();
+            services.AddTransient<ProductsDropTableCommand>();
+            services.AddTransient<ProductsTruncateCommand>();
 
             services.AddLogging(x => x.AddSerilog());
 

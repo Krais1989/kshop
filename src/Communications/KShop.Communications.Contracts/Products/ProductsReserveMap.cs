@@ -3,7 +3,8 @@
 namespace KShop.Communications.Contracts.Products
 {
     /// <summary>
-    /// [product_id, quantity]
+    /// Показывает какие ID зарезервированных позиций соответствуют ID продукта
+    /// [product_id, reserve_id]
     /// </summary>
     public class ProductsReserveMap : Dictionary<ulong, ulong>
     {

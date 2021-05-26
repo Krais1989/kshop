@@ -1,4 +1,5 @@
-﻿using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
+﻿using KShop.Communications.Contracts.Shipments;
+using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
 using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
 using KShop.Shipments.Persistence;
 using KShop.Shipments.Persistence.Entities;
@@ -42,41 +43,60 @@ namespace KShop.Shipments.Domain.BackgroundServices
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
                 var shipment_provider = scope.ServiceProvider.GetRequiredService<IExternalShipmentServiceProvider>();
 
-                var pending_shipments = await db_context.Shipments.Where(e => e.Status == EShipmentStatus.Pending).ToListAsync();
+                var pending_shipments = await db_context.Shipments
+                    .AsNoTracking()
+                    .Where(e => e.Status == EShipmentStatus.Pending)
+                    .OrderBy(e => e.LastCheckingDate)
+                    .Take(500)
+                    .ToListAsync();
 
                 foreach (var shipment in pending_shipments)
                 {
-                    var response = await shipment_provider.GetShipmentStatusAsync(
-                        new ExternalShipmentGetStatusRequest()
+                    try
+                    {
+                        _logger.LogWarning($"Check Shipment: {shipment.ID} \tOrder: {shipment.OrderID}");
+
+                        if (string.IsNullOrEmpty(shipment.ExternalID))
                         {
-                            ExternalShipmnentID = shipment.ExternalID
-                        });
+                            shipment.SetStatus(EShipmentStatus.Error);
+                            db_context.Update(shipment);
+                            await db_context.SaveChangesAsync();
+                            continue;
+                        }
 
-                    switch (response.Status)
-                    {
-                        case EExternalShipmentStatus.Processing:
-                            shipment.Status = EShipmentStatus.Pending;
-                            break;
-                        case EExternalShipmentStatus.Shipped:
-                            shipment.Status = EShipmentStatus.Shipped;
-                            break;
-                        case EExternalShipmentStatus.Cancelled:
-                            shipment.Status = EShipmentStatus.Cancelled;
-                            break;
-                        case EExternalShipmentStatus.Faulted:
-                            shipment.Status = EShipmentStatus.Faulted;
-                            break;
-                        default:
-                            break;
+                        var check_response = await shipment_provider.GetShipmentStatusAsync(
+                            new ExternalShipmentGetStatusRequest()
+                            {
+                                ExternalShipmnentID = shipment.ExternalID
+                            });
+
+                        switch (check_response.ShipmentStatus)
+                        {
+                            case EShipmentStatus.Pending:
+                            case EShipmentStatus.Shipped:
+                            case EShipmentStatus.Cancelling:
+                            case EShipmentStatus.Cancelled:
+                            case EShipmentStatus.Error:
+                                shipment.SetStatus(check_response.ShipmentStatus);
+                                db_context.Update(shipment);
+                                break;
+                            default:
+                                _logger.LogWarning($"{shipment.ID} Shipment check skiped because of status: {check_response.ShipmentStatus}");
+                                break;
+                        }
+
+                        if (check_response.ShipmentStatus == EShipmentStatus.Shipped)
+                            await pub_endpoint.Publish(new ShipmentCreateSuccessSvcEvent(shipment.OrderID, shipment.ID));
+                        if (check_response.ShipmentStatus == EShipmentStatus.Cancelled || check_response.ShipmentStatus == EShipmentStatus.Error)
+                            await pub_endpoint.Publish(new ShipmentCreateFaultSvcEvent(shipment.OrderID, $"Shipemt external faulted with status {check_response.ShipmentStatus}"));
+
+                        await db_context.SaveChangesAsync();
                     }
-
-                    if (response.Status != EExternalShipmentStatus.Processing)
+                    catch (Exception e)
                     {
-                        shipment.CompleteDate = DateTime.UtcNow;
+                        _logger.LogError(e, $"Exception when checking Shipment ID: {shipment.ID}");
                     }
                 }
-
-                await db_context.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }

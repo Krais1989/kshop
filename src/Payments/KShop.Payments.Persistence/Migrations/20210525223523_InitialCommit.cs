@@ -14,12 +14,13 @@ namespace KShop.Payments.Persistence.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     OrderID = table.Column<Guid>(nullable: false),
-                    ExternalPaymentID = table.Column<string>(nullable: true),
+                    ExternalID = table.Column<string>(nullable: true),
                     PaymentProvider = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     StatusDate = table.Column<DateTime>(nullable: false),
+                    LastCheckingDate = table.Column<DateTime>(nullable: false),
                     Currency = table.Column<string>(nullable: true, defaultValue: "RUB"),
-                    Amount = table.Column<decimal>(nullable: true, defaultValue: 0m)
+                    Price = table.Column<decimal>(nullable: true, defaultValue: 0m)
                 },
                 constraints: table =>
                 {

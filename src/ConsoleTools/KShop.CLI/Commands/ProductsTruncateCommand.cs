@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace MarketCLI
 {
-    public class CatalogueTruncateCommand : IBaseCommandAsync
+    public class ProductsTruncateCommand : IBaseCommandAsync
     {
-        private readonly ILogger<CatalogueTruncateCommand> _logger;
+        private readonly ILogger<ProductsTruncateCommand> _logger;
         private readonly ProductsContext _dbContext;
 
-        public CatalogueTruncateCommand(ILogger<CatalogueTruncateCommand> logger, ProductsContext dbContext)
+        public ProductsTruncateCommand(ILogger<ProductsTruncateCommand> logger, ProductsContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;

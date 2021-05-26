@@ -22,7 +22,7 @@ namespace KShop.Payments.Domain.Mediators
     {
         public EPaymentProvider PaymentPlatform { get; set; }
         public Guid OrderID { get; set; }
-        public Money Price { get; set; }
+        public Money Money { get; set; }
     }
     public class PaymentInitializeMediatorHandler : IRequestHandler<PaymentInitializeMediatorRequest, PaymentInitializeMediatorResponse>
     {
@@ -45,7 +45,8 @@ namespace KShop.Payments.Domain.Mediators
             var payment = new Payment()
             {
                 OrderID = request.OrderID,
-                PaymentProvider = request.PaymentPlatform
+                PaymentProvider = request.PaymentPlatform,
+                Money = request.Money
             };
 
             payment.SetStatus(EPaymentStatus.Initializing);

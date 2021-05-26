@@ -19,7 +19,7 @@ namespace KShop.Communications.ServiceBus
 
         public async Task Send(SendContext<T> context, IPipe<SendContext<T>> next)
         {
-            var name = context.ResponseAddress == null 
+            var name = context.ResponseAddress == null
                 ? $"Send: {context.DestinationAddress.LocalPath}"
                 : $"Respond: {context.ResponseAddress.LocalPath}";
 
@@ -75,29 +75,35 @@ namespace KShop.Communications.ServiceBus
 
         public async Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
         {
-            var traceIdString = context.Headers.Get<string>("trace_id", null);
-            var parentSpanIdString = context.Headers.Get<string>("parent_span_id", null);
-
-            if (!string.IsNullOrEmpty(traceIdString))
+            try
             {
-                var traceId = ActivityTraceId.CreateFromString(traceIdString);
-                var parentSpanId = ActivitySpanId.CreateFromString(parentSpanIdString);
+                var traceIdString = context.Headers.Get<string>("trace_id", null);
+                var parentSpanIdString = context.Headers.Get<string>("parent_span_id", null);
 
-                var ac = new ActivityContext(traceId, parentSpanId, ActivityTraceFlags.Recorded, null, true);
+                if (!string.IsNullOrEmpty(traceIdString))
+                {
+                    var traceId = ActivityTraceId.CreateFromString(traceIdString);
+                    var parentSpanId = parentSpanIdString == "0000000000000000"
+                        ? ActivitySpanId.CreateRandom()
+                        : ActivitySpanId.CreateFromString(parentSpanIdString);
 
-                var name = $"Consume: {context.ReceiveContext.InputAddress.LocalPath}";
-                using (var activity = KShopMassTransitTracingExtensions.KShopMassTransitSource.StartActivity(name, ActivityKind.Consumer, ac))
+                    var ac = new ActivityContext(traceId, parentSpanId, ActivityTraceFlags.Recorded, null, true);
+
+                    var name = $"Consume: {context.ReceiveContext.InputAddress.LocalPath}";
+                    using (var activity = KShopMassTransitTracingExtensions.KShopMassTransitSource.StartActivity(name, ActivityKind.Consumer, ac))
+                    {
+                        await next.Send(context);
+                    }
+                }
+                else
                 {
                     await next.Send(context);
                 }
             }
-            else
+            catch (Exception e)
             {
-                await next.Send(context);
+                throw;
             }
-
-            
-            
         }
     }
 

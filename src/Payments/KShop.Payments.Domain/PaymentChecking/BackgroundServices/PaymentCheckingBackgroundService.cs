@@ -1,4 +1,5 @@
 ﻿using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.Payments;
 using KShop.Payments.Domain.ExternalPaymentProviders.Common;
 using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
 using KShop.Payments.Domain.Mediators;
@@ -47,31 +48,64 @@ namespace KShop.Payments.Domain.BackgroundServices
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
                 var payment_provider = scope.ServiceProvider.GetRequiredService<ICommonPaymentProvider>();
 
+                // TODO: хранить дату последней проверки платежа, чтобы запрашивать по убыванию этой даты
+                /* Иначе при порционных запросах будут выбираться  */
+
                 var pending_payments = await db_context.Payments
+                    .AsNoTracking()
                     .Where(e => e.Status == EPaymentStatus.Pending)
-                    .Where(e => !string.IsNullOrEmpty(e.ExternalPaymentID))
+                    .OrderBy(e => e.LastCheckingDate)
+                    .Take(500)
                     .ToListAsync();
 
-                _logger.LogWarning($"Checking payments count: {pending_payments.Count}");
                 foreach (var payment in pending_payments)
                 {
-                    _logger.LogWarning($"Check: {payment.ID} \tOrder: {payment.OrderID}");
-                    var provider_result = await payment_provider.GetStatusAsync(
-                        new CommonPaymentProviderGetStatusRequest
-                        {
-                            Provider = payment.PaymentProvider
-                        });
-
-                    if (provider_result.PaymentStatus == EPaymentStatus.Paid 
-                        || provider_result.PaymentStatus == EPaymentStatus.Canceled
-                        || provider_result.PaymentStatus == EPaymentStatus.Error)
+                    try
                     {
-                        payment.SetStatus(provider_result.PaymentStatus);
-                        db_context.Update(payment);
+                        _logger.LogWarning($"Check Payment: {payment.ID} \tOrder: {payment.OrderID}");
+
+                        if (string.IsNullOrEmpty(payment.ExternalID))
+                        {
+                            payment.SetStatus(EPaymentStatus.Error);
+                            db_context.Update(payment);
+                            await db_context.SaveChangesAsync();
+                            continue;
+                        }
+
+                        var check_response = await payment_provider.GetStatusAsync(
+                            new CommonPaymentProviderGetStatusRequest
+                            {
+                                Provider = payment.PaymentProvider
+                            });
+
+                        switch (check_response.PaymentStatus)
+                        {
+                            case EPaymentStatus.Pending:
+                            case EPaymentStatus.Paid:
+                            case EPaymentStatus.Cancelling:
+                            case EPaymentStatus.Canceled:
+                            case EPaymentStatus.Rejected:
+                            case EPaymentStatus.Error:
+                                payment.SetStatus(check_response.PaymentStatus);
+                                db_context.Update(payment);
+                                break;
+                            default:
+                                _logger.LogWarning($"{payment.ID} Payment check skiped because of status: {check_response.PaymentStatus}");
+                                break;
+                        }
+
+                        if (check_response.PaymentStatus == EPaymentStatus.Paid)
+                            await pub_endpoint.Publish(new PaymentCreateSuccessSvcEvent(payment.OrderID, payment.ID));
+                        if (check_response.PaymentStatus == EPaymentStatus.Error || check_response.PaymentStatus == EPaymentStatus.Canceled)
+                            await pub_endpoint.Publish(new PaymentCreateFaultSvcEvent(payment.OrderID, $"Payment external faulted with status {check_response.PaymentStatus}"));
+
+                        await db_context.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Exception when checking Payment: {payment.ID}");
                     }
                 }
-
-                await db_context.SaveChangesAsync();
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }

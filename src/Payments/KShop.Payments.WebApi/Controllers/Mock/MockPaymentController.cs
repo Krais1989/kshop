@@ -79,7 +79,7 @@ namespace KShop.Payments.WebApi.Controllers.Mock
             {
                 PaymentPlatform = EPaymentProvider.Mock,
                 OrderID = dto.OrderID,
-                Price = dto.Price,
+                Money = dto.Price,
             };
 
             var result = await _createClient.GetResponse<PaymentCreateSuccessSvcEvent>(createBusReq);

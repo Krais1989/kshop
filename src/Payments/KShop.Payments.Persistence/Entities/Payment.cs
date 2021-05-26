@@ -40,10 +40,12 @@ namespace KShop.Payments.Persistence.Entities
     {
         public Guid ID { get; set; }
         public Guid OrderID { get; set; }
-        public string ExternalPaymentID { get; set; }
+        public string ExternalID { get; set; }
         public EPaymentProvider PaymentProvider { get; set; } // 
         public EPaymentStatus Status { get; set; }
         public DateTime StatusDate { get; set; }
+
+        public DateTime LastCheckingDate { get; set; }
 
         public Money Money { get; set; }
 

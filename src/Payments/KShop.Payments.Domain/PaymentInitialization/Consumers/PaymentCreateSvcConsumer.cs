@@ -37,11 +37,9 @@ namespace KShop.Payments.Domain.Consumers
                 var result = await _mediator.Send(new PaymentInitializeMediatorRequest()
                 {
                     OrderID = context.Message.OrderID,
-                    Price = context.Message.Price,
+                    Money = context.Message.Money,
                     PaymentPlatform = context.Message.PaymentPlatform
                 });
-
-                await context.Publish(new PaymentCreateSuccessSvcEvent(context.Message.OrderID, result.PaymentID));
             }
             catch (Exception e)
             {

@@ -9,18 +9,18 @@
             public const string EUR = "EUR";
         }
 
-        public Money(decimal amount, string currency = CurrencySign.RUB)
+        public Money(decimal price, string currency = CurrencySign.RUB)
         {
             Currency = currency;
-            Amount = amount;
+            Price = price;
         }
 
         public string Currency { get; private set; }
-        public decimal Amount { get; private set; }
+        public decimal Price { get; private set; }
 
         public override string ToString()
         {
-            return $"{Amount} {Currency}";
+            return $"{Price} {Currency}";
         }
     }
 }

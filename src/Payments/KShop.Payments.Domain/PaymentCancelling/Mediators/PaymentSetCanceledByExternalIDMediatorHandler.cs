@@ -35,7 +35,7 @@ namespace KShop.Payments.Domain.Mediators
 
         public async Task<PaymentSetCanceledByExternalIDMediatorResponse> Handle(PaymentSetCanceledByExternalIDMediatorRequest request, CancellationToken cancellationToken)
         {
-            var payment = await _paymentsContext.Payments.Include(e => e.Logs).FirstOrDefaultAsync(e => e.ExternalPaymentID == request.ExternalPaymentID);
+            var payment = await _paymentsContext.Payments.Include(e => e.Logs).FirstOrDefaultAsync(e => e.ExternalID == request.ExternalPaymentID);
             payment.SetStatus(EPaymentStatus.Canceled);
             await _paymentsContext.SaveChangesAsync();
             return new PaymentSetCanceledByExternalIDMediatorResponse();

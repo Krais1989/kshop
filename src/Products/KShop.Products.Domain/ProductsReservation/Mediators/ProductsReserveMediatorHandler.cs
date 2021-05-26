@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.Products;
 using KShop.Products.Domain.ProductsReservation.Validators;
 using KShop.Products.Persistence;
@@ -40,8 +41,8 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
     public class ProductsReserveMediatorRequest : IRequest<ProductsReserveMediatorResponse>
     {
         public Guid OrderID { get; set; }
-        public int CustomerID { get; set; }
-        public IDictionary<ulong, uint> OrderPositions { get; set; }
+        public ulong CustomerID { get; set; }
+        public OrderPositionsMap OrderPositions { get; set; }
     }
     public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>
     {
@@ -72,10 +73,11 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
                     ProductID = prodId,
                     Quantity = request.OrderPositions[prodId],
                     CreateDate = DateTime.UtcNow,
-                    Status = ProductReserve.EStatus.Pending
+                    Status = ProductReserve.EStatus.Pending,
+                    CustomerID = request.CustomerID
                 }).ToList();
 
-            await _context.ProductReserves.AddRangeAsync(reserves);
+            await _context.AddRangeAsync(reserves);
             await _context.SaveChangesAsync(cancellationToken);
 
             var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));

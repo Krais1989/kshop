@@ -47,17 +47,24 @@ namespace KShop.Shipments.Domain.BackgroundServices
 
                 foreach (var shipment in cancelling_shipments)
                 {
-                    await shipment_provider.CancelShipmentAsync(
-                        new ExternalShipmentCancelRequest
-                        {
-                            ExternalShipmnentID = shipment.ExternalID
-                        });
+                    try
+                    {
+                        _logger.LogWarning($"Cancel shipment: {shipment.ID} \tOrder: {shipment.OrderID}");
 
-                    shipment.Status = EShipmentStatus.Cancelled;
-                    shipment.CompleteDate = DateTime.UtcNow;
+                        await shipment_provider.CancelShipmentAsync(
+                            new ExternalShipmentCancelRequest
+                            {
+                                ExternalShipmnentID = shipment.ExternalID
+                            });
+
+                        shipment.SetStatus(EShipmentStatus.Cancelled);
+                        await db_context.SaveChangesAsync(stoppingToken);
+                    } 
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Exception when cancelling Shipment ID: {shipment.ID}");
+                    }
                 }
-
-                await db_context.SaveChangesAsync(stoppingToken);
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }

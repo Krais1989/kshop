@@ -36,17 +36,13 @@ namespace KShop.Orders.Domain.Consumers
 
                 var res = await _mediator.Send(createOrder);
 
-                await context.RespondAsync(new OrderCreateSvcResponse()
-                {
-                    OrderID = res.OrderID
-                });
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
+                    await context.RespondAsync(new OrderCreateSvcResponse() { OrderID = res.OrderID });
             }
             catch (Exception e)
             {
-                await context.RespondAsync(new OrderCreateSvcResponse()
-                {
-                    ErrorMessage = e.Message
-                });
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
+                    await context.RespondAsync(new OrderCreateSvcResponse() { ErrorMessage = e.Message });
             }
         }
     }

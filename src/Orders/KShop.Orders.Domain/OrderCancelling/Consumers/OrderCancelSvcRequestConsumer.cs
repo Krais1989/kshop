@@ -33,14 +33,16 @@ namespace KShop.Orders.Domain.OrderCancelling.Consumers
                 var res = await _mediator.Send(createOrder);
 
                 //TODO: убрать синхронный подход
-                await context.RespondAsync(new OrderCancelSvcResponse(context.Message.OrderID));
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
+                    await context.RespondAsync(new OrderCancelSvcResponse(context.Message.OrderID));
             }
             catch (Exception e)
             {
-                await context.RespondAsync(new OrderCancelSvcResponse(context.Message.OrderID)
-                {
-                    ErrorMessage = e.Message
-                });
+                if (context.RequestId.HasValue && context.ResponseAddress != null)
+                    await context.RespondAsync(new OrderCancelSvcResponse(context.Message.OrderID)
+                    {
+                        ErrorMessage = e.Message
+                    });
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿
 using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
 using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
+using KShop.Shipments.Persistence.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,7 +33,7 @@ namespace KShop.Shipments.Domain.ExternalShipmentProviders.Mocking
         {
             var result = new ExternalShipmentGetStatusResponse
             {
-                Status = EExternalShipmentStatus.Shipped
+                ShipmentStatus = EShipmentStatus.Shipped
             };
             return result;
         }

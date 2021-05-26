@@ -8,13 +8,12 @@ namespace KShop.Communications.Contracts.Products
     public class ProductsReserveSvcRequest
     {
         public Guid OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public ulong CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
     }
 
     public class ProductsReserveSvcResponse : BaseResponse
     {
-
         public ProductsReserveMap ProductsReserves { get; set; }
     }
 }

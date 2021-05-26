@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KShop.Shipments.Persistence.Migrations
 {
     [DbContext(typeof(ShipmentContext))]
-    [Migration("20210524184814_InitialCommit")]
+    [Migration("20210525223635_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace KShop.Shipments.Persistence.Migrations
 
                     b.Property<string>("ExternalID")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastCheckingDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");

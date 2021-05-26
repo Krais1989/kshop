@@ -16,6 +16,7 @@ namespace KShop.Shipments.Persistence.Migrations
                     CreateDate = table.Column<DateTime>(nullable: false),
                     PendingDate = table.Column<DateTime>(nullable: false),
                     CompleteDate = table.Column<DateTime>(nullable: false),
+                    LastCheckingDate = table.Column<DateTime>(nullable: false),
                     ExternalID = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false)
                 },

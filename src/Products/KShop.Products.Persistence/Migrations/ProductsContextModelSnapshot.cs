@@ -23,9 +23,6 @@ namespace KShop.Products.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(65,30)");
-
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -65,8 +62,8 @@ namespace KShop.Products.Persistence.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
+                    b.Property<ulong>("CustomerID")
+                        .HasColumnType("bigint unsigned");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
@@ -85,6 +82,34 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("ProductReserves");
+                });
+
+            modelBuilder.Entity("KShop.Products.Persistence.Entities.Product", b =>
+                {
+                    b.OwnsOne("KShop.Communications.Contracts.ValueObjects.Money", "Money", b1 =>
+                        {
+                            b1.Property<ulong>("ProductID")
+                                .HasColumnType("bigint unsigned");
+
+                            b1.Property<string>("Currency")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnName("Currency")
+                                .HasColumnType("longtext CHARACTER SET utf8mb4")
+                                .HasDefaultValue("RUB");
+
+                            b1.Property<decimal>("Price")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnName("Price")
+                                .HasColumnType("decimal(65,30)")
+                                .HasDefaultValue(0m);
+
+                            b1.HasKey("ProductID");
+
+                            b1.ToTable("Products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductID");
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductPosition", b =>

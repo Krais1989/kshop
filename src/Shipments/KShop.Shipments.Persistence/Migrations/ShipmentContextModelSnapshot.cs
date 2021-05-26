@@ -32,6 +32,9 @@ namespace KShop.Shipments.Persistence.Migrations
                     b.Property<string>("ExternalID")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("LastCheckingDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 

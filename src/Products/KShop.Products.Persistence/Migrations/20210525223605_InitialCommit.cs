@@ -15,7 +15,8 @@ namespace KShop.Products.Persistence.Migrations
                     ID = table.Column<ulong>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false)
+                    Currency = table.Column<string>(nullable: true, defaultValue: "RUB"),
+                    Price = table.Column<decimal>(nullable: true, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
@@ -51,7 +52,7 @@ namespace KShop.Products.Persistence.Migrations
                     ProductID = table.Column<ulong>(nullable: false),
                     Quantity = table.Column<uint>(nullable: false),
                     OrderID = table.Column<Guid>(nullable: false),
-                    CustomerID = table.Column<int>(nullable: false),
+                    CustomerID = table.Column<ulong>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: false),
                     CompleteDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<byte>(nullable: false)

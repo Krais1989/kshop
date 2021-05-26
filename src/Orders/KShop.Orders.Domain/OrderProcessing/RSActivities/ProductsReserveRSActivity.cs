@@ -19,7 +19,7 @@ namespace KShop.Orders.Domain.OrderPlacing.Activities
     {
         public Guid OrderID { get; set; }
         public Guid ReserveID { get; set; }
-        public int CustomerID { get; set; }
+        public ulong CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
     }
 

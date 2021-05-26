@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using KShop.Communications.ServiceBus;
 using KShop.Metrics;
+using KShop.Products.Domain.ProductsReservation.BackgroundServices;
 using KShop.Products.Domain.ProductsReservation.Consumers;
 using KShop.Products.Domain.ProductsReservation.Mediators;
 using KShop.Products.Domain.ProductsReservation.Validators;
@@ -73,6 +74,8 @@ namespace KShop.Products.WebApi
             services.AddControllers()
                 .AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ProductsReserveFluentValidator).Assembly));
+
+            services.AddHostedService<ProductsReservationBackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

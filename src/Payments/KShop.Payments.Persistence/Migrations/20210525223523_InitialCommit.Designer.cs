@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KShop.Payments.Persistence.Migrations
 {
     [DbContext(typeof(PaymentsContext))]
-    [Migration("20210524184917_InitialCommit")]
+    [Migration("20210525223523_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,8 +25,11 @@ namespace KShop.Payments.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ExternalPaymentID")
+                    b.Property<string>("ExternalID")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastCheckingDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
@@ -77,17 +80,17 @@ namespace KShop.Payments.Persistence.Migrations
                             b1.Property<Guid>("PaymentID")
                                 .HasColumnType("char(36)");
 
-                            b1.Property<decimal>("Amount")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnName("Amount")
-                                .HasColumnType("decimal(65,30)")
-                                .HasDefaultValue(0m);
-
                             b1.Property<string>("Currency")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnName("Currency")
                                 .HasColumnType("longtext CHARACTER SET utf8mb4")
                                 .HasDefaultValue("RUB");
+
+                            b1.Property<decimal>("Price")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnName("Price")
+                                .HasColumnType("decimal(65,30)")
+                                .HasDefaultValue(0m);
 
                             b1.HasKey("PaymentID");
 

@@ -49,6 +49,7 @@ namespace KShop.Payments.Domain.BackgroundServices
                 var payment_provider = scope.ServiceProvider.GetRequiredService<ICommonPaymentProvider>();
 
                 var initilizing_payments = await db_context.Payments
+                    .AsNoTracking()
                     .Where(e => e.Status == EPaymentStatus.Initializing)
                     .ToListAsync();
 
@@ -62,18 +63,19 @@ namespace KShop.Payments.Domain.BackgroundServices
                             new CommonPaymentProviderCreateRequest()
                             {
                                 OrderID = payment.OrderID,
-                                Provider = payment.PaymentProvider
+                                Provider = payment.PaymentProvider,
+                                Money = payment.Money
                             });
 
+                        payment.ExternalID = provider_result.ExternalPaymentID;
                         payment.SetStatus(EPaymentStatus.Pending);
+                        db_context.Update(payment);
                         await db_context.SaveChangesAsync();
-
-                        await pub_endpoint.Publish(new PaymentCreateSuccessSvcEvent(payment.OrderID, payment.ID));
 
                     }
                     catch (Exception e)
                     {
-                        await pub_endpoint.Publish(new PaymentCreateFaultSvcEvent(payment.OrderID, e));
+                        _logger.LogError(e, $"Exception when initializing Payment: {payment.ID}");
                     }
                 }
 

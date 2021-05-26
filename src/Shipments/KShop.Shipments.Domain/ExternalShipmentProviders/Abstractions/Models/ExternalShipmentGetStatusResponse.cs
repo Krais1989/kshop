@@ -1,7 +1,9 @@
-﻿namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models
+﻿using KShop.Shipments.Persistence.Entities;
+
+namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models
 {
     public class ExternalShipmentGetStatusResponse : ExternalShipmentBaseResponse
     {
-        public EExternalShipmentStatus Status { get; set; }
+        public EShipmentStatus ShipmentStatus { get; set; }
     }
 }

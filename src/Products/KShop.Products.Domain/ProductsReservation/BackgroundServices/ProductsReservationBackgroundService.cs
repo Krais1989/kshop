@@ -67,17 +67,25 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
 
                 Dictionary<Guid, List<ProductReserve>> reserving = null;
 
-                await ResilientTransaction<ProductsContext>
-                    .New(db_context)
-                    .ExecuteAsync(async () =>
-                    {
-                        var reserve_pendings = await db_context.ProductReserves.AsNoTracking()
+                //await ResilientTransaction<ProductsContext>
+                //    .New(db_context)
+                //    .ExecuteAsync(async () =>
+                //    {
+                //        var reserve_pendings = await db_context.ProductReserves.AsNoTracking()
+                //            .Where(e => e.Status == ProductReserve.EStatus.Pending)
+                //            .GroupBy(e => e.OrderID)
+                //            .ToListAsync();
+
+                //        reserving = reserve_pendings.ToDictionary(e => e.Key, e => e.ToList());
+                //    });
+
+                var reserve_pendings = await db_context.ProductReserves.AsNoTracking()
                             .Where(e => e.Status == ProductReserve.EStatus.Pending)
-                            .GroupBy(e => e.OrderID)
+                            .Take(500)
                             .ToListAsync();
 
-                        reserving = reserve_pendings.ToDictionary(e => e.Key, e => e.ToList());
-                    });
+
+                reserving = reserve_pendings.GroupBy(e => e.OrderID).ToDictionary(e => e.Key, e => e.ToList());
 
 
                 /* Политика резервирвания, варианты: */
@@ -89,49 +97,41 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
 
                 /* Оптимизировать: предварительно загружать доступные позиции товаров */
 
+                //if (reserving.Count == 0)
+                //{
+                //    await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, new ProductsReserveMap()));
+                //}
+
                 /*  */
                 foreach (var orderId in reserving.Keys)
                 {
                     try
                     {
-                        if (reserving.Count == 0)
+                        var res_positions = reserving[orderId];
+                        var reserved_products = new ProductsReserveMap();
+                        foreach (var res_pos in res_positions)
                         {
-                            var res_positions = reserving[orderId];
-                            var reserved_products = new ProductsReserveMap();
-                            foreach (var res_pos in res_positions)
+                            var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
+                            if (db_positions.Quantity >= res_pos.Quantity)
                             {
-                                await ResilientTransaction<ProductsContext>
-                                    .New(db_context)
-                                    .ExecuteAsync(async () =>
-                                    {
-                                        var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
-                                        if (db_positions.Quantity >= res_pos.Quantity)
-                                        {
-                                            db_positions.Quantity -= res_pos.Quantity;
-                                            res_pos.Status = ProductReserve.EStatus.Reserved;
-                                            res_pos.CompleteDate = DateTime.UtcNow;
+                                db_positions.Quantity -= res_pos.Quantity;
+                                res_pos.Status = ProductReserve.EStatus.Reserved;
+                                res_pos.CompleteDate = DateTime.UtcNow;
 
-                                            reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
-                                        }
-                                        else
-                                        {
-                                            res_pos.Status = ProductReserve.EStatus.NotEnough;
-                                            res_pos.CompleteDate = DateTime.UtcNow;
-                                        }
-
-                                        db_context.ProductPositions.Update(db_positions);
-                                        db_context.ProductReserves.Update(res_pos);
-                                        await db_context.SaveChangesAsync();
-                                    });
+                                reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
                             }
-                            /* Отправить сообщение о резервации продуктов */
-                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
+                            else
+                            {
+                                res_pos.Status = ProductReserve.EStatus.NotEnough;
+                                res_pos.CompleteDate = DateTime.UtcNow;
+                            }
+
+                            db_context.ProductPositions.Update(db_positions);
+                            db_context.ProductReserves.Update(res_pos);
+                            await db_context.SaveChangesAsync();
                         }
-                        else
-                        {
-                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, new ProductsReserveMap()));
-                        }
-                        
+                        /* Отправить сообщение о резервации продуктов */
+                        await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
                     }
                     catch (Exception e)
                     {
@@ -141,9 +141,6 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
 
                 await Task.Delay(TimeSpan.FromSeconds(1));
             }
-
-
-
         }
     }
 }

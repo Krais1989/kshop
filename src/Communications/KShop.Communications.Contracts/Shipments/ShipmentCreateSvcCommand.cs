@@ -31,7 +31,14 @@ namespace KShop.Communications.Contracts.Shipments
             Exception = exception;
         }
 
+        public ShipmentCreateFaultSvcEvent(Guid orderID, string errorMessage)
+        {
+            OrderID = orderID;
+            ErrorMessage = errorMessage;
+        }
+
         public Guid OrderID { get; set; }
         public Exception Exception { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

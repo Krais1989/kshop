@@ -24,7 +24,7 @@ namespace KShop.Orders.Domain.Orchestrations
         public ProductsReserveMap ProductsReserves { get; set; }
         //public Guid? OrderPlacingRSTrackingNumber { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
-        public Money Price { get; set; }
+        public Money Money { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
 
         public Guid? PaymentID { get; set; }
@@ -108,7 +108,7 @@ namespace KShop.Orders.Domain.Orchestrations
         {
             ctx.Instance.CustomerID = ctx.Data.CustomerID;
             ctx.Instance.OrderPositions = ctx.Data.Positions;
-            ctx.Instance.Price = ctx.Data.Price;
+            ctx.Instance.Money = ctx.Data.Price;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
 
             //ctx.Instance.OrderPlacingRSTrackingNumber = Guid.NewGuid();
@@ -169,7 +169,7 @@ namespace KShop.Orders.Domain.Orchestrations
             await ctx.Publish(new PaymentCreateSvcCommand()
             {
                 OrderID = ctx.Data.OrderID,
-                Price = ctx.Instance.Price,
+                Money = ctx.Instance.Money,
                 PaymentPlatform = ctx.Instance.PaymentProvider
             });
         }

@@ -23,13 +23,13 @@ namespace KShop.Shipments.Domain.BackgroundServices
     /// <summary>
     /// Фоновый сервис для подтверждения оплаты
     /// </summary>
-    public class ShipmentInitBackgroundService : BackgroundService
+    public class ShipmentInitializingBackgroundService : BackgroundService
     {
-        private readonly ILogger<ShipmentInitBackgroundService> _logger;
+        private readonly ILogger<ShipmentInitializingBackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public ShipmentInitBackgroundService(
-            ILogger<ShipmentInitBackgroundService> logger,
+        public ShipmentInitializingBackgroundService(
+            ILogger<ShipmentInitializingBackgroundService> logger,
             IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
@@ -39,6 +39,7 @@ namespace KShop.Shipments.Domain.BackgroundServices
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             using var scope = _scopeFactory.CreateScope();
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 //_logger.LogInformation("=== ExecuteAsync ===");
@@ -47,12 +48,16 @@ namespace KShop.Shipments.Domain.BackgroundServices
                 var bus = scope.ServiceProvider.GetRequiredService<IBusControl>();
                 var shipment_provider = scope.ServiceProvider.GetRequiredService<IExternalShipmentServiceProvider>();
 
-                var init_shipments = await db_context.Shipments.Where(e => e.Status == EShipmentStatus.Initializing).ToListAsync();
+                var init_shipments = await db_context.Shipments
+                    .AsNoTracking()
+                    .Where(e => e.Status == EShipmentStatus.Initializing)
+                    .ToListAsync();
 
                 foreach (var shipment in init_shipments)
                 {
                     try
                     {
+                        _logger.LogWarning($"Initialize shipment: {shipment.ID} \tOrder: {shipment.OrderID}");
                         var response = await shipment_provider.CreateShipmentAsync(
                             new ExternalShipmentCreateRequest()
                             {
@@ -61,17 +66,16 @@ namespace KShop.Shipments.Domain.BackgroundServices
                                 DestinationAddress = ""
                             });
 
-                        shipment.PendingDate = DateTime.UtcNow;
-                        shipment.Status = EShipmentStatus.Pending;
                         shipment.ExternalID = response.ExternalShipmnentID;
+                        shipment.SetStatus(EShipmentStatus.Pending);
 
+                        db_context.Update(shipment);
                         await db_context.SaveChangesAsync();
-
-                        await pub_endpoint.Publish(new ShipmentCreateSuccessSvcEvent(shipment.OrderID, shipment.ID));
                     }
+                    // TODO: отлавливать отдельный тип исключения, приводящий к Fault статусу платежа, вместо скипа и повтора
                     catch (Exception e)
                     {
-                        await pub_endpoint.Publish(new ShipmentCreateFaultSvcEvent(shipment.OrderID, e));
+                        _logger.LogError(e, $"Exception when initializing Shipment: {shipment.ID}");
                     }
                 }
 

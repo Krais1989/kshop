@@ -13,7 +13,7 @@ namespace KShop.Communications.Contracts.Payments
     {
         public Guid OrderID { get; set; }
         public EPaymentProvider PaymentPlatform { get; set; }
-        public Money Price { get; set; }
+        public Money Money { get; set; }
     }
 
     public class PaymentCreateSuccessSvcEvent
@@ -39,9 +39,15 @@ namespace KShop.Communications.Contracts.Payments
             Exception = exception;
         }
 
+        public PaymentCreateFaultSvcEvent(Guid orderID, string errorMessage = null)
+        {
+            OrderID = orderID;
+            ErrorMessage = errorMessage;
+        }
+
         public Guid OrderID { get; set; }
         public Exception Exception { get; set; }
-
+        public string ErrorMessage { get; set; }
 
     }
 }

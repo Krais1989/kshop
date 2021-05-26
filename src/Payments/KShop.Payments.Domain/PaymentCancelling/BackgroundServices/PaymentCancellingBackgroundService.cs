@@ -50,18 +50,25 @@ namespace KShop.Payments.Domain.BackgroundServices
                 _logger.LogWarning($"Cancel payments count: {cancelling_payments.Count}");
                 foreach (var payment in cancelling_payments)
                 {
-                    _logger.LogWarning($"Cancel: {payment.ID} \tOrder: {payment.OrderID}");
+                    try
+                    {
+                        _logger.LogWarning($"Cancel: {payment.ID} \tOrder: {payment.OrderID}");
 
-                    var result = await payment_provider.CancelAsync(
-                        new CommonPaymentProviderCancelRequest
-                        {
-                            ExternalPaymentID = payment.ExternalPaymentID,
-                            Provider = payment.PaymentProvider
-                        });
+                        var result = await payment_provider.CancelAsync(
+                            new CommonPaymentProviderCancelRequest
+                            {
+                                ExternalPaymentID = payment.ExternalID,
+                                Provider = payment.PaymentProvider
+                            });
 
-                    payment.SetStatus(EPaymentStatus.Canceled);
+                        payment.SetStatus(EPaymentStatus.Canceled);
 
-                    await db_context.SaveChangesAsync();
+                        await db_context.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Exception when cancelling Payment: {payment.ID}");
+                    }
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);

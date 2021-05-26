@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace MarketCLI
 {
-
-    public class CatalogueDropTableCommand : IBaseCommandAsync
+    public class ProductsDeleteCommand : IBaseCommandAsync
     {
-        private readonly ILogger<CatalogueDropTableCommand> _logger;
+        private readonly ILogger<ProductsDeleteCommand> _logger;
         private readonly ProductsContext _dbContext;
 
-        public CatalogueDropTableCommand(ILogger<CatalogueDropTableCommand> logger, ProductsContext dbContext)
+        public ProductsDeleteCommand(ILogger<ProductsDeleteCommand> logger, ProductsContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -26,7 +25,7 @@ namespace MarketCLI
 
             foreach (var table in tables)
             {
-                var sql = $"drop table {table};";
+                var sql = $"delete from {table};";
                 _logger.LogInformation(sql);
                 int count = _dbContext.Database.ExecuteSqlRaw(sql);
                 _logger.LogInformation($"Result: {count}");

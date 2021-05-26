@@ -72,7 +72,7 @@ namespace KShop.Shipments.WebApi
 
             services.AddMediatR(typeof(ShipmentInitializeMediatorHandler).Assembly);
 
-            services.AddHostedService<ShipmentInitBackgroundService>();
+            services.AddHostedService<ShipmentInitializingBackgroundService>();
             services.AddHostedService<ShipmentCheckBackgroundService>();
             services.AddHostedService<ShipmentCancellingBackgroundService>();
 

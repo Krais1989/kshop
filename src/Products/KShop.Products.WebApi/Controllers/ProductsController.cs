@@ -1,6 +1,7 @@
 ﻿using KShop.Communications.Contracts.Products;
 using KShop.Products.Domain.ProductsReservation.Mediators;
 using KShop.Products.Persistence;
+using KShop.Products.Persistence.Entities;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,28 @@ namespace KShop.Products.WebApi.Controllers
             _context = context;
             _mediator = mediator;
         }
-        
-        [HttpGet("{productId}")]
+
+        [HttpGet("[action]/{productId}")]
         public async ValueTask<IActionResult> Get(ulong productId)
         {
             var result = await _context.Products.Include(e => e.Positions).AsNoTracking().FirstOrDefaultAsync(e => e.ID == productId);
             return Ok(result);
+        }
+
+
+        [HttpGet("[action]/{productId}")]
+        public async ValueTask<IActionResult> TestProductReservePending(ulong productId, uint quantity)
+        {
+            var entity = new ProductReserve()
+            {
+                OrderID = Guid.NewGuid(),
+                ProductID = productId,
+                Quantity = quantity,
+                Status = ProductReserve.EStatus.Pending
+            };
+            await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return Ok(entity);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace KShop.Orders.WebApi.Controllers
             {
                 OrderID = Guid.NewGuid(),
                 CustomerID = 111,
-                Positions = new OrderPositionsMap(),
+                Positions = new OrderPositionsMap() { { 1, 1 } },
                 Price = new Money(200),
                 PaymentProvider = EPaymentProvider.Mock
             };
