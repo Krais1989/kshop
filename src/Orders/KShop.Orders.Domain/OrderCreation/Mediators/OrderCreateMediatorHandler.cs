@@ -58,7 +58,7 @@ namespace KShop.Orders.Domain.Handlers
                 Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }).ToList(),
                 Logs = new List<OrderLog>()
             };
-            entity.SetStatus(Order.EStatus.Initial);
+            entity.SetStatus(Order.EStatus.Initialized);
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return new OrderCreateMediatorResponse() { OrderID = entity.ID };

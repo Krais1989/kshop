@@ -35,24 +35,105 @@ namespace KShop.Communications.Contracts.Orders
     //    Cancelled = 7
     //}
 
-    public class OrderSetStatusPaidSvcRequest
-    {
-        public Guid OrderID { get; set; }
-    }
-
-    public class OrderSetStatusErrorSvcRequest
-    {
-        public Guid OrderID { get; set; }
-    }
-
-    public class OrderSetStatusCanceledSvcRequest
-    {
-        public Guid OrderID { get; set; }
-    }
-
     public class OrderSetStatusReservedSvcRequest
     {
+        public OrderSetStatusReservedSvcRequest()
+        {
+        }
+
+        public OrderSetStatusReservedSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
         public Guid OrderID { get; set; }
+        public string Comment { get; set; }
     }
+
+    public class OrderSetStatusPayedSvcRequest
+    {
+        public OrderSetStatusPayedSvcRequest()
+        {
+        }
+
+        public OrderSetStatusPayedSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
+        public Guid OrderID { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class OrderSetStatusShippedSvcRequest
+    {
+        public OrderSetStatusShippedSvcRequest()
+        {
+        }
+
+        public OrderSetStatusShippedSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
+        public Guid OrderID { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class OrderSetStatusFaultedSvcRequest
+    {
+        public OrderSetStatusFaultedSvcRequest()
+        {
+        }
+
+        public OrderSetStatusFaultedSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
+        public Guid OrderID { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class OrderSetStatusRefundedSvcRequest
+    {
+        public OrderSetStatusRefundedSvcRequest()
+        {
+        }
+
+        public OrderSetStatusRefundedSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
+        public Guid OrderID { get; set; }
+        public string Comment { get; set; }
+    }
+    public class OrderSetStatusCancelledSvcRequest
+    {
+        public OrderSetStatusCancelledSvcRequest()
+        {
+        }
+
+        public OrderSetStatusCancelledSvcRequest(Guid orderID, string comment = null)
+        {
+            OrderID = orderID;
+            Comment = comment;
+        }
+
+        public Guid OrderID { get; set; }
+        public string Comment { get; set; }
+    }
+
+
+    public class OrderSetStatusSvcResponse : BaseResponse
+    {
+    }
+
 }
 

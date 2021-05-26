@@ -33,12 +33,6 @@ namespace KShop.Communications.Contracts.Payments
 
     public class PaymentCreateFaultSvcEvent
     {
-        public PaymentCreateFaultSvcEvent(Guid orderID, Exception exception = null)
-        {
-            OrderID = orderID;
-            Exception = exception;
-        }
-
         public PaymentCreateFaultSvcEvent(Guid orderID, string errorMessage = null)
         {
             OrderID = orderID;
@@ -46,7 +40,6 @@ namespace KShop.Communications.Contracts.Payments
         }
 
         public Guid OrderID { get; set; }
-        public Exception Exception { get; set; }
         public string ErrorMessage { get; set; }
 
     }

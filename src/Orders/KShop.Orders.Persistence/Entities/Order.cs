@@ -9,35 +9,31 @@ namespace KShop.Orders.Persistence.Entities
     {
         public enum EStatus : byte
         {
-            Initial = 0,
+            Initialized = 0,
             /// <summary>
             /// Резервирование, 
             /// </summary>
-            Reserving = 1,
+            Reserved = 1,
             /// <summary>
             /// Ожидание платежа
             /// </summary>
-            Processing = 2,
+            Payed = 2,
             /// <summary>
             /// Доставляется покупателю
             /// </summary>
-            Shipping = 3,
-            /// <summary>
-            /// Доставлен покупателю
-            /// </summary>
-            Completed = 4,
+            Shipped = 3,
             /// <summary>
             /// Ошибка обработки
             /// </summary>
-            Failed = 5,
+            Faulted = 4,
             /// <summary>
             /// Возвращен
             /// </summary>
-            Refunded = 6,
+            Refunded = 5,
             /// <summary>
             /// Отменен покупателем
             /// </summary>
-            Cancelled = 7
+            Cancelled = 6
         }
 
         public Guid ID { get; set; }
@@ -55,7 +51,7 @@ namespace KShop.Orders.Persistence.Entities
 
         public void SetStatus(EStatus newStatus, string logMessage = null)
         {
-            if (Status != EStatus.Initial && Status == newStatus)
+            if (Status != EStatus.Initialized && Status == newStatus)
             {
                 throw new Exception($"Exception while changing to same status ({newStatus})! OrderID: {ID}");
             }

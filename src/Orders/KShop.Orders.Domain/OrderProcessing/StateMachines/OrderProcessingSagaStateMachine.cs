@@ -6,6 +6,7 @@ using KShop.Communications.Contracts.Products;
 using KShop.Communications.Contracts.Shipments;
 using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Domain.RoutingSlips.OrderInitialization;
+using KShop.Orders.Persistence.Entities;
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using MassTransit.Definition;
@@ -33,6 +34,10 @@ namespace KShop.Orders.Domain.Orchestrations
         public int CustomerID { get; set; }
         public int CurrentState { get; set; }
 
+        /// <summary>
+        /// Лог статусов заказа. Используется для компенсации
+        /// </summary>
+        public List<Order.EStatus> Statuses { get; set; } = new List<Order.EStatus>();
     }
     public class OrderProcessingSagaStateMachineDefinition : SagaDefinition<OrderProcessingSagaState>
     {
@@ -111,8 +116,6 @@ namespace KShop.Orders.Domain.Orchestrations
             ctx.Instance.Money = ctx.Data.Price;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
 
-            //ctx.Instance.OrderPlacingRSTrackingNumber = Guid.NewGuid();
-
             await ctx.Publish(new OrderPlacingRSRequest
             {
                 OrderID = ctx.Data.OrderID,
@@ -164,6 +167,8 @@ namespace KShop.Orders.Domain.Orchestrations
 
         private async Task HandleOnOrderReserved(BehaviorContext<OrderProcessingSagaState, ProductsReserveSuccessEvent> ctx)
         {
+            ctx.Instance.Statuses.Add(Order.EStatus.Reserved);
+
             ctx.Instance.ProductsReserves = ctx.Data.ReservedProducts;
 
             await ctx.Publish(new PaymentCreateSvcCommand()
@@ -172,17 +177,15 @@ namespace KShop.Orders.Domain.Orchestrations
                 Money = ctx.Instance.Money,
                 PaymentPlatform = ctx.Instance.PaymentProvider
             });
+
+            await ctx.Publish(new OrderSetStatusReservedSvcRequest(ctx.Data.OrderID));
         }
 
         private async Task HandleOnOrderReserveFault(BehaviorContext<OrderProcessingSagaState, ProductsReserveFaultEvent> ctx)
         {
             _logger.LogError($"RS OrderPlacing is FAULTED! {ctx.Data.OrderID}");
-        }
 
-        private async Task CompensateOrderReserving(BehaviorContext<OrderProcessingSagaState, PaymentPendingCancelledSagaEvent> ctx)
-        {
-            await ctx.Publish(new ProductsReserveCancelSvcRequest(ctx.Data.OrderID));
-            await ctx.Publish(new OrderCancelSvcRequest(ctx.Data.OrderID));
+            await Compensate(ctx);
         }
         #endregion
 
@@ -202,7 +205,7 @@ namespace KShop.Orders.Domain.Orchestrations
             });
             Event(() => OnPaymentFaulted, e =>
             {
-                e.CorrelateById(ctx => ctx.CorrelationId.Value);
+                e.CorrelateById(ctx => ctx.Message.OrderID);
             });
 
             During(PaymentProcessing,
@@ -219,18 +222,23 @@ namespace KShop.Orders.Domain.Orchestrations
         private async Task HandleOnPaymentSuccessed(BehaviorContext<OrderProcessingSagaState, PaymentCreateSuccessSvcEvent> ctx)
         {
             ctx.Instance.PaymentID = ctx.Data.PaymentID;
+            ctx.Instance.Statuses.Add(Order.EStatus.Payed);
 
             await ctx.Publish(new ShipmentCreateSvcCommand()
             {
                 OrderID = ctx.Data.OrderID,
                 OrderPositions = ctx.Instance.OrderPositions
             });
+
+            await ctx.Publish(new OrderSetStatusPayedSvcRequest(ctx.Data.OrderID));
         }
 
         private async Task HandleOnPaymentFaulted(BehaviorContext<OrderProcessingSagaState, PaymentCreateFaultSvcEvent> ctx)
         {
-            _logger.LogError(ctx.Data.Exception, ctx.Data.Exception.Message);
+            _logger.LogError(ctx.Data.ErrorMessage);
             // TODO: вызвать компенсацию предыдущих шагов
+
+            await Compensate(ctx);
         }
         #endregion
 
@@ -250,7 +258,7 @@ namespace KShop.Orders.Domain.Orchestrations
             });
             Event(() => OnShipmentFault, e =>
             {
-                e.CorrelateById(ctx => ctx.CorrelationId.Value);
+                e.CorrelateById(ctx => ctx.Message.OrderID);
             });
 
             During(ShipmentProcessing,
@@ -267,17 +275,51 @@ namespace KShop.Orders.Domain.Orchestrations
         private async Task HandleOnOnShipmentSuccessed(BehaviorContext<OrderProcessingSagaState, ShipmentCreateSuccessSvcEvent> ctx)
         {
             ctx.Instance.ShipmentID = ctx.Data.ShipmentID;
+            ctx.Instance.Statuses.Add(Order.EStatus.Shipped);
+
+            await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Data.OrderID));
         }
 
         private async Task HandleOnShipmentFault(BehaviorContext<OrderProcessingSagaState, ShipmentCreateFaultSvcEvent> ctx)
         {
-            _logger.LogError(ctx.Data.Exception, ctx.Data.Exception.Message);
-            // TODO: вызвать компенсацию предыдущих шагов
+            _logger.LogError(ctx.Data.ErrorMessage);
+            await Compensate(ctx);
         }
 
         #endregion
 
+        private async Task Compensate<K>(BehaviorContext<OrderProcessingSagaState, K> ctx)
+        {
+            var statuses = new List<Order.EStatus>(ctx.Instance.Statuses);
+            statuses.Reverse();
 
+            foreach (var s in statuses)
+            {
+                _logger.LogWarning($"Compensate order {ctx.Instance.CorrelationId} - for {s}");
+                switch (s)
+                {
+                    case Order.EStatus.Reserved:
+                        await ctx.Publish(new ProductsReserveCancelSvcRequest(ctx.Instance.CorrelationId));
+                        break;
+                    case Order.EStatus.Payed:
+                        await ctx.Publish(new PaymentCancelSvcRequest() { PaymentID = ctx.Instance.PaymentID.Value });
+                        break;
+                    case Order.EStatus.Shipped:
+                        await ctx.Publish(new ShipmentCancelSvcRequest() { ShipmentID = ctx.Instance.ShipmentID.Value });
+                        break;
+                    case Order.EStatus.Faulted:
+                        break;
+                    case Order.EStatus.Refunded:
+                        break;
+                    case Order.EStatus.Cancelled:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            await ctx.Publish(new OrderSetStatusCancelledSvcRequest(ctx.Instance.CorrelationId));
+        }
 
 
         public OrderProcessingSagaStateMachine(ILogger<OrderProcessingSagaStateMachine> logger)

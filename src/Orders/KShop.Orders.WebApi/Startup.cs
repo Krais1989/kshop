@@ -59,7 +59,13 @@ namespace KShop.Orders.WebApi
                     busServices.AddRequestClient<OrderGetStatusSagaRequest>();
                     busServices.AddRequestClient<OrderPlacingSagaRequest>();
                     busServices.AddRequestClient<OrderCreateSvcRequest>();
-                    busServices.AddRequestClient<OrderCancelSvcRequest>();
+
+                    busServices.AddRequestClient<OrderSetStatusCancelledSvcRequest>();
+                    busServices.AddRequestClient<OrderSetStatusFaultedSvcRequest>();
+                    busServices.AddRequestClient<OrderSetStatusPayedSvcRequest>();
+                    busServices.AddRequestClient<OrderSetStatusRefundedSvcRequest>();
+                    busServices.AddRequestClient<OrderSetStatusReservedSvcRequest>();
+                    busServices.AddRequestClient<OrderSetStatusShippedSvcRequest>();
 
                     busServices.AddRequestClient<ProductsReserveSvcRequest>();
                     busServices.AddRequestClient<ProductsReserveCancelSvcRequest>();

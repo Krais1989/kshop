@@ -5,12 +5,12 @@ namespace KShop.Communications.Contracts.Products
     public class ProductsReserveFaultEvent
     {
         public Guid OrderID { get; set; }
-        public Exception Exception { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public ProductsReserveFaultEvent(Guid orderID, Exception exception = null)
+        public ProductsReserveFaultEvent(Guid orderID, string errorMessage = null)
         {
             OrderID = orderID;
-            Exception = exception;
+            ErrorMessage = errorMessage;
         }
     }
 }

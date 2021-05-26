@@ -109,15 +109,17 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
                     {
                         var res_positions = reserving[orderId];
                         var reserved_products = new ProductsReserveMap();
+
                         foreach (var res_pos in res_positions)
                         {
+
+
                             var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
                             if (db_positions.Quantity >= res_pos.Quantity)
                             {
                                 db_positions.Quantity -= res_pos.Quantity;
                                 res_pos.Status = ProductReserve.EStatus.Reserved;
                                 res_pos.CompleteDate = DateTime.UtcNow;
-
                                 reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
                             }
                             else
@@ -131,11 +133,14 @@ namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
                             await db_context.SaveChangesAsync();
                         }
                         /* Отправить сообщение о резервации продуктов */
-                        await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
+                        if (reserved_products.Count > 0)
+                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
+                        else
+                            await publish_endpoint.Publish(new ProductsReserveFaultEvent(orderId, $"Not enought products for order"));
                     }
                     catch (Exception e)
                     {
-                        await publish_endpoint.Publish(new ProductsReserveFaultEvent(orderId, e));
+                        await publish_endpoint.Publish(new ProductsReserveFaultEvent(orderId, e.Message));
                     }
                 }
 

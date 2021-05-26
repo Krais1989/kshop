@@ -52,7 +52,7 @@ namespace KShop.Orders.Domain.Consumers
             }
             catch (Exception e)
             {
-                await _publishEndpoint.Publish(new ProductsReserveFaultEvent(context.Message.OrderID, e));
+                await _publishEndpoint.Publish(new ProductsReserveFaultEvent(context.Message.OrderID, e.Message));
             }
         }
 

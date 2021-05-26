@@ -43,7 +43,7 @@ namespace KShop.Payments.Domain.Consumers
             }
             catch (Exception e)
             {
-                await context.Publish(new PaymentCreateFaultSvcEvent(context.Message.OrderID, e));
+                await context.Publish(new PaymentCreateFaultSvcEvent(context.Message.OrderID, e.Message));
             }
 
         }

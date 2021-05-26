@@ -25,20 +25,13 @@ namespace KShop.Communications.Contracts.Shipments
 
     public class ShipmentCreateFaultSvcEvent
     {
-        public ShipmentCreateFaultSvcEvent(Guid orderID, Exception exception = null)
-        {
-            OrderID = orderID;
-            Exception = exception;
-        }
-
-        public ShipmentCreateFaultSvcEvent(Guid orderID, string errorMessage)
+        public ShipmentCreateFaultSvcEvent(Guid orderID, string errorMessage = null)
         {
             OrderID = orderID;
             ErrorMessage = errorMessage;
         }
 
         public Guid OrderID { get; set; }
-        public Exception Exception { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

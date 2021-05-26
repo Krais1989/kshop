@@ -28,13 +28,13 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
         private readonly IPublishEndpoint _pub;
 
         private readonly IRequestClient<OrderCreateSvcRequest> _clCreate;
-        private readonly IRequestClient<OrderCancelSvcRequest> _clCancel;
+        private readonly IRequestClient<OrderSetStatusCancelledSvcRequest> _clCancel;
 
         public OrderCreateRSActivity(
             ILogger<OrderCreateRSActivity> logger,
             IPublishEndpoint pub,
             IRequestClient<OrderCreateSvcRequest> clCreate,
-            IRequestClient<OrderCancelSvcRequest> clCancel)
+            IRequestClient<OrderSetStatusCancelledSvcRequest> clCancel)
         {
             _logger = logger;
             _pub = pub;
@@ -68,7 +68,7 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
 
         public async Task<CompensationResult> Compensate(CompensateContext<OrderCreateRSActivityLog> context)
         {
-            var response = await _clCancel.GetResponse<OrderCancelSvcResponse>(new OrderCancelSvcRequest(context.Log.OrderID.Value));
+            var response = await _clCancel.GetResponse<OrderSetStatusSvcResponse>(new OrderSetStatusCancelledSvcRequest(context.Log.OrderID.Value));
 
             if (response.Message.IsSuccess)
             {
