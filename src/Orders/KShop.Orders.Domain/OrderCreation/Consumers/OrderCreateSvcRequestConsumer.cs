@@ -3,6 +3,7 @@ using KShop.Orders.Domain.Handlers;
 using KShop.Orders.Persistence;
 using MassTransit;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace KShop.Orders.Domain.Consumers
 {
-
     public class OrderCreateSvcRequestConsumer : IConsumer<OrderCreateSvcRequest>
     {
         private readonly ILogger<OrderCreateSvcRequestConsumer> _logger;

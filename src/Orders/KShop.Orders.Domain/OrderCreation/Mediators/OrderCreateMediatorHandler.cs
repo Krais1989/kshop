@@ -5,6 +5,7 @@ using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
 using KShop.Orders.Persistence.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -59,8 +60,23 @@ namespace KShop.Orders.Domain.Handlers
                 Logs = new List<OrderLog>()
             };
             entity.SetStatus(Order.EStatus.Initialized);
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+
+            _context.Add(entity);
+
+            try
+            {
+                var strat = _context.Database.CreateExecutionStrategy();
+                await strat.ExecuteAsync((ct) => {
+                    //throw new Exception("test exception");
+                    return _context.SaveChangesAsync(ct);
+                }, cancellationToken);
+            } catch (Exception e)
+            {
+                _logger.LogError(e, "Cover strategy exception");
+            }
+
+
+
             return new OrderCreateMediatorResponse() { OrderID = entity.ID };
         }
     }

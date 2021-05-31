@@ -10,6 +10,7 @@ using KShop.Orders.Persistence.Entities;
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using MassTransit.Definition;
+using MassTransit.Saga;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Orders.Domain.Orchestrations
 {
-    public class OrderProcessingSagaState : SagaStateMachineInstance
+    public class OrderProcessingSagaState : SagaStateMachineInstance, ISagaVersion
     {
         public Guid CorrelationId { get; set; }
         //public Guid OrderID => CorrelationId;
@@ -38,6 +39,7 @@ namespace KShop.Orders.Domain.Orchestrations
         /// Лог статусов заказа. Используется для компенсации
         /// </summary>
         public List<Order.EStatus> Statuses { get; set; } = new List<Order.EStatus>();
+        public int Version { get; set; }
     }
     public class OrderProcessingSagaStateMachineDefinition : SagaDefinition<OrderProcessingSagaState>
     {
@@ -103,6 +105,7 @@ namespace KShop.Orders.Domain.Orchestrations
             {
                 e.CorrelateById(ctx => ctx.Message.OrderID);
                 e.SelectId(ctx => ctx.Message.OrderID);
+                e.InsertOnInitial = true;
             });
 
             /* Событие размещения - запустить RS размещения заказа */
@@ -116,7 +119,7 @@ namespace KShop.Orders.Domain.Orchestrations
         {
             ctx.Instance.CustomerID = ctx.Data.CustomerID;
             ctx.Instance.OrderPositions = ctx.Data.Positions;
-            ctx.Instance.Money = ctx.Data.Price;
+            //ctx.Instance.Money = ctx.Data.Price;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
 
             await ctx.Publish(new OrderPlacingRSRequest
@@ -125,7 +128,7 @@ namespace KShop.Orders.Domain.Orchestrations
                 OrderPositions = ctx.Data.Positions,
                 CustomerID = ctx.Data.CustomerID,
                 PaymentProvider = ctx.Data.PaymentProvider,
-                Price = ctx.Data.Price
+               // Price = ctx.Data.Price
             });
         }
         #endregion
@@ -171,8 +174,9 @@ namespace KShop.Orders.Domain.Orchestrations
         private async Task HandleOnOrderReserved(BehaviorContext<OrderProcessingSagaState, ProductsReserveSuccessEvent> ctx)
         {
             ctx.Instance.Statuses.Add(Order.EStatus.Reserved);
-
             ctx.Instance.ProductsReserves = ctx.Data.ReservedProducts;
+            //TODO: выставить реальную стоимость заказа
+            ctx.Instance.Money = new Money(100);
 
             await ctx.Publish(new PaymentCreateSvcCommand()
             {

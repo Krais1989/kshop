@@ -4,6 +4,7 @@ using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MassTransit.Pipeline.Filters;
 using MassTransit.RabbitMqTransport;
+using MassTransit.Saga;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,6 +17,17 @@ namespace KShop.Communications.ServiceBus
 {
     public static class KShopMassTransitServiceExtensions
     {
+        public static ISagaRegistrationConfigurator<T> AddKShopSagaRedisStorage<T>(this ISagaRegistrationConfigurator<T> saga, IConfiguration config)
+            where T: class, ISagaVersion
+        {
+            saga.RedisRepository(r => {
+                r.DatabaseConfiguration(config.GetConnectionString("RedisConnection"));
+                r.KeyPrefix = "kshop-saga";
+            });
+
+            return saga;
+        }
+
         public static IServiceCollection AddKShopMassTransitRabbitMq(
             this IServiceCollection services,
             IConfiguration config,
@@ -33,7 +45,6 @@ namespace KShop.Communications.ServiceBus
 
                 if (busServicesConf != null)
                     busServicesConf(x);
-
 
                 //x.AddConsumers(typeof(PaymentCreateSvcConsumer).Assembly);
                 //x.AddRequestClient<PaymentCreateSvcRequest>();
@@ -61,17 +72,22 @@ namespace KShop.Communications.ServiceBus
                     if (rabbitConf != null)
                         rabbitConf(ctx, cfg);
 
-
                     cfg.UseMessageRetry(retry =>
                     {
                         // Интервалы в мс: s + i*n, где s - начальный интервал, i - шаг, n - добавочный интервал после каждого шага
                         retry.Incremental(10, TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(1000));
+
                     });
 
-                    cfg.UseScheduledRedelivery(redil =>
-                    {
-                        redil.Interval(10, TimeSpan.FromMilliseconds(5000));
-                    });
+                    //cfg.UseScheduledRedelivery(redil =>
+                    //{
+                    //    redil.Interval(10, TimeSpan.FromMilliseconds(5000));
+                    //});
+
+                    //cfg.UseInMemoryOutbox(outbox => {
+                    //    outbox.ConcurrentMessageDelivery = false;
+                    //});
+
 
                     //cfg.UseInMemoryOutbox(outbox => { 
                     //    outbox.ConcurrentMessageDelivery

@@ -40,12 +40,17 @@ namespace KShop.Orders.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddStackExchangeRedisCache(r => { 
+                r.Configuration = Configuration.GetConnectionString("RedisConnection");
+            });
+
             services.AddDbContext<OrderContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                //db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
-
-                db.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
+                db.UseMySql(constr, x => { 
+                    x.ServerVersion(new ServerVersion(new Version(8, 0)));
+                    x.EnableRetryOnFailure(10, TimeSpan.FromSeconds(5), null);
+                });
             });
 
             services.AddMediatR(typeof(OrderCreateMediatorHandler).Assembly);
@@ -76,7 +81,8 @@ namespace KShop.Orders.WebApi
                     busServices.AddConsumers(typeof(OrderCreateSvcRequestConsumer).Assembly);
                     busServices
                         .AddSagaStateMachine<OrderProcessingSagaStateMachine, OrderProcessingSagaState>(typeof(OrderProcessingSagaStateMachineDefinition))
-                        .InMemoryRepository();
+                        .AddKShopSagaRedisStorage(Configuration);
+                        //.InMemoryRepository();
                 },
                 (busContext, rabbigConfig) =>
                 {

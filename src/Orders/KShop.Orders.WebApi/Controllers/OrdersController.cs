@@ -1,4 +1,5 @@
 ﻿using KShop.Communications.Contracts.Orders;
+using KShop.Communications.Contracts.Payments;
 using KShop.Communications.Contracts.ValueObjects;
 using KShop.Orders.Persistence;
 using KShop.Orders.Persistence.Entities;
@@ -46,7 +47,7 @@ namespace KShop.Orders.WebApi.Controllers
                         OrderID = orderId
                     });
 
-            
+
             if (response.Message.IsSuccess)
                 return Ok(response.Message.Status);
             else
@@ -58,12 +59,14 @@ namespace KShop.Orders.WebApi.Controllers
         {
             var orderCreateRequest = new OrderPlacingSagaRequest
             {
-                CustomerID = 1,
+                OrderID = Guid.NewGuid(),
+                PaymentProvider = EPaymentProvider.Mock,
+                CustomerID = 1, // TODO: определять текущего юзера
                 Positions = dto.Positions
             };
 
-            var response = await _createOrderClient.GetResponse<OrderPlacingSagaRequest>(orderCreateRequest);
-            return Ok(response.Message);
+            await _pubEndpoint.Publish(orderCreateRequest);
+            return Ok(orderCreateRequest);
         }
 
         [HttpPost("[action]")]

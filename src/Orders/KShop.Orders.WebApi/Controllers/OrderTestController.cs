@@ -7,9 +7,11 @@ using KShop.Orders.Persistence.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,15 +25,18 @@ namespace KShop.Orders.WebApi.Controllers
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
         private readonly OrderContext _orderContext;
+        private readonly IDistributedCache _cache;
 
         public OrderTestController(
             IPublishEndpoint publishEndpoint,
             IRequestClient<OrderPlacingSagaRequest> createOrderClient,
-            OrderContext orderContext)
+            OrderContext orderContext, 
+            IDistributedCache cache)
         {
             _publishEndpoint = publishEndpoint;
             _createOrderClient = createOrderClient;
             _orderContext = orderContext;
+            _cache = cache;
         }
 
 
@@ -46,15 +51,18 @@ namespace KShop.Orders.WebApi.Controllers
         [HttpGet("[action]")]
         public async ValueTask<IActionResult> PostTest()
         {
+            await _cache.SetAsync("kshop-test", Encoding.UTF8.GetBytes("Data"));
+
             //TODO: вынести генерацию OrderID из контроллера
             var msg = new OrderPlacingSagaRequest()
             {
                 OrderID = Guid.NewGuid(),
                 CustomerID = 111,
                 Positions = new OrderPositionsMap() { { 1, 1 } },
-                Price = new Money(200),
                 PaymentProvider = EPaymentProvider.Mock
+                //Price = new Money(200),
             };
+
             await _publishEndpoint.Publish(msg);
 
             //var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(

@@ -15,7 +15,7 @@ namespace KShop.Communications.Contracts.Orders
         public int CustomerID { get; set; }
         public OrderPositionsMap Positions { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
-        public Money Price { get; set; }
+        //public Money Price { get; set; }
     }
 
     /// <summary>
