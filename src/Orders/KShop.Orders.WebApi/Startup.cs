@@ -47,8 +47,7 @@ namespace KShop.Orders.WebApi
             services.AddDbContext<OrderContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, x => { 
-                    x.ServerVersion(new ServerVersion(new Version(8, 0)));
+                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)), x => {
                     x.EnableRetryOnFailure(10, TimeSpan.FromSeconds(5), null);
                 });
             });

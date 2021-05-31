@@ -1,5 +1,4 @@
-﻿using KShop.Products.Domain.Consumers;
-using KShop.Products.Persistence;
+﻿using KShop.Products.Persistence;
 using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.ValueObjects;
 using MassTransit;
@@ -11,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KShop.Products.Domain.ProductsReservation.Consumers;
 
 namespace KShop.Products.UnitTests
 {
@@ -20,7 +20,7 @@ namespace KShop.Products.UnitTests
         [Test]
         public async Task Should_respond_with_acceptance_if_ok()
         {
-            var logMock = new Mock<ILogger<ProductsReserveConsumer>>();
+            var logMock = new Mock<ILogger<ProductsReservationSvcRequestConsumer>>();
             var pubMock = new Mock<IPublishEndpoint>();
             var contextMock = new Mock<ProductsContext>();
 

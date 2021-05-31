@@ -31,11 +31,9 @@ namespace KShop.Products.Persistence
             base.OnConfiguring(optionsBuilder);
 
             var constr = "Server=127.0.0.1;Port=3306;Database=db_products;Uid=asd;Pwd=asd;";
-            optionsBuilder
-                .UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); })
-                ;
-                //.UseLoggerFactory(ContextLoggerFactory);
-            
+            optionsBuilder.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+            //.UseLoggerFactory(ContextLoggerFactory);
+
             //optionsBuilder.UseMySql("Server=127.0.0.1;Port=3306;Database=db_catalogues;Uid=asd;Pwd=asd;", new MySqlServerVersion(new Version(8, 0)));
 
         }

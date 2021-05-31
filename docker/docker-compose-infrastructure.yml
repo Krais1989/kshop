@@ -138,80 +138,6 @@ services:
                 aliases:
                 - log_seq
     
-    # log_elasticsearch:
-    #     restart: always
-    #     #container_name: log_elasticsearch
-    #     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
-    #     ports:
-    #         - 9200:9200
-    #         - 9300:9300
-    #     environment:
-    #         - xpack.security.enabled=false
-    #         - discovery.type=single-node
-    #         # - node.name=es01
-    #         # - cluster.name=es-docker-cluster
-    #         # - discovery.type=single-node
-    #         # - bootstrap.memory_lock=true
-    #         # - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
-    #         # - "ELASTIC_PASSWORD:changeme"
-
-    #         #- xpack.security.enabled=true                    
-    #     volumes:
-    #         - vol-log_elastic:/usr/share/elasticsearch/data
-    #         #- ./configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    #     networks:
-    #         kshop_network:
-    #             aliases:
-    #             - log_elasticsearch
-                
-    #     ulimits:
-    #         memlock:
-    #             soft: -1
-    #             hard: -1
-    #         nofile:
-    #             soft: 65536
-    #             hard: 65536
-
-    #     mem_limit: 2g
-            
-    # log_kibana:
-    #     restart: always
-    #     #container_name: log_kibana    
-    #     image: docker.elastic.co/kibana/kibana:7.12.0
-    #     ports:
-    #         - 5601:5601
-    #     environment:
-    #         #ELASTICSEARCH_URL: "http://log_elasticsearch:9200"
-    #         ELASTICSEARCH_HOSTS: "http://log_elasticsearch:9200"
-    #         ELASTICSEARCH_USERNAME: "kibana"
-    #         ELASTICSEARCH_PASSWORD: "changeme"
-    #     depends_on:
-    #         - log_elasticsearch   
-    #     # volumes:  
-    #     #     - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml
-    #     networks:
-    #         kshop_network:
-    #             aliases:
-    #             - log_kibana
-
-    # metr_influxdb2:
-    #     restart: always
-    #     image: influxdb:2.0.4
-    #     ports:
-    #         - 8086:8086
-    #     environment: 
-    #         - DOCKER_INFLUXDB_INIT_USERNAME=influx
-    #         - DOCKER_INFLUXDB_INIT_PASSWORD=asdasdasd
-    #         - DOCKER_INFLUXDB_INIT_ORG=kshop
-    #         - DOCKER_INFLUXDB_INIT_BUCKET=appmetrics
-    #     volumes:
-    #         - vol-metr_influxdb2:/var/lib/influxdb2
-    #     networks:
-    #         kshop_network:
-    #             aliases:
-    #             - metr_influxdb2
-    #     mem_limit: 1g
-
     metr_influxdb:
         restart: always
         image: influxdb:1.8
@@ -307,6 +233,82 @@ services:
             kshop_network:
                 aliases: 
                 - trace_jaeger
+                
+    
+    # log_elasticsearch:
+    #     restart: always
+    #     #container_name: log_elasticsearch
+    #     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    #     ports:
+    #         - 9200:9200
+    #         - 9300:9300
+    #     environment:
+    #         - xpack.security.enabled=false
+    #         - discovery.type=single-node
+    #         # - node.name=es01
+    #         # - cluster.name=es-docker-cluster
+    #         # - discovery.type=single-node
+    #         # - bootstrap.memory_lock=true
+    #         # - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    #         # - "ELASTIC_PASSWORD:changeme"
+
+    #         #- xpack.security.enabled=true                    
+    #     volumes:
+    #         - vol-log_elastic:/usr/share/elasticsearch/data
+    #         #- ./configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    #     networks:
+    #         kshop_network:
+    #             aliases:
+    #             - log_elasticsearch
+                
+    #     ulimits:
+    #         memlock:
+    #             soft: -1
+    #             hard: -1
+    #         nofile:
+    #             soft: 65536
+    #             hard: 65536
+
+    #     mem_limit: 2g
+            
+    # log_kibana:
+    #     restart: always
+    #     #container_name: log_kibana    
+    #     image: docker.elastic.co/kibana/kibana:7.12.0
+    #     ports:
+    #         - 5601:5601
+    #     environment:
+    #         #ELASTICSEARCH_URL: "http://log_elasticsearch:9200"
+    #         ELASTICSEARCH_HOSTS: "http://log_elasticsearch:9200"
+    #         ELASTICSEARCH_USERNAME: "kibana"
+    #         ELASTICSEARCH_PASSWORD: "changeme"
+    #     depends_on:
+    #         - log_elasticsearch   
+    #     # volumes:  
+    #     #     - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml
+    #     networks:
+    #         kshop_network:
+    #             aliases:
+    #             - log_kibana
+
+    # metr_influxdb2:
+    #     restart: always
+    #     image: influxdb:2.0.4
+    #     ports:
+    #         - 8086:8086
+    #     environment: 
+    #         - DOCKER_INFLUXDB_INIT_USERNAME=influx
+    #         - DOCKER_INFLUXDB_INIT_PASSWORD=asdasdasd
+    #         - DOCKER_INFLUXDB_INIT_ORG=kshop
+    #         - DOCKER_INFLUXDB_INIT_BUCKET=appmetrics
+    #     volumes:
+    #         - vol-metr_influxdb2:/var/lib/influxdb2
+    #     networks:
+    #         kshop_network:
+    #             aliases:
+    #             - metr_influxdb2
+    #     mem_limit: 1g
+
 
 networks:
     kshop_network:

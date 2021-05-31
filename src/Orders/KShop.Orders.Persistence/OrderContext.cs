@@ -27,7 +27,8 @@ namespace KShop.Orders.Persistence
             //optionsBuilder.UseMySql("Server=127.0.0.1;Port=3307;Database=db_orders;Uid=asd;Pwd=asd;", new MySqlServerVersion(new Version(8, 0)));
 
             var constr = "Server=127.0.0.1;Port=3307;Database=db_orders;Uid=asd;Pwd=asd;";
-            optionsBuilder.UseMySql(constr, x => { x.ServerVersion(new ServerVersion(new Version(8, 0))); });
+            var serverVersion = new MySqlServerVersion(new Version(8, 0));
+            optionsBuilder.UseMySql(constr, serverVersion);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

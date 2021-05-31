@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KShop.Orders.Domain.Sagas;
 using MassTransit.Testing;
 using NUnit.Framework;
 
