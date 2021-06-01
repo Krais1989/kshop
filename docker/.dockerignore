@@ -1,0 +1,8 @@
+﻿.git
+.vs
+.gitignore
+.gitlab-ci.yml
+obj/
+bin/
+out/
+wwwroot/

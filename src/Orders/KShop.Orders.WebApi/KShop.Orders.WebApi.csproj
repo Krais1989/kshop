@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>eaa9b68e-51df-4897-b8ea-80d2d151586f</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,6 +25,12 @@
     <ProjectReference Include="..\..\Shared\KShop.Swagger\KShop.Swagger.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />
     <ProjectReference Include="..\KShop.Orders.Domain\KShop.Orders.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="KShop.Orders.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

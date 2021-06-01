@@ -1,0 +1,1 @@
+docker build -t kshop.payments.webapi:latest -f payments.dockerfile ../src

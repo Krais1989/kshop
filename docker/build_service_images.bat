@@ -1,0 +1,5 @@
+start build_orders_image.bat
+start build_products_image.bat
+start build_payments_image.bat
+start build_shipments_image.bat
+pause

@@ -1,0 +1,1 @@
+docker build -t kshop.shipments.webapi:latest -f shipments.dockerfile ../src

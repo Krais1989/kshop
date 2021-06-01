@@ -8,31 +8,36 @@ namespace KShop.Orders.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
-                    CustomerID = table.Column<int>(nullable: false),
-                    Status = table.Column<byte>(nullable: false),
-                    CreateDate = table.Column<DateTime>(nullable: false),
-                    StatusDate = table.Column<DateTime>(nullable: false)
+                    ID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    StatusDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.ID);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "OrderLog",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(nullable: false)
+                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderID = table.Column<Guid>(nullable: false),
-                    NewStatus = table.Column<byte>(nullable: false),
-                    StatusDate = table.Column<DateTime>(nullable: false),
-                    Message = table.Column<string>(nullable: true)
+                    OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NewStatus = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                    StatusDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Message = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -43,17 +48,18 @@ namespace KShop.Orders.Persistence.Migrations
                         principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "OrderPositions",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(nullable: false)
+                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderID = table.Column<Guid>(nullable: false),
-                    ProductID = table.Column<ulong>(nullable: false),
-                    Quantity = table.Column<uint>(nullable: false)
+                    OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    Quantity = table.Column<uint>(type: "int unsigned", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,7 +70,8 @@ namespace KShop.Orders.Persistence.Migrations
                         principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderLog_OrderID",

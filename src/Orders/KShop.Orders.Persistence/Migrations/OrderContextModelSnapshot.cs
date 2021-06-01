@@ -14,8 +14,8 @@ namespace KShop.Orders.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.6");
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.Order", b =>
                 {
@@ -47,7 +47,7 @@ namespace KShop.Orders.Persistence.Migrations
                         .HasColumnType("bigint unsigned");
 
                     b.Property<string>("Message")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<byte>("NewStatus")
                         .HasColumnType("tinyint unsigned");
@@ -94,6 +94,8 @@ namespace KShop.Orders.Persistence.Migrations
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
@@ -103,6 +105,15 @@ namespace KShop.Orders.Persistence.Migrations
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("KShop.Orders.Persistence.Entities.Order", b =>
+                {
+                    b.Navigation("Logs");
+
+                    b.Navigation("Positions");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,4 +23,10 @@
     <ProjectReference Include="..\KShop.Shipments.Domain\KShop.Shipments.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="KShop.Shipments.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

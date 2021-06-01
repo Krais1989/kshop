@@ -1,5 +1,6 @@
 ﻿using KShop.Payments.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,21 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Persistence
 {
+    /// <summary>
+    /// Контекст для миграций
+    /// </summary>
+    public class OrderContextDesignFactory : IDesignTimeDbContextFactory<PaymentsContext>
+    {
+        public PaymentsContext CreateDbContext(string[] args)
+        {
+            var constr = "Server=127.0.0.1;Port=3308;Database=db_payments;Uid=asd;Pwd=asd;";
+            Console.WriteLine($"Design context: {constr}");
+            var optionsBuilder = new DbContextOptionsBuilder<PaymentsContext>();
+            optionsBuilder.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+            return new PaymentsContext(optionsBuilder.Options);
+        }
+    }
+
     public class PaymentsContext : DbContext
     {
         public DbSet<Payment> Payments { get; set; }
@@ -19,15 +35,6 @@ namespace KShop.Payments.Persistence
 
         public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseMySql("Server=127.0.0.1;Port=3308;Database=db_payments;Uid=asd;Pwd=asd;", new MySqlServerVersion(new Version(8, 0)));
-
-            var constr = "Server=127.0.0.1;Port=3308;Database=db_payments;Uid=asd;Pwd=asd;";
-            optionsBuilder.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,10 +1,26 @@
 ﻿using KShop.Shipments.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using System;
 
 namespace KShop.Shipments.Persistence
 {
+    /// <summary>
+    /// Контекст для миграций
+    /// </summary>
+    public class OrderContextDesignFactory : IDesignTimeDbContextFactory<ShipmentContext>
+    {
+        public ShipmentContext CreateDbContext(string[] args)
+        {
+            var constr = "Server=127.0.0.1;Port=3309;Database=db_shipments;Uid=asd;Pwd=asd;";
+            Console.WriteLine($"Design context: {constr}");
+            var optionsBuilder = new DbContextOptionsBuilder<ShipmentContext>();
+            optionsBuilder.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
+            return new ShipmentContext(optionsBuilder.Options);
+        }
+    }
+
     public class ShipmentContext : DbContext
     {
         public DbSet<Shipment> Shipments { get; set; }
@@ -17,16 +33,6 @@ namespace KShop.Shipments.Persistence
 
         public ShipmentContext(DbContextOptions<ShipmentContext> options) : base(options)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            //optionsBuilder.UseMySql("Server=127.0.0.1;Port=3307;Database=db_orders;Uid=asd;Pwd=asd;", new MySqlServerVersion(new Version(8, 0)));
-
-            var constr = "Server=127.0.0.1;Port=3309;Database=db_shipments;Uid=asd;Pwd=asd;";
-            optionsBuilder.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

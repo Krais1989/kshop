@@ -8,29 +8,35 @@ namespace KShop.Products.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(nullable: false)
+                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    Currency = table.Column<string>(nullable: true, defaultValue: "RUB"),
-                    Price = table.Column<decimal>(nullable: true, defaultValue: 0m)
+                    Title = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "longtext", nullable: true, defaultValue: "RUB")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: true, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ID);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductPositions",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(nullable: false)
+                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductID = table.Column<ulong>(nullable: false),
-                    Quantity = table.Column<uint>(nullable: false)
+                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    Quantity = table.Column<uint>(type: "int unsigned", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,21 +47,22 @@ namespace KShop.Products.Persistence.Migrations
                         principalTable: "Products",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductReserves",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(nullable: false)
+                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductID = table.Column<ulong>(nullable: false),
-                    Quantity = table.Column<uint>(nullable: false),
-                    OrderID = table.Column<Guid>(nullable: false),
-                    CustomerID = table.Column<ulong>(nullable: false),
-                    CreateDate = table.Column<DateTime>(nullable: false),
-                    CompleteDate = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<byte>(nullable: false)
+                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    Quantity = table.Column<uint>(type: "int unsigned", nullable: false),
+                    OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CustomerID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CompleteDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<byte>(type: "tinyint unsigned", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +73,8 @@ namespace KShop.Products.Persistence.Migrations
                         principalTable: "Products",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPositions_ProductID",

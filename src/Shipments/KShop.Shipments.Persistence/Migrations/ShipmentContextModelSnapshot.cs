@@ -14,8 +14,8 @@ namespace KShop.Shipments.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.6");
 
             modelBuilder.Entity("KShop.Shipments.Persistence.Entities.Shipment", b =>
                 {
@@ -30,7 +30,7 @@ namespace KShop.Shipments.Persistence.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExternalID")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastCheckingDate")
                         .HasColumnType("datetime(6)");

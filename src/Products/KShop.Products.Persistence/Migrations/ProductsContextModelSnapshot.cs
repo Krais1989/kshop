@@ -14,8 +14,8 @@ namespace KShop.Products.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.6");
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.Product", b =>
                 {
@@ -24,7 +24,7 @@ namespace KShop.Products.Persistence.Migrations
                         .HasColumnType("bigint unsigned");
 
                     b.Property<string>("Title")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.HasKey("ID");
 
@@ -93,15 +93,15 @@ namespace KShop.Products.Persistence.Migrations
 
                             b1.Property<string>("Currency")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnName("Currency")
-                                .HasColumnType("longtext CHARACTER SET utf8mb4")
-                                .HasDefaultValue("RUB");
+                                .HasColumnType("longtext")
+                                .HasDefaultValue("RUB")
+                                .HasColumnName("Currency");
 
                             b1.Property<decimal>("Price")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnName("Price")
                                 .HasColumnType("decimal(65,30)")
-                                .HasDefaultValue(0m);
+                                .HasDefaultValue(0m)
+                                .HasColumnName("Price");
 
                             b1.HasKey("ProductID");
 
@@ -110,6 +110,8 @@ namespace KShop.Products.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProductID");
                         });
+
+                    b.Navigation("Money");
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductPosition", b =>
@@ -119,6 +121,8 @@ namespace KShop.Products.Persistence.Migrations
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductReserve", b =>
@@ -128,6 +132,15 @@ namespace KShop.Products.Persistence.Migrations
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("KShop.Products.Persistence.Entities.Product", b =>
+                {
+                    b.Navigation("Positions");
+
+                    b.Navigation("Reserves");
                 });
 #pragma warning restore 612, 618
         }

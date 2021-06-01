@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
+using Serilog;
 using Swagger;
 using System;
 using System.Reflection;
@@ -40,6 +41,9 @@ namespace KShop.Orders.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = (Configuration as IConfigurationRoot).GetDebugView();
+            Log.Warning(config);
+
             services.AddStackExchangeRedisCache(r => { 
                 r.Configuration = Configuration.GetConnectionString("RedisConnection");
             });
@@ -102,7 +106,7 @@ namespace KShop.Orders.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
