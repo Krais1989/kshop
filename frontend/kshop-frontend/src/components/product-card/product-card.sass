@@ -1,0 +1,62 @@
+.kshop-product-card
+    width: 170px
+    height: auto
+
+    background-color: #dedede
+
+    display: flex
+    flex-flow: column nowrap
+    
+    .kshop-product-card-image
+        img
+            width: 100%
+
+    .kshop-product-card-price
+        padding: 5px 5px
+        span
+            font-size: 20px
+            font-weight: 700
+            line-height: 26px
+    .kshop-product-card-title
+        padding: 0 5px 5px 5px
+        span
+            font-size: 14px
+            line-height: 20px
+
+    .kshop-product-card-rating
+
+    .kshop-product-card-actions
+        display: flex
+        flex-flow: row nowrap
+        justify-content: stretch
+
+        *
+            flex-grow: 1
+
+    .kshop-product-card-actions-dropdown
+        font-weight: 700
+
+    .kshop-button
+        cursor: pointer
+        background-color: #4CAF50
+        border: none
+        color: white
+        padding: 10px 10px
+        text-align: center
+        text-decoration: none
+        display: inline-block
+        font-size: 14px
+
+    .kshop-button-green
+        @extend .kshop-button
+        background-color: #4CAF50
+
+    .kshop-button-blue
+        @extend .kshop-button
+        background-color: #008CBA
+
+    .kshop-button-gray
+        @extend .kshop-button
+        background-color: #e7e7e7
+        color: black
+

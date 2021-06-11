@@ -1,1 +1,1 @@
-docker-compose up --force-recreate api_orders
+docker-compose up --build api_orders

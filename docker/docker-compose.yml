@@ -1,10 +1,22 @@
 version: '3.9'
 services:
 
+    front_kshop:
+        build:
+            context: .
+            dockerfile: kshop.front.dockerfile.dev
+        ports:
+            - '3000:3000'
+        volumes:
+            - /app/nodemodules
+            - .:/app
+    front_admin:
+
+
     api_orders:
         build:
             context: '../src'
-            dockerfile: 'orders.dockerfile'
+            dockerfile: orders.dockerfile
         image: kshop.orders.webapi:latest
         restart: always
         environment: 
