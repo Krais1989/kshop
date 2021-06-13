@@ -1,6 +1,9 @@
 import * as React from "react";
 import "./product-card.sass";
 import nophoto from "./nophoto.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
+import DropDown from "components/controls/drop-down/drop-down";
 
 export interface IProductCardProps {
     id: number;
@@ -11,7 +14,7 @@ export interface IProductCardProps {
 }
 
 const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
-    const productLink = `products/${props.id}`;
+    const productLink = `catalog/products/${props.id}`;
     let title = `${props.title}`;
     if (props.description)
         title = `${title}, ${props.description}`;
@@ -44,10 +47,12 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
             </div>
 
             <div className="kshop-product-card-actions">
-                <button className="kshop-button-green">В корзину</button>
-                <button className="kshop-button-gray kshop-product-card-actions-dropdown">
-                    ...
-                </button>
+                <button className="kshop-button-green">В корзину <FontAwesomeIcon icon={faCartArrowDown} /> </button>
+                <DropDown title="...">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </DropDown>
             </div>
         </div>
     );

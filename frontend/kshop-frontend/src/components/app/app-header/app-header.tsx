@@ -7,8 +7,7 @@ interface IAppHeaderProps { }
 const AppHeader: React.FunctionComponent<IAppHeaderProps> = (props) => {
     return (
         <div className="kshop-app-header">
-                <img src={logo} alt="" />
-                <span className="kshop-app-header-text">HeaderBar</span>            
+                <a href="/"><img src={logo} alt="" /></a>        
         </div>
         
     )

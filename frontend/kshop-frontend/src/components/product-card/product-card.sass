@@ -7,25 +7,25 @@
     display: flex
     flex-flow: column nowrap
     
-    .kshop-product-card-image
+    &-image
         img
             width: 100%
 
-    .kshop-product-card-price
+    &-price
         padding: 5px 5px
         span
             font-size: 20px
             font-weight: 700
             line-height: 26px
-    .kshop-product-card-title
+    &-title
         padding: 0 5px 5px 5px
         span
             font-size: 14px
             line-height: 20px
 
-    .kshop-product-card-rating
+    &-rating
 
-    .kshop-product-card-actions
+    &-actions
         display: flex
         flex-flow: row nowrap
         justify-content: stretch
@@ -33,7 +33,7 @@
         *
             flex-grow: 1
 
-    .kshop-product-card-actions-dropdown
+    &-actions-dropdown
         font-weight: 700
 
     .kshop-button
@@ -59,4 +59,5 @@
         @extend .kshop-button
         background-color: #e7e7e7
         color: black
+
 

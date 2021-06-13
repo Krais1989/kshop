@@ -1,10 +1,10 @@
 
 class ProductAttribute {
-    title: string;
+    name: string;
     value: string;
 
-    constructor(title: string, value: string) {
-        this.title = title;
+    constructor(name: string, value: string) {
+        this.name = name;
         this.value = value;
     }
 }

@@ -15,8 +15,13 @@ import Navbar from "../navbar/navbar";
 import AppContent from "./app-content/app-content";
 import AppFooter from "./app-footer/app-footer";
 import AppHeader from "./app-header/app-header";
+import ProductDetailsPage from "../pages/product-details-page/product-details-page";
+import OrdersPage from "../pages/orders-page/orders-page";
 
-function App() {
+class DataContext {
+}
+
+const App:React.FC = () => {
     return (
         <div className="kshop-app">
             <Router>
@@ -31,7 +36,9 @@ function App() {
                             path="/catalog/group/:id"
                             component={CatalogPage}
                         />
-                        <Route exact path="/catalog/product/:id" />
+                        <Route exact path="/catalog/products/:id" component={ProductDetailsPage} />
+
+                        <Route exact path="/orders" component={OrdersPage} />
                         <Redirect to="/" />
                     </Switch>
                 </AppContent>
