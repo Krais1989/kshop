@@ -1,15 +1,15 @@
 version: '3.9'
 services:
 
-    front_kshop:
-        build:
-            context: .
-            dockerfile: kshop.front.dockerfile.dev
-        ports:
-            - '3000:3000'
-        volumes:
-            - /app/nodemodules
-            - .:/app
+    # front_kshop:
+    #     build:
+    #         context: .
+    #         dockerfile: kshop.front.dockerfile.dev
+    #     ports:
+    #         - '3000:3000'
+    #     volumes:
+    #         - /app/nodemodules
+    #         - .:/app
 
     api_orders:
         build:
@@ -185,7 +185,7 @@ services:
         environment: 
             MONGO_INITDB_ROOT_USERNAME: asd
             MONGO_INITDB_ROOT_PASSWORD: asd
-            MONGO_INITDB_DATABASE: kshop_carts
+            MONGO_INITDB_DATABASE: kshop_db_carts
         ports:
             - '27017:27017'
         expose: 

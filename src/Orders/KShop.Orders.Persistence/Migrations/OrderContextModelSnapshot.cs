@@ -42,7 +42,7 @@ namespace KShop.Orders.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
                 {
-                    b.Property<ulong>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
@@ -67,14 +67,14 @@ namespace KShop.Orders.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
                 {
-                    b.Property<ulong>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
-                    b.Property<ulong>("ProductID")
+                    b.Property<uint>("ProductID")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<uint>("Quantity")

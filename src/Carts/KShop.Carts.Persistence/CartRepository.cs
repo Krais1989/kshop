@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace KShop.Carts.Persistence
 {
-    public class CartsStorageSettings
+    public class MongoSettings
     {
-        public MongoClientSettings ClientSettings { get; set; }
-
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
         public string CartsCollection { get; set; }
@@ -22,18 +20,21 @@ namespace KShop.Carts.Persistence
     {
         private readonly IMongoCollection<Cart> _cartStorage;
 
-        public CartRepository(IOptions<CartsStorageSettings> storageSettings)
+        public CartRepository(IOptions<MongoSettings> storageSettings)
         {
-            var client = new MongoClient(storageSettings.Value.ClientSettings);
-            var db = client.GetDatabase(storageSettings.Value.DatabaseName);
-            _cartStorage = db.GetCollection<Cart>(storageSettings.Value.CartsCollection);
+            var client = new MongoClient(storageSettings.Value.ConnectionString);
+            var db = client.GetDatabase(storageSettings.Value.DatabaseName, 
+                new MongoDatabaseSettings { });
+            _cartStorage = db.GetCollection<Cart>(storageSettings.Value.CartsCollection, 
+                new MongoCollectionSettings { 
+                });
         }
 
 
         public async ValueTask<List<Cart>> GetAllAsync(Func<Cart, bool> where = null, CancellationToken cancellationToken = default)
         {
             var result = await _cartStorage
-                .Find(b => where == null ? true : where(b), _findAllOptions)
+                .Find(b => true, _findAllOptions)
                 .ToListAsync(cancellationToken);
 
             return result;

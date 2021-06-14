@@ -21,7 +21,7 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.Product", b =>
                 {
-                    b.Property<ulong>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
@@ -35,11 +35,11 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductPosition", b =>
                 {
-                    b.Property<ulong>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<ulong>("ProductID")
+                    b.Property<uint>("ProductID")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<uint>("Quantity")
@@ -54,7 +54,7 @@ namespace KShop.Products.Persistence.Migrations
 
             modelBuilder.Entity("KShop.Products.Persistence.Entities.ProductReserve", b =>
                 {
-                    b.Property<ulong>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
@@ -64,13 +64,13 @@ namespace KShop.Products.Persistence.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<ulong>("CustomerID")
+                    b.Property<uint>("CustomerID")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
-                    b.Property<ulong>("ProductID")
+                    b.Property<uint>("ProductID")
                         .HasColumnType("bigint unsigned");
 
                     b.Property<uint>("Quantity")
@@ -90,7 +90,7 @@ namespace KShop.Products.Persistence.Migrations
                 {
                     b.OwnsOne("KShop.Communications.Contracts.ValueObjects.Money", "Money", b1 =>
                         {
-                            b1.Property<ulong>("ProductID")
+                            b1.Property<uint>("ProductID")
                                 .HasColumnType("bigint unsigned");
 
                             b1.Property<string>("Currency")

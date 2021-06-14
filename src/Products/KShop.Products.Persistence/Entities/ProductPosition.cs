@@ -2,8 +2,8 @@
 {
     public class ProductPosition
     {
-        public ulong ID { get; set; }
-        public ulong ProductID { get; set; }
+        public uint ID { get; set; }
+        public uint ProductID { get; set; }
         public uint Quantity { get; set; }
 
 

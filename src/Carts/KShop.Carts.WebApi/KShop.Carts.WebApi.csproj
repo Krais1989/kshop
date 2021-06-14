@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Norix\source\repos\KShop\src\Carts\KShop.Carts.WebApi\KShop.Carts.WebApi.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\KShop.Auth\KShop.Auth.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Metrics\KShop.Metrics.csproj" />
@@ -20,5 +24,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.6" NoWarn="NU1605" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="KShop.Carts.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

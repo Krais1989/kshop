@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using KShop.Auth;
+using KShop.Carts.Persistence;
 using KShop.Communications.ServiceBus;
 using KShop.Metrics;
 using KShop.Tracing;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swagger;
@@ -39,6 +41,10 @@ namespace KShop.Carts.WebApi
         {
             var config = (Configuration as IConfigurationRoot).GetDebugView();
             Log.Warning(config);
+
+            services.Configure<MongoSettings>(Configuration.GetSection(nameof(MongoSettings)));
+            services.AddSingleton<MongoSettings>(sp => sp.GetRequiredService<IOptions<MongoSettings>>().Value);
+            services.AddScoped<ICartRepository, CartRepository>();
 
             services.AddKShopTracing(Configuration);
             services.AddKShopMetrics(Configuration);

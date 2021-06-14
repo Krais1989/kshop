@@ -8,7 +8,7 @@ namespace KShop.Carts.Domain
 {
     public class CartService
     {
-        public async Task SetCartPosition(ulong productId, uint quantity)
+        public async Task SetCartPosition(uint productId, uint quantity)
         {
 
         }

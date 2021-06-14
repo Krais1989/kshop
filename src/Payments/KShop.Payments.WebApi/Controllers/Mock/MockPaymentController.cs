@@ -115,8 +115,6 @@ namespace KShop.Payments.WebApi.Controllers.Mock
         /// <summary>
         /// Redirect-url для платежной системы, принимает запросы с результатами платежа
         /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
         [HttpGet("[action]")]
         public async Task<ActionResult> PaymentCallback([FromQuery] MockPaymentCallbackDto dto)
         {

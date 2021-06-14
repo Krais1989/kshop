@@ -31,7 +31,7 @@ namespace KShop.Orders.Persistence.Migrations
                 name: "OrderLog",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                    ID = table.Column<uint>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     NewStatus = table.Column<byte>(type: "tinyint unsigned", nullable: false),
@@ -55,10 +55,10 @@ namespace KShop.Orders.Persistence.Migrations
                 name: "OrderPositions",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                    ID = table.Column<uint>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ProductID = table.Column<uint>(type: "bigint unsigned", nullable: false),
                     Quantity = table.Column<uint>(type: "int unsigned", nullable: false)
                 },
                 constraints: table =>

@@ -7,7 +7,7 @@ namespace KShop.Products.Persistence.Entities
 {
     public class Product
     {
-        public ulong ID { get; set; }
+        public uint ID { get; set; }
         public string Title { get; set; }
         public Money Money { get; set; }
         

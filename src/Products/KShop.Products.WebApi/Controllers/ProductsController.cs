@@ -36,7 +36,7 @@ namespace KShop.Products.WebApi.Controllers
         }
 
         [HttpGet("[action]/{productId}")]
-        public async ValueTask<IActionResult> Get(ulong productId)
+        public async ValueTask<IActionResult> Get(uint productId)
         {
             var result = await _context.Products.Include(e => e.Positions).AsNoTracking().FirstOrDefaultAsync(e => e.ID == productId);
             return Ok(result);
@@ -44,7 +44,7 @@ namespace KShop.Products.WebApi.Controllers
 
 
         [HttpGet("[action]/{productId}")]
-        public async ValueTask<IActionResult> TestProductReservePending(ulong productId, uint quantity)
+        public async ValueTask<IActionResult> TestProductReservePending(uint productId, uint quantity)
         {
             var entity = new ProductReserve()
             {

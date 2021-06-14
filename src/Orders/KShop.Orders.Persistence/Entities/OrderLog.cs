@@ -4,7 +4,7 @@ namespace KShop.Orders.Persistence.Entities
 {
     public class OrderLog
     {
-        public ulong ID { get; set; }
+        public uint ID { get; set; }
         public Guid OrderID { get; set; }
 
         public Order.EStatus NewStatus { get; set; }

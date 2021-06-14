@@ -1,4 +1,5 @@
-﻿using KShop.Carts.Persistence;
+﻿using KShop.Auth;
+using KShop.Carts.Persistence;
 using KShop.Carts.Persistence.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,20 @@ namespace KShop.Carts.WebApi.Controllers
 {
     public class CartPosition
     {
-        public ulong ProductID { get; set; }
+        public CartPosition()
+        {
+        }
+
+        public CartPosition(uint productID, uint quantity)
+        {
+            ProductID = productID;
+            Quantity = quantity;
+        }
+
+        public uint ProductID { get; set; }
         public uint Quantity { get; set; }
+
+
     }
 
     [ApiController]
@@ -29,18 +42,18 @@ namespace KShop.Carts.WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("my")]
         public async Task<IActionResult> Get()
         {
-            ulong userId = 0;
+            var userId = this.GetCurrentUserID();
             var cart = await _cartService.GetAsync(userId.ToString());
             return Ok(cart);
         }
 
-        [HttpPost]
+        [HttpPost("set")]
         public async Task<IActionResult> SetPosition([FromBody]CartPosition position)
         {
-            ulong userId = 0;
+            var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
             var cart = await _cartService.GetAsync(userId.ToString());
             cart.Positions.Add(position.ProductID, position.Quantity);
@@ -48,10 +61,10 @@ namespace KShop.Carts.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete("{productId}")]
-        public async Task<IActionResult> RemovePosition(ulong productId)
+        [HttpDelete("del/{productId}")]
+        public async Task<IActionResult> RemovePosition(uint productId)
         {
-            ulong userId = 0;
+            var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
             var cart = await _cartService.GetAsync(userId.ToString());
             cart.Positions.Remove(productId);
@@ -59,9 +72,10 @@ namespace KShop.Carts.WebApi.Controllers
             return Ok();
         }
 
+        [HttpDelete("clear")]
         public async Task<IActionResult> Clear()
         {
-            ulong userId = 0;
+            var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
             var cart = await _cartService.GetAsync(userId.ToString());
             cart.Positions.Clear();

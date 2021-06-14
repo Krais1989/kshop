@@ -7,32 +7,15 @@ using System.Threading.Tasks;
 
 namespace KShop.Identities.Persistence.Entities
 {
+
     public class User : IdentityUser<uint>
     {
-    }
+        public EUserStatus Status { get; set; }
 
-    public class Role : IdentityRole<uint>
-    {
-    }
-
-    public class RoleClaim : IdentityRoleClaim<uint>
-    {
-    }
-
-    public class UserLogin : IdentityUserLogin<uint>
-    {
-    }
-
-    public class UserClaim : IdentityUserClaim<uint>
-    {
-    }
-
-    public class UserRole : IdentityUserRole<uint>
-    {
-    }
-
-    public class UserToken : IdentityUserToken<uint>
-    {
+        public ICollection<UserClaim> UserClaims { get; set; }
+        public ICollection<UserLogin> UserLogins { get; set; }
+        public ICollection<UserToken> UserTokens { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 
 }

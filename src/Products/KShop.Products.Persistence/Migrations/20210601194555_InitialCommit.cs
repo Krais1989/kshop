@@ -15,7 +15,7 @@ namespace KShop.Products.Persistence.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                    ID = table.Column<uint>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -33,9 +33,9 @@ namespace KShop.Products.Persistence.Migrations
                 name: "ProductPositions",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                    ID = table.Column<uint>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ProductID = table.Column<uint>(type: "bigint unsigned", nullable: false),
                     Quantity = table.Column<uint>(type: "int unsigned", nullable: false)
                 },
                 constraints: table =>
@@ -54,12 +54,12 @@ namespace KShop.Products.Persistence.Migrations
                 name: "ProductReserves",
                 columns: table => new
                 {
-                    ID = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                    ID = table.Column<uint>(type: "bigint unsigned", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    ProductID = table.Column<uint>(type: "bigint unsigned", nullable: false),
                     Quantity = table.Column<uint>(type: "int unsigned", nullable: false),
                     OrderID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CustomerID = table.Column<ulong>(type: "bigint unsigned", nullable: false),
+                    CustomerID = table.Column<uint>(type: "bigint unsigned", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CompleteDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<byte>(type: "tinyint unsigned", nullable: false)

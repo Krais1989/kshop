@@ -15,7 +15,7 @@ namespace KShop.Identities.Domain.SignIn.Mediators
 {
     public class AccountRegistrationMediatorResponse : BaseResponse
     {
-        public ulong ID { get; set; }
+        public uint ID { get; set; }
     }
     public class AccountRegistrationMediatorRequest : IRequest<AccountRegistrationMediatorResponse>
     {

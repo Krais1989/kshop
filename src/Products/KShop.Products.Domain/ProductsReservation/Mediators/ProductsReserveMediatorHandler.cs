@@ -41,7 +41,7 @@ namespace KShop.Products.Domain.ProductsReservation.Mediators
     public class ProductsReserveMediatorRequest : IRequest<ProductsReserveMediatorResponse>
     {
         public Guid OrderID { get; set; }
-        public ulong CustomerID { get; set; }
+        public uint CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
     }
     public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>

@@ -13,12 +13,12 @@ namespace KShop.Products.Persistence.Entities
             NotEnough
         }
 
-        public ulong ID { get; set; }
-        public ulong ProductID { get; set; }
+        public uint ID { get; set; }
+        public uint ProductID { get; set; }
         public uint Quantity { get; set; }
 
         public Guid OrderID { get; set; }
-        public ulong CustomerID { get; set; }
+        public uint CustomerID { get; set; }
 
         /// <summary>
         /// Дата создания резерва

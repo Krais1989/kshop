@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace KShop.Communications.Contracts.Orders
 {
-    public class OrderPositionsMap : Dictionary<ulong, uint>
+    public class OrderPositionsMap : Dictionary<uint, uint>
     {
         public OrderPositionsMap()
         {
         }
 
-        public OrderPositionsMap(IDictionary<ulong, uint> dictionary) : base(dictionary)
+        public OrderPositionsMap(IDictionary<uint, uint> dictionary) : base(dictionary)
         {
         }
     }
@@ -21,7 +21,7 @@ namespace KShop.Communications.Contracts.Orders
     {
         public OrderPositionsMap Convert()
         {
-            return new OrderPositionsMap(this.ToDictionary(e => ulong.Parse(e.Key), e => e.Value));
+            return new OrderPositionsMap(this.ToDictionary(e => uint.Parse(e.Key), e => e.Value));
         }
     }
 }

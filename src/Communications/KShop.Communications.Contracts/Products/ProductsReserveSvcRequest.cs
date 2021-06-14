@@ -8,7 +8,7 @@ namespace KShop.Communications.Contracts.Products
     public class ProductsReserveSvcRequest
     {
         public Guid OrderID { get; set; }
-        public ulong CustomerID { get; set; }
+        public uint CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
     }
 
