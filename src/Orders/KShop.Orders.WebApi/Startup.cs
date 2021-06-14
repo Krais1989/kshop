@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Auth;
 using KShop.Communications.Contracts.Orders;
 using KShop.Communications.Contracts.Products;
 using KShop.Communications.ServiceBus;
@@ -61,6 +62,8 @@ namespace KShop.Orders.WebApi
             services.AddKShopMetrics(Configuration);
             services.AddKShopSwagger(Configuration);
 
+            services.AddKShopAuth(Configuration);
+
             services.AddKShopMassTransitRabbitMq(Configuration,
                 busServices =>
                 {
@@ -113,6 +116,7 @@ namespace KShop.Orders.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

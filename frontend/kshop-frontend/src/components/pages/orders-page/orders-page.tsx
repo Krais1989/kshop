@@ -1,7 +1,7 @@
 import * as React from 'react';
 import WOrdersList from '../../widgets/w-orders-list/w-orders-list';
 
-import "../base-page/base-page.sass";
+import "styles/base-page.sass";
 import "./orders-page.sass";
 
 interface IOrdersPageProps { }

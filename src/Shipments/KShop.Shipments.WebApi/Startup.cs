@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Auth;
 using KShop.Communications.ServiceBus;
 using KShop.Metrics;
 using KShop.ServiceBus;
@@ -71,6 +72,8 @@ namespace KShop.Shipments.WebApi
 
             services.AddMediatR(typeof(ShipmentInitializeMediatorHandler).Assembly);
 
+            services.AddKShopAuth(Configuration);
+
             services.AddHostedService<ShipmentInitializingBackgroundService>();
             services.AddHostedService<ShipmentCheckBackgroundService>();
             services.AddHostedService<ShipmentCancellingBackgroundService>();
@@ -95,7 +98,7 @@ namespace KShop.Shipments.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

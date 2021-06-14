@@ -7,7 +7,6 @@ const AppFooter: React.FunctionComponent<IAppFooterProps> = (props) => {
     return (
 
         <div className="kshop-app-footer">
-            <h2>Footer Bar</h2>
         </div>
     )
 };

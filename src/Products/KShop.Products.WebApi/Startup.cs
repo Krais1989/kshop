@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Auth;
 using KShop.Communications.ServiceBus;
 using KShop.Metrics;
 using KShop.Products.Domain.ProductsReservation.BackgroundServices;
@@ -69,6 +70,8 @@ namespace KShop.Products.WebApi
             services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(ProductsReserveMediatorHandler).Assembly);
 
+            services.AddKShopAuth(Configuration);
+
             services.AddControllers()
                 .AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ProductsReserveFluentValidator).Assembly));
@@ -96,6 +99,7 @@ namespace KShop.Products.WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

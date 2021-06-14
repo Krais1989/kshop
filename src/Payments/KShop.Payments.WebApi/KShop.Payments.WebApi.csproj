@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Auth\KShop.Auth.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Metrics\KShop.Metrics.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Swagger\KShop.Swagger.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />

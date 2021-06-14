@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using KShop.Auth;
 using KShop.Communications.Contracts.Payments;
 using KShop.Communications.ServiceBus;
 using KShop.Metrics;
@@ -67,6 +68,8 @@ namespace KShop.Payments.WebApi
             services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(PaymentInitializeMediatorHandler).Assembly);
 
+            services.AddKShopAuth(Configuration);
+
             services.AddControllers()
                 .AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(PaymentCreatedFluentValidator).Assembly));
@@ -110,7 +113,7 @@ namespace KShop.Payments.WebApi
             });
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

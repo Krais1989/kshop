@@ -14,29 +14,7 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
 ) => {
     let prods: ProductShort[] = [];
 
-    const notify = () =>
-        toast.success("🦄 Wow so easy!", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-
-    const notifyError = () =>
-        toast.error("🦄 ERROR!", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 60; i++) {
         prods.push(
             new ProductShort(
                 i,
@@ -63,8 +41,6 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
 
     return (
         <div className="kshop-w-all-products-list">
-            <button onClick={notify}>NOTIFY</button>
-            <button onClick={notifyError}>ERROR</button>
             {jsxProducts}
         </div>
     );

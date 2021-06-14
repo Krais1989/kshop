@@ -10,8 +10,6 @@ services:
         volumes:
             - /app/nodemodules
             - .:/app
-    front_admin:
-
 
     api_orders:
         build:
@@ -84,6 +82,7 @@ services:
             kshop_network:
                 aliases:
                     - api_shipments
+
 
     dbs_products:
         image: mysql:latest
@@ -160,6 +159,44 @@ services:
                     - dbs_shipments
         volumes:
             - vol-dbs_shipments:/var/lib/mysql
+
+    dbs_identities:
+        image: mysql:latest
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db_identities'
+            MYSQL_USER: 'asd'
+            MYSQL_PASSWORD: 'asd'
+            MYSQL_ROOT_PASSWORD: 'asd'
+        ports:
+            - '3310:3306'
+        expose: 
+            - '3310'
+        networks:
+            kshop_network:
+                aliases:
+                    - dbs_identities
+        volumes:
+            - vol-dbs_identities:/var/lib/mysql
+
+    dbs_carts:
+        image: mongo
+        restart: always
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: asd
+            MONGO_INITDB_ROOT_PASSWORD: asd
+            MONGO_INITDB_DATABASE: kshop_carts
+        ports:
+            - '27017:27017'
+        expose: 
+            - '27017'
+        networks:
+            kshop_network:
+                aliases:
+                    - dbs_carts
+        volumes:
+            - vol-dbs_carts:/data/db
+
 
     msgb_rabbitmq:
         image: 'rabbitmq:3.8.9-management-alpine'
@@ -328,12 +365,14 @@ volumes:
     vol-dbs_orders: {}
     vol-dbs_payments: {}
     vol-dbs_shipments: {}
+    vol-dbs_identities: {}
+    vol-dbs_carts: {}
     vol-msgb_rabbitmq: {}
     vol-log_seq: {}
     vol-redis: {}
     vol-log_elastic: {}
     vol-metr_influxdb: {}
-    vol-metr_influxdb2: {}
+    #vol-metr_influxdb2: {}
     vol-metr_grafana: {}
     vol-metr_chronograf: {}
     #vol-trace_jaeger: {}

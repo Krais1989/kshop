@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
+    <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Auth\KShop.Auth.csproj" />
+    <ProjectReference Include="..\KShop.Identities.Persistence\KShop.Identities.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.2.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.1" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Registration\" />
+    <Folder Include="SignIn\Validators\" />
+  </ItemGroup>
+
+</Project>
