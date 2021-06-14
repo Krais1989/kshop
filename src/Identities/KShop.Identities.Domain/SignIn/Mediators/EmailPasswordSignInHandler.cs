@@ -46,6 +46,7 @@ namespace KShop.Identities.Domain.SignIn.Mediators
             if (!passCheck)
                 return new EmailPasswordSignInResponse() { ErrorMessage = "Invalid Email or Password" };
 
+
             var tokenClaims = new List<Claim>
             {
                 new Claim("id", user.Id.ToString()),

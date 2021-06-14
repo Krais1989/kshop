@@ -1,5 +1,5 @@
-﻿using KShop.Identities.Domain.SignIn.Mediators;
-using MassTransit;
+﻿using KShop.Communications.Contracts;
+using KShop.Identities.Domain.SignIn.Mediators;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +19,14 @@ namespace KShop.Identities.WebApi.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IMediator _mediator;
 
+        private IActionResult Return(BaseResponse response)
+        {
+            if (response.IsSuccess)
+                return Ok(response);
+            else
+                return BadRequest(response);
+        }
+
         public AccountController(ILogger<AccountController> logger, IMediator mediator)
         {
             _logger = logger;
@@ -28,7 +36,7 @@ namespace KShop.Identities.WebApi.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> Current()
         {
-            var request = new AccountGetCurrentMediatorRequest { User = HttpContext.User };
+            var request = new AccountGetCurrentMediatorRequest { User = this.User };
             var result = await _mediator.Send(request);
             return Ok(result);
         }
@@ -38,7 +46,7 @@ namespace KShop.Identities.WebApi.Controllers
         public async Task<IActionResult> Register(AccountRegistrationMediatorRequest dto)
         {
             var result = await _mediator.Send(dto);
-            return Ok(result);
+            return Return(result);
         }
 
         [HttpPost("change-password")]

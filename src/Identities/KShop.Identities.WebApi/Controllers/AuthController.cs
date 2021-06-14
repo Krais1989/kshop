@@ -24,13 +24,9 @@ namespace KShop.Identities.WebApi.Controllers
         }
 
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn()
+        public async Task<IActionResult> SignIn(EmailPasswordSignInHandlerRequest request)
         {
-            var result = await _mediator.Send(new EmailPasswordSignInHandlerRequest
-            { 
-                Email = "",
-                Password = ""
-            });
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
 

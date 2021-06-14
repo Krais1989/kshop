@@ -35,18 +35,19 @@ namespace KShop.Carts.WebApi.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ILogger<CartsController> _logger;
-        private readonly ICartRepository _cartService;
+        private readonly ICartRepository _cartsRepo;
 
-        public CartsController(ILogger<CartsController> logger)
+        public CartsController(ILogger<CartsController> logger, ICartRepository cartsRepo)
         {
             _logger = logger;
+            _cartsRepo = cartsRepo;
         }
 
         [HttpGet("my")]
         public async Task<IActionResult> Get()
         {
             var userId = this.GetCurrentUserID();
-            var cart = await _cartService.GetAsync(userId.ToString());
+            var cart = await _cartsRepo.GetAsync(userId.ToString());
             return Ok(cart);
         }
 
@@ -55,9 +56,9 @@ namespace KShop.Carts.WebApi.Controllers
         {
             var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
-            var cart = await _cartService.GetAsync(userId.ToString());
+            var cart = await _cartsRepo.GetAsync(userId.ToString());
             cart.Positions.Add(position.ProductID, position.Quantity);
-            await _cartService.UpdateAsync(cartId, cart);
+            await _cartsRepo.UpdateAsync(cartId, cart);
             return Ok();
         }
 
@@ -66,9 +67,9 @@ namespace KShop.Carts.WebApi.Controllers
         {
             var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
-            var cart = await _cartService.GetAsync(userId.ToString());
+            var cart = await _cartsRepo.GetAsync(userId.ToString());
             cart.Positions.Remove(productId);
-            await _cartService.UpdateAsync(cartId, cart);
+            await _cartsRepo.UpdateAsync(cartId, cart);
             return Ok();
         }
 
@@ -77,9 +78,9 @@ namespace KShop.Carts.WebApi.Controllers
         {
             var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
-            var cart = await _cartService.GetAsync(userId.ToString());
+            var cart = await _cartsRepo.GetAsync(userId.ToString());
             cart.Positions.Clear();
-            await _cartService.UpdateAsync(cartId, cart);
+            await _cartsRepo.UpdateAsync(cartId, cart);
             return Ok();
         }
     }

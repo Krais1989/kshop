@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using KShop.Auth;
 using KShop.Communications.ServiceBus;
+using KShop.Identities.Domain;
 using KShop.Identities.Domain.SignIn.Mediators;
 using KShop.Identities.Persistence;
 using KShop.Metrics;
@@ -61,6 +62,7 @@ namespace KShop.Identities.WebApi
             services.AddKShopSwagger(Configuration);
 
             services.AddKShopAuth(Configuration);
+            services.AddKNewsIdentity(Configuration);
 
             services.AddKShopMassTransitRabbitMq(Configuration,
                 busServices =>

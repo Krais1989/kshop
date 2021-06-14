@@ -1,9 +1,12 @@
 ﻿using KShop.Identities.Persistence.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace KShop.Identities.Domain
 {
@@ -31,5 +34,20 @@ namespace KShop.Identities.Domain
                 logger)
         {
         }
+
+
+        public async override Task<User> GetUserAsync(ClaimsPrincipal principal)
+        {
+            var result = await Users.SingleOrDefaultAsync(e => e.Id == principal.GetID());
+            return result;
+        }
+
+        //public async virtual Task<User> GetUserAsync<TProperty>(ClaimsPrincipal principal, Expression<Func<User, TProperty>> navigationPropertyPath = null)
+        //{
+        //    var result = await (navigationPropertyPath == null ? Users : Users.Include(e => navigationPropertyPath))
+        //        .SingleOrDefaultAsync(e => e.UserName == principal.GetName());
+
+        //    return result;
+        //}
     }
 }

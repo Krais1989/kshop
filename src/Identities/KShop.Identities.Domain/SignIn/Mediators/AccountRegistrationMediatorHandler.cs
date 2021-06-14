@@ -43,13 +43,17 @@ namespace KShop.Identities.Domain.SignIn.Mediators
         {
             var user = new User
             {
+                UserName = request.Email,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber
             };
 
             var createResult = await _userMan.CreateAsync(user, request.Password);
 
-            return new AccountRegistrationMediatorResponse { ID = user.Id };
+            if (createResult.Succeeded)
+                return new AccountRegistrationMediatorResponse { ID = user.Id };
+            else
+                return new AccountRegistrationMediatorResponse { ErrorMessage = string.Join("\n", createResult.Errors.Select(e => e.Description)) };
         }
     }
 }
