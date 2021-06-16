@@ -1,7 +1,7 @@
-﻿using KShop.Communications.Contracts.Orders;
+﻿using KShop.Shared.Domain.Contracts;
 using System.Collections.Generic;
 
-namespace KShop.Orders.WebApi.DTOs
+namespace KShop.Orders.WebApi
 {
     public class OrderCreateRequestDto
     {

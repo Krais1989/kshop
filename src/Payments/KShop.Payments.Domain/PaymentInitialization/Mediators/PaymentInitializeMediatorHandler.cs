@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.ValueObjects;
-using KShop.Payments.Domain.Validators;
+using KShop.Shared.Domain.Contracts;
 using KShop.Payments.Persistence;
-using KShop.Payments.Persistence.Entities;
+
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.Mediators
+namespace KShop.Payments.Domain
 {
     public class PaymentInitializeMediatorResponse
     {

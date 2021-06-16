@@ -1,5 +1,5 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.Mediators;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.Consumers
+namespace KShop.Payments.Domain
 {
     public class PaymentCancelSvcConsumer : IConsumer<PaymentCancelSvcRequest>
     {

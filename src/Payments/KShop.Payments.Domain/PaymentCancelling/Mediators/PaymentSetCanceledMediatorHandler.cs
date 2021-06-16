@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using KShop.Payments.Domain.Validators;
 using KShop.Payments.Persistence;
-using KShop.Payments.Persistence.Entities;
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.Mediators
+namespace KShop.Payments.Domain
 {
 
     public class PaymentCancelMediatorResponse

@@ -1,4 +1,4 @@
-﻿//using KShop.Communications.Contracts.Orders;
+﻿//
 //using KShop.Orders.Domain.OrderCancelling.Mediators;
 //using MassTransit;
 //using MediatR;
@@ -8,6 +8,8 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
+namespace KShop.Orders.Domain
+{
 //namespace KShop.Orders.Domain.OrderCancelling.Consumers
 //{
 //    public class OrderCancelSvcRequestConsumer : IConsumer<OrderCancelSvcRequest>
@@ -47,3 +49,4 @@
 //        }
 //    }
 //}
+}

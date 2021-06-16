@@ -1,5 +1,5 @@
-﻿using KShop.Communications.Contracts.Products;
-using KShop.Products.Domain.ProductsReservation.Mediators;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.ProductsReservation.Consumers
+namespace KShop.Products.Domain
 {
     public class ProductsReservationSvcRequestConsumer : IConsumer<ProductsReserveSvcRequest>
     {

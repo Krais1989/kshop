@@ -1,4 +1,4 @@
-﻿using KShop.Identities.Persistence.Entities;
+﻿using KShop.Identities.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

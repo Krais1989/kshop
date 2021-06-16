@@ -1,5 +1,4 @@
 ﻿using KShop.Identities.Persistence;
-using KShop.Identities.Persistence.Entities;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

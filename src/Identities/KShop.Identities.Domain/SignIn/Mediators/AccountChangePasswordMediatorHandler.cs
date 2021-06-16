@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.Domain.SignIn.Mediators
+namespace KShop.Identities.Domain
 {
 
     public class AccountChangePasswordMediatorResponse

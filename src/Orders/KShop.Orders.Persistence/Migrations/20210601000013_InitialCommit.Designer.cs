@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Orders.Persistence.Migrations
+namespace KShop.Orders.Persistence
 {
     [DbContext(typeof(OrderContext))]
     [Migration("20210601000013_InitialCommit")]

@@ -1,4 +1,4 @@
-﻿using KShop.Payments.Persistence.Entities;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Storage;

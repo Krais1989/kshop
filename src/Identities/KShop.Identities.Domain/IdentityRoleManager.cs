@@ -1,4 +1,4 @@
-﻿using KShop.Identities.Persistence.Entities;
+﻿using KShop.Identities.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

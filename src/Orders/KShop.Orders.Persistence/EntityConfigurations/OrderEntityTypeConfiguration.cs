@@ -1,12 +1,11 @@
-﻿using KShop.Orders.Persistence.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Persistence.EntityConfigurations
+namespace KShop.Orders.Persistence
 {
     public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
     {

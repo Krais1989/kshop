@@ -1,17 +1,6 @@
 using FluentValidation.AspNetCore;
-using KShop.Auth;
-using KShop.Communications.Contracts.Payments;
-using KShop.Communications.ServiceBus;
-using KShop.Metrics;
-using KShop.Payments.Domain.BackgroundServices;
-using KShop.Payments.Domain.Consumers;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common;
-using KShop.Payments.Domain.ExternalPaymentProviders.Mocking;
-using KShop.Payments.Domain.Mediators;
-using KShop.Payments.Domain.Validators;
+using KShop.Shared.Domain.Contracts;
 using KShop.Payments.Persistence;
-using KShop.ServiceBus;
-using KShop.Tracing;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -22,9 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
-using Swagger;
 using System;
 using System.Reflection;
+using KShop.Shared.WebApi;
+using KShop.Payments.Domain;
+using KShop.Shared.Integration.MassTransit;
+using KShop.Shared.Authentication;
+using KShop.Shared.Integration.Contracts;
 
 namespace KShop.Payments.WebApi
 {

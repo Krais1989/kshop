@@ -1,4 +1,4 @@
-﻿namespace KShop.Identities.Persistence.Entities
+﻿namespace KShop.Identities.Persistence
 {
     public enum EUserStatus : byte
     {

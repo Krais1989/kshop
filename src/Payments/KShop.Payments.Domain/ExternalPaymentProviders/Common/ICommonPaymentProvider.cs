@@ -1,11 +1,10 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
+﻿using KShop.Shared.Domain.Contracts;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common
+namespace KShop.Payments.Domain
 {
     /// <summary>
     /// Интерфейс общего провайдера платежных систем

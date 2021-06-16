@@ -1,7 +1,6 @@
-﻿using KShop.Communications.Contracts.Products;
-using KShop.Products.Domain.ProductsReservation.Mediators;
+﻿using KShop.Shared.Domain.Contracts;
 using KShop.Products.Persistence;
-using KShop.Products.Persistence.Entities;
+
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Products.WebApi.Controllers
+namespace KShop.Products.WebApi
 {
     [ApiController]
     [Route("[controller]")]

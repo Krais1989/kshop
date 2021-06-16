@@ -1,4 +1,4 @@
-﻿using KShop.Products.Persistence.Entities;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;

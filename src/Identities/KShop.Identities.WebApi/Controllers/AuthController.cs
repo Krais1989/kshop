@@ -1,4 +1,4 @@
-﻿using KShop.Identities.Domain.SignIn.Mediators;
+﻿using KShop.Identities.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.WebApi.Controllers
+namespace KShop.Identities.WebApi
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Orders.WebApi.DTOs
+namespace KShop.Orders.WebApi
 {
     public class OrderCancelDto
     {

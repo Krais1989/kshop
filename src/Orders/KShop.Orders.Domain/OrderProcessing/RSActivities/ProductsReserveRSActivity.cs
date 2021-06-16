@@ -1,5 +1,5 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Products;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MassTransit.Courier;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.OrderPlacing.Activities
+namespace KShop.Orders.Domain
 {
     public class ProductsReserveRSActivityLog
     {

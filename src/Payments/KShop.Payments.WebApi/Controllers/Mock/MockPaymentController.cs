@@ -1,8 +1,5 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.ValueObjects;
-using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
-using KShop.Payments.Domain.Mediators;
-using KShop.Payments.Persistence.Entities;
+﻿using KShop.Shared.Domain.Contracts;
+
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KShop.Shared.Integration.Contracts;
+using KShop.Payments.Domain;
+using KShop.Payments.Persistence;
 
-namespace KShop.Payments.WebApi.Controllers.Mock
+namespace KShop.Payments.WebApi
 {
     public class MockPaymentCreateRequestApiDto
     {

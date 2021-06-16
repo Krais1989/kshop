@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.Exceptions
+namespace KShop.Products.Domain
 {
     public class OrderReserveException : Exception
     {

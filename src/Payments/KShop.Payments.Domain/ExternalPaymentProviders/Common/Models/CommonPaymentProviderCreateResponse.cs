@@ -1,7 +1,7 @@
-﻿using KShop.Communications.Contracts;
+﻿using KShop.Shared.Domain.Contracts;
 using System;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
+namespace KShop.Payments.Domain
 {
     public class CommonPaymentProviderCreateResponse : BaseResponse
     {

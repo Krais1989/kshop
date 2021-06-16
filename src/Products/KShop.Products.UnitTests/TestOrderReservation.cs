@@ -1,6 +1,5 @@
-﻿using KShop.Products.Persistence;
-using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.ValueObjects;
+﻿using KShop.Products.Domain;
+using KShop.Products.Persistence;
 using MassTransit;
 using MassTransit.Testing;
 using Microsoft.Extensions.Logging;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KShop.Products.Domain.ProductsReservation.Consumers;
 
 namespace KShop.Products.UnitTests
 {

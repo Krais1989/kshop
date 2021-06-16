@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models
+namespace KShop.Shipments.Domain
 {
     public abstract class ExternalShipmentBaseResponse
     {

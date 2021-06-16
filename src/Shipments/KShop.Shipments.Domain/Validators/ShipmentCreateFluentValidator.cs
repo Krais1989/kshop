@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Shipments.Domain.Validators
+namespace KShop.Shipments.Domain
 {
 
     public class ShipmentCreateFluentValidatorDto

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Carts.Persistence.Entities
+namespace KShop.Carts.Persistence
 {
     public class CartPositions : Dictionary<uint, uint>
     {

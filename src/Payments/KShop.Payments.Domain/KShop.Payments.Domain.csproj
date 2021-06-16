@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Authentication\KShop.Shared.Authentication.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Integration.MassTransit\KShop.Shared.Integration.MassTransit.csproj" />
     <ProjectReference Include="..\KShop.Payments.Persistence\KShop.Payments.Persistence.csproj" />
   </ItemGroup>
 
@@ -24,7 +25,6 @@
     <Folder Include="PaymentProcessing\Activities\" />
     <Folder Include="PaymentProcessing\Consumers\" />
     <Folder Include="PaymentProcessing\Sagas\" />
-    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>

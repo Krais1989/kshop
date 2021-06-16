@@ -11,11 +11,11 @@ services:
     #         - /app/nodemodules
     #         - .:/app
 
-    api_orders:
-        build:
-            context: '../src'
-            dockerfile: orders.dockerfile
-        image: kshop.orders.webapi:latest
+    api_identities:
+        build: 
+            context: ../src
+            dockerfile: ../docker/identities.dockerfile
+        image: kshop.identities.webapi:latest
         restart: always
         environment: 
             ASPNETCORE_ENVIRONMENT: 'Staging'
@@ -24,16 +24,17 @@ services:
             - '5001:443'
         expose:
             - '5000'
+            - '5001'
         networks:
             kshop_network:
                 aliases:
-                    - api_orders
+                    - api_identities
 
-    api_products:
+    api_orders:
         build:
-            context: '../src'
-            dockerfile: 'products.dockerfile'
-        image: kshop.products.webapi:latest
+            context: ../src
+            dockerfile: ../docker/orders.dockerfile
+        image: kshop.orders.webapi:latest
         restart: always
         environment: 
             ASPNETCORE_ENVIRONMENT: 'Staging'
@@ -42,16 +43,17 @@ services:
             - '5011:443'
         expose:
             - '5010'
+            - '5011'
         networks:
             kshop_network:
                 aliases:
-                    - api_products
+                    - api_orders
 
-    api_payments:
+    api_products:
         build:
-            context: '../src'
-            dockerfile: 'payments.dockerfile'
-        image: kshop.payments.webapi:latest
+            context: ../src
+            dockerfile: ../docker/products.dockerfile
+        image: kshop.products.webapi:latest
         restart: always
         environment: 
             ASPNETCORE_ENVIRONMENT: 'Staging'
@@ -60,16 +62,17 @@ services:
             - '5021:443'
         expose:
             - '5020'
+            - '5021'
         networks:
             kshop_network:
                 aliases:
-                    - api_payments
+                    - api_products
 
-    api_shipments:
+    api_payments:
         build:
-            context: '../src'
-            dockerfile: 'shipments.dockerfile'
-        image: kshop.shipments.webapi:latest
+            context: ../src
+            dockerfile: ../docker/payments.dockerfile
+        image: kshop.payments.webapi:latest
         restart: always
         environment: 
             ASPNETCORE_ENVIRONMENT: 'Staging'
@@ -78,10 +81,49 @@ services:
             - '5031:443'
         expose:
             - '5030'
+            - '5031'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_payments
+
+    api_shipments:
+        build:
+            context: ../src
+            dockerfile: ../docker/shipments.dockerfile
+        image: kshop.shipments.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5040:80'
+            - '5041:443'
+        expose:
+            - '5040'
+            - '5041'
         networks:
             kshop_network:
                 aliases:
                     - api_shipments
+
+    api_carts:
+        build:
+            context: ../src
+            dockerfile: ../docker/carts.dockerfile
+        image: kshop.carts.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5050:80'
+            - '5051:443'
+        expose:
+            - '5050'
+            - '5051'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_carts
 
 
     dbs_products:
@@ -185,7 +227,6 @@ services:
         environment: 
             MONGO_INITDB_ROOT_USERNAME: asd
             MONGO_INITDB_ROOT_PASSWORD: asd
-            MONGO_INITDB_DATABASE: kshop_db_carts
         ports:
             - '27017:27017'
         expose: 

@@ -22,9 +22,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\KShop.Metrics\KShop.Metrics.csproj" />
-    <ProjectReference Include="..\..\Shared\KShop.Swagger\KShop.Swagger.csproj" />
-    <ProjectReference Include="..\..\Shared\KShop.Tracing\KShop.Tracing.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.WebApi\KShop.Shared.WebApi.csproj" />
     <ProjectReference Include="..\KShop.Identities.Domain\KShop.Identities.Domain.csproj" />
   </ItemGroup>
 

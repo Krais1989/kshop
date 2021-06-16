@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
-using KShop.Orders.Persistence.Entities;
+using KShop.Orders.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Orders.Domain.Validators
+namespace KShop.Orders.Domain
 {
 
     public class OrderCreateRevertFluentValidatorDto
     {
-        public Order.EStatus Status { get; set; }
+        public EOrderStatus Status { get; set; }
     }
 
     public class OrderCreateRevertFluentValidator : AbstractValidator<OrderCreateRevertFluentValidatorDto>

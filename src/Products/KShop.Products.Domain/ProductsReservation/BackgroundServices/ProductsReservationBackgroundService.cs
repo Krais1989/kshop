@@ -1,6 +1,7 @@
-﻿using KShop.Communications.Contracts.Products;
+﻿
 using KShop.Products.Persistence;
-using KShop.Products.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.ProductsReservation.BackgroundServices
+namespace KShop.Products.Domain
 {
     /// <summary>
     /// Класс-обёртка для организации надежных транзакций. При ошибке операции выполняют retry согласно стратегии.

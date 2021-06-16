@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Products;
-using KShop.Products.Domain.ProductsReservation.Validators;
 using KShop.Products.Persistence;
-using KShop.Products.Persistence.Entities;
+
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,8 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using KShop.Shared.Domain.Contracts;
 
-namespace KShop.Products.Domain.ProductsReservation.Mediators
+namespace KShop.Products.Domain
 {
 
     public class ProductsReserveMediatorResponse

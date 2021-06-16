@@ -22,8 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
-    <ProjectReference Include="..\..\Communications\KShop.Communications.ServiceBus\KShop.Communications.ServiceBus.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Authentication\KShop.Shared.Authentication.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Domain.Contracts\KShop.Shared.Domain.Contracts.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Integration.Contracts\KShop.Shared.Integration.Contracts.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Integration.MassTransit\KShop.Shared.Integration.MassTransit.csproj" />
     <ProjectReference Include="..\KShop.Orders.Persistence\KShop.Orders.Persistence.csproj" />
   </ItemGroup>
 

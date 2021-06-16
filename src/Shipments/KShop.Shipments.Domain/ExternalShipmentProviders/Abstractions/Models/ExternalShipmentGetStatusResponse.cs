@@ -1,6 +1,7 @@
-﻿using KShop.Shipments.Persistence.Entities;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shipments.Persistence;
 
-namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models
+namespace KShop.Shipments.Domain
 {
     public class ExternalShipmentGetStatusResponse : ExternalShipmentBaseResponse
     {

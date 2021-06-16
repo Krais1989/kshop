@@ -1,6 +1,6 @@
-﻿using KShop.Communications.Contracts;
+﻿using KShop.Shared.Domain.Contracts;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models
+namespace KShop.Payments.Domain
 {
     public class MockExternalPaymentGetStatusResponse : BaseResponse
     {

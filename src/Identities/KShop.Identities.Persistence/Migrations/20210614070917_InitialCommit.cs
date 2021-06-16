@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace KShop.Identities.Persistence.Migrations
+namespace KShop.Identities.Persistence
 {
     public partial class InitialCommit : Migration
     {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Orders.Persistence.Migrations
+namespace KShop.Orders.Persistence
 {
     [DbContext(typeof(OrderContext))]
     partial class OrderContextModelSnapshot : ModelSnapshot

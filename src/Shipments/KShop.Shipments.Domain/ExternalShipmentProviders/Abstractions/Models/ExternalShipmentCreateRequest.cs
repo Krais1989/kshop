@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models
+namespace KShop.Shipments.Domain
 {
     public class ExternalShipmentCreateRequest
     {

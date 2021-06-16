@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models
+namespace KShop.Payments.Domain
 {
     public enum EMockPaymentExternalStatus
     {

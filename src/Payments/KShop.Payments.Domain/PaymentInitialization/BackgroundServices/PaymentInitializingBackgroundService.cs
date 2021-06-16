@@ -1,8 +1,6 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
+﻿using KShop.Shared.Domain.Contracts;
 using KShop.Payments.Persistence;
-using KShop.Payments.Persistence.Entities;
+
 using MassTransit;
 using MassTransit.Events;
 using MediatR;
@@ -17,7 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.BackgroundServices
+namespace KShop.Payments.Domain
 {
 
     /// <summary>

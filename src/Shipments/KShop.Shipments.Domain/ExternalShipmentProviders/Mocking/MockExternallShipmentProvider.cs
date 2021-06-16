@@ -1,14 +1,12 @@
-﻿
-using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
-using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
-using KShop.Shipments.Persistence.Entities;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shipments.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ExternalShipmentProviders.Mocking
+namespace KShop.Shipments.Domain
 {
     public class MockExternallShipmentProvider : IExternalShipmentServiceProvider
     {

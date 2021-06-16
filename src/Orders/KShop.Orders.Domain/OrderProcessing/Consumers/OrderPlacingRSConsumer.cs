@@ -1,10 +1,5 @@
-﻿
-using Automatonymous.Requests;
-using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Products;
-using KShop.Orders.Domain.OrderPlacing.Activities;
-using KShop.Orders.Domain.RoutingSlips;
-using KShop.Orders.Domain.RoutingSlips.OrderInitialization;
+﻿using Automatonymous.Requests;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MassTransit.Courier;
 using MassTransit.Courier.Contracts;
@@ -17,7 +12,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.Consumers
+
+namespace KShop.Orders.Domain
 {
 
 

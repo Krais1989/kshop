@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts;
-using KShop.Orders.Domain.OrderStatusChanging.Validators;
 using KShop.Orders.Persistence;
-using KShop.Orders.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.OrderStatusChanging.Mediators
+namespace KShop.Orders.Domain
 {
     public class OrderSetStatusResponse : BaseResponse
     {
@@ -20,7 +18,7 @@ namespace KShop.Orders.Domain.OrderStatusChanging.Mediators
     public class OrderSetStatusRequest : IRequest<OrderSetStatusResponse>
     {
         public Guid OrderID { get; set; }
-        public Order.EStatus OrderStatus { get; set; }
+        public EOrderStatus OrderStatus { get; set; }
     }
     public class OrderSetStatusMediatorHandler : IRequestHandler<OrderSetStatusRequest, OrderSetStatusResponse>
     {

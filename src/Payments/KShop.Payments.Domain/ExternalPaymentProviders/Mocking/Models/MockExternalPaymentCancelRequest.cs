@@ -1,4 +1,4 @@
-﻿namespace KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models
+﻿namespace KShop.Payments.Domain
 {
     public class MockExternalPaymentCancelRequest
     {

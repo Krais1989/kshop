@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts;
-using KShop.Identities.Persistence.Entities;
+using KShop.Identities.Persistence;
+using KShop.Shared.Domain;
+using KShop.Shared.Domain.Contracts;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.Domain.SignIn.Mediators
+namespace KShop.Identities.Domain
 {
     public class AccountRegistrationMediatorResponse : BaseResponse
     {

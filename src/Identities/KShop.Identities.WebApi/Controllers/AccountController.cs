@@ -1,5 +1,5 @@
-﻿using KShop.Communications.Contracts;
-using KShop.Identities.Domain.SignIn.Mediators;
+﻿using KShop.Identities.Domain;
+using KShop.Shared.Domain.Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.WebApi.Controllers
+namespace KShop.Identities.WebApi
 {
-    [Route("api/[controller]")]
+    [Route("api/accounts")]
     [ApiController]
     [Authorize]
     public class AccountController : ControllerBase

@@ -1,6 +1,6 @@
-﻿using KShop.Communications.Contracts.Payments;
+﻿using KShop.Shared.Domain.Contracts;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
+namespace KShop.Payments.Domain
 {
     public class CommonPaymentProviderCancelRequest
     {

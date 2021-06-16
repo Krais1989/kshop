@@ -1,10 +1,11 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.ValueObjects;
+﻿using KShop.Orders.Domain;
 using KShop.Orders.Persistence;
-using KShop.Orders.Persistence.Entities;
-using KShop.Orders.WebApi.DTOs;
+using KShop.Shared.Authentication;
+using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,11 +13,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.WebApi.Controllers
+namespace KShop.Orders.WebApi
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/orders")]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ILogger<OrdersController> _logger;
@@ -24,37 +26,53 @@ namespace KShop.Orders.WebApi.Controllers
         private readonly OrderContext _orderContext;
         private readonly IRequestClient<OrderGetStatusSagaRequest> _getOrderStatusClient;
         private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
+        private readonly IMediator _mediator;
 
         public OrdersController(ILogger<OrdersController> logger,
                                 IPublishEndpoint pubEndpoint,
                                 OrderContext orderContext,
                                 IRequestClient<OrderGetStatusSagaRequest> getOrderStatusClient,
-                                IRequestClient<OrderPlacingSagaRequest> createOrderClient)
+                                IRequestClient<OrderPlacingSagaRequest> createOrderClient, IMediator mediator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
             _orderContext = orderContext;
             _getOrderStatusClient = getOrderStatusClient;
             _createOrderClient = createOrderClient;
+            _mediator = mediator;
         }
 
-        [HttpGet("{orderId}")]
-        public async ValueTask<IActionResult> Get(Guid orderId)
+        private IActionResult ReturnBaseResponse(BaseResponse response)
         {
-            var response = await _getOrderStatusClient.GetResponse<OrderGetStatusSagaResponse>(
-                    new OrderGetStatusSagaRequest
-                    {
-                        OrderID = orderId
-                    });
-
-
-            if (response.Message.IsSuccess)
-                return Ok(response.Message.Status);
+            if (response.IsSuccess)
+                return Ok(response);
             else
-                return NotFound(response.Message);
+                return BadRequest(response);
         }
 
-        [HttpPost("[action]")]
+        /// <summary>
+        /// Детали заказа
+        /// </summary>
+        [HttpGet("details/{orderId}")]
+        public async ValueTask<IActionResult> GetDetails(Guid orderId)
+        {
+            var customerId = this.GetCurrentUserIDExcept();
+            var response = await _mediator.Send(new OrderGetDetailsRequest { CustomerID = customerId, OrderID = orderId });
+            return ReturnBaseResponse(response);
+        }
+
+        /// <summary>
+        /// Заказа текущего пользователя
+        /// </summary>
+        [HttpGet("all")]
+        public async ValueTask<IActionResult> GetAll()
+        {
+            var customerId = this.GetCurrentUserIDExcept();
+            var response = await _mediator.Send(new OrderGetAllRequest { CustomerID = customerId });
+            return ReturnBaseResponse(response);
+        }
+
+        [HttpPost]
         public async ValueTask<ActionResult> Create([FromBody] OrderCreateRequestDto dto)
         {
             var orderCreateRequest = new OrderPlacingSagaRequest
@@ -69,12 +87,14 @@ namespace KShop.Orders.WebApi.Controllers
             return Ok(orderCreateRequest);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("cancel")]
         public async ValueTask<ActionResult> Cancel([FromBody] OrderCancelDto dto)
         {
             /* Проверка данных для создания заказа */
             /* Создание заказа в БД */
             /* Инициализация саги создания заказа */
+
+            // TODO: логика отмены заказа
 
             return Ok();
         }

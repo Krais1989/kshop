@@ -1,19 +1,10 @@
-﻿using System;
+﻿using KShop.Shared.Domain.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Shipments.Persistence.Entities
+namespace KShop.Shipments.Persistence
 {
-    public enum EShipmentStatus
-    {
-        Initializing,
-        Pending,
-        Shipped,
-        Cancelling,
-        Cancelled,
-        Error
-    }
-
     public class Shipment
     {
         public Guid ID { get; set; }

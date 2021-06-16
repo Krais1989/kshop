@@ -1,8 +1,8 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.Mediators;
+﻿
+using KShop.Shared.Domain.Contracts;
+
 using KShop.Payments.Persistence;
-using KShop.Payments.Persistence.Entities;
+
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,8 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using KShop.Shared.Integration.Contracts;
 
-namespace KShop.Payments.Domain.Consumers
+namespace KShop.Payments.Domain
 {
     public class PaymentCreateSvcConsumer : IConsumer<PaymentCreateSvcCommand>
     {

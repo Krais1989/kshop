@@ -1,5 +1,4 @@
-﻿using KShop.Shipments.Persistence.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using System;

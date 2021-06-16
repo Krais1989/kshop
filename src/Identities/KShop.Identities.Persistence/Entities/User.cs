@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.Persistence.Entities
+namespace KShop.Identities.Persistence
 {
 
     public class User : IdentityUser<uint>

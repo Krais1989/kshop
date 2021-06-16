@@ -1,12 +1,8 @@
 ﻿using Automatonymous;
 using GreenPipes;
-using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.Products;
-using KShop.Communications.Contracts.Shipments;
-using KShop.Communications.Contracts.ValueObjects;
-using KShop.Orders.Domain.RoutingSlips.OrderInitialization;
-using KShop.Orders.Persistence.Entities;
+using KShop.Orders.Persistence;
+using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using MassTransit.Definition;
@@ -17,7 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.Orchestrations
+namespace KShop.Orders.Domain
 {
     public class OrderProcessingSagaState : SagaStateMachineInstance, ISagaVersion
     {
@@ -38,7 +34,7 @@ namespace KShop.Orders.Domain.Orchestrations
         /// <summary>
         /// Лог статусов заказа. Используется для компенсации
         /// </summary>
-        public List<Order.EStatus> Statuses { get; set; } = new List<Order.EStatus>();
+        public List<EOrderStatus> Statuses { get; set; } = new List<EOrderStatus>();
         public int Version { get; set; }
     }
     public class OrderProcessingSagaStateMachineDefinition : SagaDefinition<OrderProcessingSagaState>
@@ -173,7 +169,7 @@ namespace KShop.Orders.Domain.Orchestrations
 
         private async Task HandleOnOrderReserved(BehaviorContext<OrderProcessingSagaState, ProductsReserveSuccessEvent> ctx)
         {
-            ctx.Instance.Statuses.Add(Order.EStatus.Reserved);
+            ctx.Instance.Statuses.Add(EOrderStatus.Reserved);
             ctx.Instance.ProductsReserves = ctx.Data.ReservedProducts;
             //TODO: выставить реальную стоимость заказа
             ctx.Instance.Money = new Money(100);
@@ -229,7 +225,7 @@ namespace KShop.Orders.Domain.Orchestrations
         private async Task HandleOnPaymentSuccessed(BehaviorContext<OrderProcessingSagaState, PaymentCreateSuccessSvcEvent> ctx)
         {
             ctx.Instance.PaymentID = ctx.Data.PaymentID;
-            ctx.Instance.Statuses.Add(Order.EStatus.Payed);
+            ctx.Instance.Statuses.Add(EOrderStatus.Payed);
 
             await ctx.Publish(new ShipmentCreateSvcCommand()
             {
@@ -282,7 +278,7 @@ namespace KShop.Orders.Domain.Orchestrations
         private async Task HandleOnOnShipmentSuccessed(BehaviorContext<OrderProcessingSagaState, ShipmentCreateSuccessSvcEvent> ctx)
         {
             ctx.Instance.ShipmentID = ctx.Data.ShipmentID;
-            ctx.Instance.Statuses.Add(Order.EStatus.Shipped);
+            ctx.Instance.Statuses.Add(EOrderStatus.Shipped);
 
             await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Data.OrderID));
         }
@@ -297,7 +293,7 @@ namespace KShop.Orders.Domain.Orchestrations
 
         private async Task Compensate<K>(BehaviorContext<OrderProcessingSagaState, K> ctx)
         {
-            var statuses = new List<Order.EStatus>(ctx.Instance.Statuses);
+            var statuses = new List<EOrderStatus>(ctx.Instance.Statuses);
             statuses.Reverse();
 
             foreach (var s in statuses)
@@ -305,20 +301,20 @@ namespace KShop.Orders.Domain.Orchestrations
                 _logger.LogWarning($"Compensate order {ctx.Instance.CorrelationId} - for {s}");
                 switch (s)
                 {
-                    case Order.EStatus.Reserved:
+                    case EOrderStatus.Reserved:
                         await ctx.Publish(new ProductsReserveCancelSvcRequest(ctx.Instance.CorrelationId));
                         break;
-                    case Order.EStatus.Payed:
+                    case EOrderStatus.Payed:
                         await ctx.Publish(new PaymentCancelSvcRequest() { PaymentID = ctx.Instance.PaymentID.Value });
                         break;
-                    case Order.EStatus.Shipped:
+                    case EOrderStatus.Shipped:
                         await ctx.Publish(new ShipmentCancelSvcRequest() { ShipmentID = ctx.Instance.ShipmentID.Value });
                         break;
-                    case Order.EStatus.Faulted:
+                    case EOrderStatus.Faulted:
                         break;
-                    case Order.EStatus.Refunded:
+                    case EOrderStatus.Refunded:
                         break;
-                    case Order.EStatus.Cancelled:
+                    case EOrderStatus.Cancelled:
                         break;
                     default:
                         break;

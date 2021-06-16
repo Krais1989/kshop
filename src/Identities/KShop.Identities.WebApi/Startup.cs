@@ -1,11 +1,9 @@
-using FluentValidation.AspNetCore;
-using KShop.Auth;
-using KShop.Communications.ServiceBus;
+
 using KShop.Identities.Domain;
-using KShop.Identities.Domain.SignIn.Mediators;
 using KShop.Identities.Persistence;
-using KShop.Metrics;
-using KShop.Tracing;
+using KShop.Shared.Authentication;
+using KShop.Shared.Integration.MassTransit;
+using KShop.Shared.WebApi;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;

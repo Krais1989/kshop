@@ -1,10 +1,7 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
-using KShop.Payments.Domain.Mediators;
+﻿
+using KShop.Shared.Domain.Contracts;
 using KShop.Payments.Persistence;
-using KShop.Payments.Persistence.Entities;
+
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using KShop.Shared.Integration.Contracts;
 
-namespace KShop.Payments.Domain.BackgroundServices
+namespace KShop.Payments.Domain
 {
     /// <summary>
     /// Фоновый сервис запрашивающий состояния платежа у внешней системы

@@ -1,11 +1,9 @@
-﻿
-using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions
+namespace KShop.Shipments.Domain
 {
 
     public interface IExternalShipmentServiceProvider

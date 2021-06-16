@@ -1,4 +1,5 @@
-﻿using KShop.Communications.Contracts.Orders;
+﻿using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MassTransit.Courier;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
+namespace KShop.Orders.Domain
 {
     public class OrderCreateRSActivityLog
     {
@@ -17,7 +18,7 @@ namespace KShop.Orders.Domain.RoutingSlips.OrderInitialization
     public class OrderCreateRSActivityArgs
     {
         public Guid? OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public uint CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
     }
 

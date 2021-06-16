@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KShop.Orders.Persistence.Entities
+namespace KShop.Orders.Persistence
 {
     public class OrderPosition
     {

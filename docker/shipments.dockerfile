@@ -7,7 +7,11 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY "Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj" "Shipments/KShop.Shipments.WebApi/"
 RUN dotnet restore "Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj"
-COPY . .
+#COPY . .
+COPY Shipments/ Shipments/
+COPY Communications/ Communications/
+COPY Shared/ Shared/
+
 RUN dotnet build "/src/Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish

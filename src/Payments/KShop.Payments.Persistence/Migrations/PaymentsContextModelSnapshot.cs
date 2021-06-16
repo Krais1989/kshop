@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Payments.Persistence.Migrations
+namespace KShop.Payments.Persistence
 {
     [DbContext(typeof(PaymentsContext))]
     partial class PaymentsContextModelSnapshot : ModelSnapshot

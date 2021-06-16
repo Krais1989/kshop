@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Payments.Persistence.Migrations
+namespace KShop.Payments.Persistence
 {
     [DbContext(typeof(PaymentsContext))]
     [Migration("20210601194626_InitialCommit")]

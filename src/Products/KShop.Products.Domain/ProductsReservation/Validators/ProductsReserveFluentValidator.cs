@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Products.Domain.ProductsReservation.Validators
+namespace KShop.Products.Domain
 {
 
     public class ProductsReserveFluentValidatorDto

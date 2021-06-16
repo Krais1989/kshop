@@ -1,6 +1,5 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Orders.Domain.Handlers;
-using KShop.Orders.Persistence;
+﻿using KShop.Orders.Persistence;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.Consumers
+namespace KShop.Orders.Domain
 {
     public class OrderCreateSvcRequestConsumer : IConsumer<OrderCreateSvcRequest>
     {

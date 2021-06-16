@@ -1,11 +1,10 @@
-﻿using KShop.Shipments.Persistence.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Shipments.Persistence.EntityConfigurations
+namespace KShop.Shipments.Persistence
 {
     public class ShipmentEntityTypeConfiguration : IEntityTypeConfiguration<Shipment>
     {

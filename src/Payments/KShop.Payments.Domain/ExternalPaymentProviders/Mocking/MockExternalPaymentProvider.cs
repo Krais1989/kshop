@@ -1,5 +1,4 @@
 ﻿
-using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Mocking
+namespace KShop.Payments.Domain
 {
     public class MockExternalPaymentProvider : IMockExternalPaymentProvider
     {

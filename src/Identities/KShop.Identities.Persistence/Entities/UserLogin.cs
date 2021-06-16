@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace KShop.Identities.Persistence.Entities
+namespace KShop.Identities.Persistence
 {
     public class UserLogin : IdentityUserLogin<uint>
     {

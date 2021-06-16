@@ -1,5 +1,4 @@
-﻿using KShop.Communications.Contracts.ValueObjects;
-using KShop.Payments.Persistence.Entities;
+﻿using KShop.Shared.Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Persistence.EntityConfigurations
+namespace KShop.Payments.Persistence
 {
     public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Payment>
     {

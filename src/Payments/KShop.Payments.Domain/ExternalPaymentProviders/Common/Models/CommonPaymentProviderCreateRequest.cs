@@ -1,8 +1,7 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.ValueObjects;
+﻿using KShop.Shared.Domain.Contracts;
 using System;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
+namespace KShop.Payments.Domain
 {
     public class CommonPaymentProviderCreateRequest
     {

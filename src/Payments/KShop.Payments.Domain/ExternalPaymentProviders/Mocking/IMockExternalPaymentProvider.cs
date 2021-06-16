@@ -1,11 +1,10 @@
-﻿using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Mocking
+namespace KShop.Payments.Domain
 {
     /// <summary>
     /// Провайдер для тестирования внешних платежей

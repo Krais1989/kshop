@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Domain.Contracts\KShop.Shared.Domain.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

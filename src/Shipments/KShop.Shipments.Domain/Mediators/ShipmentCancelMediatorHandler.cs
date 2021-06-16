@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using KShop.Shipments.Domain.Validators;
+using KShop.Shared.Domain.Contracts;
 using KShop.Shipments.Persistence;
-using KShop.Shipments.Persistence.Entities;
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.Mediators
+namespace KShop.Shipments.Domain
 {
 
     public class ShipmentCancelMediatorResponse

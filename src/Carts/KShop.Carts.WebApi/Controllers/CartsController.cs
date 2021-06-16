@@ -1,6 +1,5 @@
-﻿using KShop.Auth;
-using KShop.Carts.Persistence;
-using KShop.Carts.Persistence.Entities;
+﻿using KShop.Carts.Persistence;
+using KShop.Shared.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,24 +8,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KShop.Carts.WebApi.Controllers
+namespace KShop.Carts.WebApi
 {
     public class CartPosition
     {
-        public CartPosition()
-        {
-        }
-
+        public uint ProductID { get; set; }
+        public uint Quantity { get; set; }
+        public CartPosition() { }
         public CartPosition(uint productID, uint quantity)
         {
             ProductID = productID;
             Quantity = quantity;
         }
-
-        public uint ProductID { get; set; }
-        public uint Quantity { get; set; }
-
-
     }
 
     [ApiController]
@@ -35,9 +28,9 @@ namespace KShop.Carts.WebApi.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ILogger<CartsController> _logger;
-        private readonly ICartRepository _cartsRepo;
+        private readonly ICartKVRepository _cartsRepo;
 
-        public CartsController(ILogger<CartsController> logger, ICartRepository cartsRepo)
+        public CartsController(ILogger<CartsController> logger, ICartKVRepository cartsRepo)
         {
             _logger = logger;
             _cartsRepo = cartsRepo;
@@ -57,8 +50,8 @@ namespace KShop.Carts.WebApi.Controllers
             var userId = this.GetCurrentUserID();
             string cartId = userId.ToString();
             var cart = await _cartsRepo.GetAsync(userId.ToString());
-            cart.Positions.Add(position.ProductID, position.Quantity);
-            await _cartsRepo.UpdateAsync(cartId, cart);
+            cart.Positions[position.ProductID] = position.Quantity;
+            await _cartsRepo.ReplaceAsync(cartId, cart);
             return Ok();
         }
 
@@ -69,7 +62,7 @@ namespace KShop.Carts.WebApi.Controllers
             string cartId = userId.ToString();
             var cart = await _cartsRepo.GetAsync(userId.ToString());
             cart.Positions.Remove(productId);
-            await _cartsRepo.UpdateAsync(cartId, cart);
+            await _cartsRepo.ReplaceAsync(cartId, cart);
             return Ok();
         }
 
@@ -80,7 +73,7 @@ namespace KShop.Carts.WebApi.Controllers
             string cartId = userId.ToString();
             var cart = await _cartsRepo.GetAsync(userId.ToString());
             cart.Positions.Clear();
-            await _cartsRepo.UpdateAsync(cartId, cart);
+            await _cartsRepo.ReplaceAsync(cartId, cart);
             return Ok();
         }
     }

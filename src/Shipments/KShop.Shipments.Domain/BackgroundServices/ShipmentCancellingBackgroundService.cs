@@ -1,8 +1,9 @@
 ﻿
-using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions;
-using KShop.Shipments.Domain.ExternalShipmentProviders.Abstractions.Models;
+
+
+using KShop.Shared.Domain.Contracts;
 using KShop.Shipments.Persistence;
-using KShop.Shipments.Persistence.Entities;
+
 using MassTransit;
 using MassTransit.Mediator;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Shipments.Domain.BackgroundServices
+namespace KShop.Shipments.Domain
 {
     /// <summary>
     /// Процедура отмены доставки во внешнем сервисе

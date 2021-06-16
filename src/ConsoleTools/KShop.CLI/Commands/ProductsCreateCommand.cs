@@ -1,7 +1,7 @@
 ﻿
-using KShop.Communications.Contracts.ValueObjects;
+
 using KShop.Products.Persistence;
-using KShop.Products.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;

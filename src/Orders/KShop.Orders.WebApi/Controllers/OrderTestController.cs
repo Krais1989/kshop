@@ -1,9 +1,7 @@
-﻿using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.Payments;
-using KShop.Communications.Contracts.ValueObjects;
-using KShop.Orders.Domain.Consumers;
+﻿
 using KShop.Orders.Persistence;
-using KShop.Orders.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace KShop.Orders.WebApi.Controllers
+namespace KShop.Orders.WebApi
 {
     [Route("api/[controller]")]
     [ApiController]

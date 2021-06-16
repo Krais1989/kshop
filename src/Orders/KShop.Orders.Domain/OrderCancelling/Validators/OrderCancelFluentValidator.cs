@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KShop.Orders.Domain.OrderCancelling.Validators
+namespace KShop.Orders.Domain
 {
 
     public class OrderCancelFluentValidatorDto

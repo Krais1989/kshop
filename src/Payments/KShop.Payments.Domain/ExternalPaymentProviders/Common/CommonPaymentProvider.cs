@@ -1,14 +1,11 @@
-﻿using KShop.Communications.Contracts.Payments;
-using KShop.Payments.Domain.ExternalPaymentProviders.Common.Models;
-using KShop.Payments.Domain.ExternalPaymentProviders.Mocking;
-using KShop.Payments.Domain.ExternalPaymentProviders.Mocking.Models;
-using KShop.Payments.Persistence.Entities;
+﻿using KShop.Payments.Persistence;
+using KShop.Shared.Domain.Contracts;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common
+namespace KShop.Payments.Domain
 {
     public class CommonPaymentProvider : ICommonPaymentProvider
     {

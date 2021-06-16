@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts.Orders;
-using KShop.Communications.Contracts.ValueObjects;
-using KShop.Orders.Domain.Validators;
 using KShop.Orders.Persistence;
-using KShop.Orders.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.Handlers
+namespace KShop.Orders.Domain
 {
 
     public class OrderCreateMediatorResponse
@@ -24,7 +22,7 @@ namespace KShop.Orders.Domain.Handlers
     public class OrderCreateMediatorRequest : IRequest<OrderCreateMediatorResponse>
     {
         public Guid? OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public uint CustomerID { get; set; }
         public OrderPositionsMap Positions { get; set; }
 
     }
@@ -59,7 +57,7 @@ namespace KShop.Orders.Domain.Handlers
                 Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }).ToList(),
                 Logs = new List<OrderLog>()
             };
-            entity.SetStatus(Order.EStatus.Initialized);
+            entity.SetStatus(EOrderStatus.Initialized);
 
             _context.Add(entity);
 

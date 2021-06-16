@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using KShop.Auth;
-using KShop.Communications.Contracts;
+using KShop.Shared.Authentication;
+using KShop.Shared.Domain;
+using KShop.Shared.Domain.Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Identities.Domain.SignIn.Mediators
+namespace KShop.Identities.Domain
 {
     public class EmailPasswordSignInResponse : BaseResponse
     {

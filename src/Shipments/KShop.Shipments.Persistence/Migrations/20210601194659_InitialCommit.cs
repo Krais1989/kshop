@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace KShop.Shipments.Persistence.Migrations
+namespace KShop.Shipments.Persistence
 {
     public partial class InitialCommit : Migration
     {

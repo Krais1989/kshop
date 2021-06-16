@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
-using KShop.Communications.Contracts;
-using KShop.Orders.Domain.OrderCancelling.Validators;
 using KShop.Orders.Persistence;
-using KShop.Orders.Persistence.Entities;
+using KShop.Shared.Domain.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Orders.Domain.OrderCancelling.Mediators
+namespace KShop.Orders.Domain
 {
 
     public class OrderCancelMediatorResponse : BaseResponse
@@ -44,7 +42,7 @@ namespace KShop.Orders.Domain.OrderCancelling.Mediators
             _validator.Validate(validatorDto);
 
             var order = await _orderContext.Orders.FirstOrDefaultAsync(e => e.ID == request.OrderID);
-            order.SetStatus(Order.EStatus.Cancelled);
+            order.SetStatus(EOrderStatus.Cancelled);
 
             await _orderContext.SaveChangesAsync();
 

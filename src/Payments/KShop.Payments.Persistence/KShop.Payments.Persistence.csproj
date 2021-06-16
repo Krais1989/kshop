@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Communications\KShop.Communications.Contracts\KShop.Communications.Contracts.csproj" />
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Integration.Contracts\KShop.Shared.Integration.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

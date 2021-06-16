@@ -1,9 +1,9 @@
 ﻿
-using KShop.Products.Persistence.Entities;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace KShop.Products.Persistence.EntityConfigurations
+namespace KShop.Products.Persistence
 {
     public class ProductPositionEntityTypeConfiguration : IEntityTypeConfiguration<ProductPosition>
     {

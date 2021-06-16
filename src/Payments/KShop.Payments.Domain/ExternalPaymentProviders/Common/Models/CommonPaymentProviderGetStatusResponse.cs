@@ -1,7 +1,8 @@
-﻿using KShop.Communications.Contracts;
-using KShop.Payments.Persistence.Entities;
+﻿using KShop.Payments.Persistence;
+using KShop.Shared.Domain.Contracts;
 
-namespace KShop.Payments.Domain.ExternalPaymentProviders.Common.Models
+
+namespace KShop.Payments.Domain
 {
 
     public class CommonPaymentProviderGetStatusResponse : BaseResponse
