@@ -1,15 +1,104 @@
 .kshop-w-product-details
     display: flex
     flex-flow: column nowrap
+    justify-content: center
+    align-items: stretch
 
-    .kshop-w-product-details-attr
+    &-title
+        //background-color: #e09999
+        flex-basis: 40px
+        font-weight: 700
+        font-size: 20px
+
+    &-topbar
+        background-color: #e0e6e0
+        flex-basis: 30px
         display: flex
-        flex-flow: row nowrap
+        flex-flow: column wrap
+        align-items: flex-end
 
-        background-color: yellow
+    &-flex
+        display: flex
+        flex-flow: row wrap
+        justify-content: stretch
+        flex-basis: 400px
 
-        .kshop-w-product-details-attr-name
-            width: 50%
+    @media ( max-width: 800px )
+        .kshop-w-product-details-flex
+            flex-flow: column nowrap
+            
+    &-galery
+        background-color: #f5f3f3
+        order: 1
+        flex-basis: 200px
+        flex-grow: 1
 
-        .kshop-w-product-details-attr-value
-            width: 50%
+        display: flex
+        flex-flow: column nowrap
+        align-items: center
+        justify-content: flex-start
+
+        padding: 20px 5px
+
+        img
+            width: clamp(100px, 80%, 400px)
+
+    &-price
+        // border: [border-width || border-style || border-color] | inherit
+        //border: 1px solid red
+        background-color: #fafce6
+
+        flex-basis: 50px
+        flex-grow: 1
+        order: 3
+
+        display: flex
+        flex-flow: column nowrap
+        align-items: center
+        justify-content: stretch
+
+        padding: 15px 5px
+
+        &-original
+            font-size: 20px
+            font-weight: 800
+            
+    
+    &-info
+        order: 2
+        flex-grow: 1
+        flex-basis: 200px
+
+        display: flex
+        flex-flow: column nowrap
+        
+
+        &-attributes
+            background-color: #c2badb
+            order: 1
+            // flex-basis: 200px
+            // flex-grow: 1
+
+            display: flex
+            flex-flow: column nowrap
+            align-items: stretch
+            justify-content: flex-start
+
+            padding: 5px 10px
+
+            &-row
+                display: flex
+                flex-flow: row nowrap
+                justify-content: space-between
+                line-height: 30px
+
+                font-weight: 500
+
+        &-description
+            background-color: #d7d6da
+            // flex-basis: 200px
+            // flex-grow: 1
+            order: 2
+
+            padding: 5px 10px
+            

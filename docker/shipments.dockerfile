@@ -9,7 +9,6 @@ COPY "Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj" "Shipments
 RUN dotnet restore "Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj"
 #COPY . .
 COPY Shipments/ Shipments/
-COPY Communications/ Communications/
 COPY Shared/ Shared/
 
 RUN dotnet build "/src/Shipments/KShop.Shipments.WebApi/KShop.Shipments.WebApi.csproj" -c Release -o /app/build

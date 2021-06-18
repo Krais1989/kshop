@@ -9,7 +9,6 @@ COPY "Payments/KShop.Payments.WebApi/KShop.Payments.WebApi.csproj" "Payments/KSh
 RUN dotnet restore "Payments/KShop.Payments.WebApi/KShop.Payments.WebApi.csproj"
 #COPY . .
 COPY Payments/ Payments/
-COPY Communications/ Communications/
 COPY Shared/ Shared/
 
 RUN dotnet build "/src/Payments/KShop.Payments.WebApi/KShop.Payments.WebApi.csproj" -c Release -o /app/build

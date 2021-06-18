@@ -2,6 +2,8 @@ import React from "react";
 import "./app.sass";
 
 import "styles/button.sass"
+import "styles/select.sass"
+import "styles/checkbox.sass"
 
 import {
     BrowserRouter as Router,

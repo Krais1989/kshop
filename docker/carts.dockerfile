@@ -13,7 +13,6 @@ RUN dotnet restore "Carts/KShop.Carts.WebApi/KShop.Carts.WebApi.csproj"
 
 #COPY . .
 COPY Carts/ Carts/
-COPY Communications/ Communications/
 COPY Shared/ Shared/
 RUN dotnet build "/src/Carts/KShop.Carts.WebApi/KShop.Carts.WebApi.csproj" -c Release -o /app/build
 

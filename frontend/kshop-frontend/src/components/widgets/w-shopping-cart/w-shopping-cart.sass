@@ -1,1 +1,75 @@
 .kshop-w-shopping-cart
+
+    display: flex
+    flex-flow: row nowrap
+    align-items: stretch
+    justify-content: stretch
+
+    &-actions
+
+        position: sticky
+        top: 40px
+
+        align-self: flex-start
+        flex-basis: 200px
+        flex-grow: 1
+
+        display: flex        
+        flex-flow: column nowrap
+        align-content: center
+
+        background-color: #f1f1f1
+        border: 1px solid #aaaaaa
+        margin: 0px 10px
+
+        max-width: clamp(100px, 60%, 300px)
+
+        &-priceinfo
+            margin: 20px 20px
+            font-weight: 600
+
+    &-positions
+
+        display: flex
+        flex-flow: column nowrap
+        flex-grow: 1
+        align-items: stretch
+        justify-content: flex-start
+
+        &-row
+            padding: 10px 10px
+
+            background-color: #ffffff
+            border: 1px solid #eeeeee
+
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
+            justify-content: space-between
+
+            &-check
+                
+            &-image
+                margin: 5px 20px
+                img
+                    width: 50px
+
+            &-info
+                margin: 5px
+                &-title
+                    font-size: 18px
+                    font-weight: 600
+                &-description
+                
+            &-actions
+                display: flex
+                flex-flow: row nowrap
+                justify-content: flex-end
+                margin: 10px 10px
+
+            &-price
+                margin: 10px 10px
+                font-size: 16px
+                font-weight: 600
+            &-quantity
+                margin: 5px 5px

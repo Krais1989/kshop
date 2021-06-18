@@ -248,9 +248,13 @@ services:
             - '15672:15672'
         environment: 
             RABBITMQ_DEFAULT_VHOST: "/"
-            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            #RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
             RABBITMQ_DEFAULT_USER: 'guest'
             RABBITMQ_DEFAULT_PASS: 'guest'
+
+        #entrypoint: ["rabbitmq-server", "rabbitmqctl add_vhost kshop"]
+        #command: ["sh", "-c", "rabbitmqctl add_vhost kshop"]
+
         networks:
             kshop_network:
                 aliases:
@@ -411,7 +415,7 @@ volumes:
     vol-msgb_rabbitmq: {}
     vol-log_seq: {}
     vol-redis: {}
-    vol-log_elastic: {}
+    #vol-log_elastic: {}
     vol-metr_influxdb: {}
     #vol-metr_influxdb2: {}
     vol-metr_grafana: {}

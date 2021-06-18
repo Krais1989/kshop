@@ -9,7 +9,6 @@ COPY "Identities/KShop.Identities.WebApi/KShop.Identities.WebApi.csproj" "Identi
 RUN dotnet restore "Identities/KShop.Identities.WebApi/KShop.Identities.WebApi.csproj"
 #COPY . .
 COPY Identities/ Identities/
-COPY Communications/ Communications/
 COPY Shared/ Shared/
 RUN dotnet build "/src/Identities/KShop.Identities.WebApi/KShop.Identities.WebApi.csproj" -c Release -o /app/build
 
