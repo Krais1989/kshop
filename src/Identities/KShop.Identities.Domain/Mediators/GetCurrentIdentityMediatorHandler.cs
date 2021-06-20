@@ -13,31 +13,31 @@ using System.Threading.Tasks;
 namespace KShop.Identities.Domain
 {
 
-    public class AccountGetCurrentMediatorResponse
+    public class GetCurrentIdentityMediatorResponse
     {
         public string Email { get; set; }
     }
-    public class AccountGetCurrentMediatorRequest : IRequest<AccountGetCurrentMediatorResponse>
+    public class GetCurrentIdentityMediatorRequest : IRequest<GetCurrentIdentityMediatorResponse>
     {
         public ClaimsPrincipal User { get; set; }
     }
-    public class AccountGetCurrentMediatorHandler : IRequestHandler<AccountGetCurrentMediatorRequest, AccountGetCurrentMediatorResponse>
+    public class GetCurrentIdentityMediatorHandler : IRequestHandler<GetCurrentIdentityMediatorRequest, GetCurrentIdentityMediatorResponse>
     {
-        private readonly ILogger<AccountGetCurrentMediatorHandler> _logger;
+        private readonly ILogger<GetCurrentIdentityMediatorHandler> _logger;
         private readonly IdentityUserManager _userMan;
         private readonly IdentitySignInManager _signMan;
 
-        public AccountGetCurrentMediatorHandler(ILogger<AccountGetCurrentMediatorHandler> logger, IdentityUserManager userMan, IdentitySignInManager signMan)
+        public GetCurrentIdentityMediatorHandler(ILogger<GetCurrentIdentityMediatorHandler> logger, IdentityUserManager userMan, IdentitySignInManager signMan)
         {
             _logger = logger;
             _userMan = userMan;
             _signMan = signMan;
         }
 
-        public async Task<AccountGetCurrentMediatorResponse> Handle(AccountGetCurrentMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<GetCurrentIdentityMediatorResponse> Handle(GetCurrentIdentityMediatorRequest request, CancellationToken cancellationToken)
         {
             var user = await _userMan.GetUserAsync(request.User);
-            return new AccountGetCurrentMediatorResponse() { Email = user.Email };
+            return new GetCurrentIdentityMediatorResponse() { Email = user.Email };
         }
     }
 }

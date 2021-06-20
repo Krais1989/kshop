@@ -53,7 +53,7 @@ namespace KShop.Identities.WebApi
                 });
             });
 
-            services.AddMediatR(typeof(EmailPasswordSignInHandler).Assembly);
+            services.AddMediatR(typeof(SignInByEmailPasswordMediaotorHandler).Assembly);
             services.AddKShopTracing(Configuration);
             services.AddKShopMetrics(Configuration);
             services.AddKShopSwagger(Configuration);

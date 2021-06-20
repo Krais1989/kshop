@@ -42,6 +42,12 @@ namespace KShop.Identities.Domain
             return result;
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            var result = await Users.SingleOrDefaultAsync(e => e.Email == email);
+            return result;
+        }
+
         //public async virtual Task<User> GetUserAsync<TProperty>(ClaimsPrincipal principal, Expression<Func<User, TProperty>> navigationPropertyPath = null)
         //{
         //    var result = await (navigationPropertyPath == null ? Users : Users.Include(e => navigationPropertyPath))

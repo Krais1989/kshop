@@ -29,6 +29,11 @@ namespace KShop.Identities.Persistence
 
         public IdentityContext(DbContextOptions options) : base(options)
         {
+            //Database.EnsureDeleted();
+            //if (!Database.EnsureCreated())
+            //    Database.Migrate();
+
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

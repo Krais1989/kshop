@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace KShop.Identities.WebApi
 {
+    public class ChangePasswordRequestDto
+    {
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+    } 
+
+
     [Route("api/accounts")]
     [ApiController]
     [Authorize]
@@ -33,31 +40,30 @@ namespace KShop.Identities.WebApi
             _mediator = mediator;
         }
 
-        [HttpGet("current")]
-        public async Task<IActionResult> Current()
-        {
-            var request = new AccountGetCurrentMediatorRequest { User = this.User };
-            var result = await _mediator.Send(request);
-            return Ok(result);
-        }
-
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(AccountRegistrationMediatorRequest dto)
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> Register([FromBody]SignUpMediatorRequest dto)
         {
             var result = await _mediator.Send(dto);
             return Return(result);
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword(AccountChangePasswordMediatorRequest dto)
+        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequestDto dto)
         {
-            var result = await _mediator.Send(dto);
+            var request = new ChangePasswordMediatorRequest
+            {
+                User = this.User,
+                OldPassword = dto.OldPassword,
+                NewPassword = dto.NewPassword
+            };
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
 
-        [HttpPost("confirm-email")]
-        public async Task<IActionResult> ConfirmByEmail(AccountEmailConfirmMediatorRequest dto)
+        [AllowAnonymous]
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmByEmail(ConfirmByEmailMediatorRequest dto)
         {
             var result = await _mediator.Send(dto);
             return Ok(result);
@@ -66,7 +72,7 @@ namespace KShop.Identities.WebApi
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete()
         {
-            var request = new AccountDeleteMediatorRequest { };
+            var request = new DeleteAccountMediatorRequest {  };
             var result = await _mediator.Send(request);
             return Ok(result);
         }

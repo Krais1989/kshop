@@ -14,24 +14,24 @@ using System.Threading.Tasks;
 
 namespace KShop.Identities.Domain
 {
-    public class AccountRegistrationMediatorResponse : BaseResponse
+    public class SignUpMediatorResponse : BaseResponse
     {
         public uint ID { get; set; }
     }
-    public class AccountRegistrationMediatorRequest : IRequest<AccountRegistrationMediatorResponse>
+    public class SignUpMediatorRequest : IRequest<SignUpMediatorResponse>
     {
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
     }
-    public class AccountRegistrationMediatorHandler : IRequestHandler<AccountRegistrationMediatorRequest, AccountRegistrationMediatorResponse>
+    public class SignUpMediatorHandler : IRequestHandler<SignUpMediatorRequest, SignUpMediatorResponse>
     {
-        private readonly ILogger<AccountRegistrationMediatorHandler> _logger;
+        private readonly ILogger<SignUpMediatorHandler> _logger;
         private readonly IdentityUserManager _userMan;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public AccountRegistrationMediatorHandler(
-            ILogger<AccountRegistrationMediatorHandler> logger,
+        public SignUpMediatorHandler(
+            ILogger<SignUpMediatorHandler> logger,
             IdentityUserManager userMan,
             IPublishEndpoint publishEndpoint)
         {
@@ -40,7 +40,7 @@ namespace KShop.Identities.Domain
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<AccountRegistrationMediatorResponse> Handle(AccountRegistrationMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<SignUpMediatorResponse> Handle(SignUpMediatorRequest request, CancellationToken cancellationToken)
         {
             var user = new User
             {
@@ -52,9 +52,9 @@ namespace KShop.Identities.Domain
             var createResult = await _userMan.CreateAsync(user, request.Password);
 
             if (createResult.Succeeded)
-                return new AccountRegistrationMediatorResponse { ID = user.Id };
+                return new SignUpMediatorResponse { ID = user.Id };
             else
-                return new AccountRegistrationMediatorResponse { ErrorMessage = string.Join("\n", createResult.Errors.Select(e => e.Description)) };
+                return new SignUpMediatorResponse { ErrorMessage = string.Join("\n", createResult.Errors.Select(e => e.Description)) };
         }
     }
 }

@@ -14,38 +14,39 @@ using System.Threading.Tasks;
 
 namespace KShop.Identities.Domain
 {
-    public class EmailPasswordSignInResponse : BaseResponse
+    public class SignInByEmailPasswordMediatorResponse : BaseResponse
     {
-        public string Login { get; set; }
+        public string Email { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
-    public class EmailPasswordSignInHandlerRequest : IRequest<EmailPasswordSignInResponse>
+    public class SignInByEmailPasswordMediatorHandlerRequest : IRequest<SignInByEmailPasswordMediatorResponse>
     {
         public string Email { get; set; }
         public string Password { get; set; }
     }
-    public class EmailPasswordSignInHandler : IRequestHandler<EmailPasswordSignInHandlerRequest, EmailPasswordSignInResponse>
+    public class SignInByEmailPasswordMediaotorHandler : IRequestHandler<SignInByEmailPasswordMediatorHandlerRequest, SignInByEmailPasswordMediatorResponse>
     {
-        private readonly ILogger<EmailPasswordSignInHandler> _logger;
+        private readonly ILogger<SignInByEmailPasswordMediaotorHandler> _logger;
         private readonly IdentityUserManager _userMan;
         private readonly IJWTFactory _jwtFactory;
 
-        public EmailPasswordSignInHandler(ILogger<EmailPasswordSignInHandler> logger, IdentityUserManager userMan, IJWTFactory jwtFactory)
+        public SignInByEmailPasswordMediaotorHandler(ILogger<SignInByEmailPasswordMediaotorHandler> logger, IdentityUserManager userMan, IJWTFactory jwtFactory)
         {
             _logger = logger;
             _userMan = userMan;
             _jwtFactory = jwtFactory;
         }
 
-        public async Task<EmailPasswordSignInResponse> Handle(EmailPasswordSignInHandlerRequest request, CancellationToken cancellationToken)
+        public async Task<SignInByEmailPasswordMediatorResponse> Handle(SignInByEmailPasswordMediatorHandlerRequest request, CancellationToken cancellationToken)
         {
             var user = await _userMan.FindByEmailAsync(request.Email);
             if (user == null)
-                return new EmailPasswordSignInResponse() { ErrorMessage = "Invalid Email or Password" };
+                return new SignInByEmailPasswordMediatorResponse() { ErrorMessage = "Invalid Email or Password" };
 
             var passCheck = await _userMan.CheckPasswordAsync(user, request.Password);
             if (!passCheck)
-                return new EmailPasswordSignInResponse() { ErrorMessage = "Invalid Email or Password" };
+                return new SignInByEmailPasswordMediatorResponse() { ErrorMessage = "Invalid Email or Password" };
 
 
             var tokenClaims = new List<Claim>
@@ -54,9 +55,9 @@ namespace KShop.Identities.Domain
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            return new EmailPasswordSignInResponse()
+            return new SignInByEmailPasswordMediatorResponse()
             {
-                Login = user.Email,
+                Email = user.Email,
                 Token = _jwtFactory.Generate(tokenClaims)
             };
         }

@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Registration\" />
-    <Folder Include="SignIn\Validators\" />
   </ItemGroup>
 
 </Project>
