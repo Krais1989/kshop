@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Products.Persistence
 {
+
     public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
@@ -26,22 +27,8 @@ namespace KShop.Products.Persistence
                     .HasColumnName("Currency")
                     .HasDefaultValue(Money.CurrencySign.RUB);
             });
-        }
-    }
 
-    public class ProductAttributeEntityTypeConfiguration : IEntityTypeConfiguration<ProductAttribute>
-    {
-        public void Configure(EntityTypeBuilder<ProductAttribute> builder)
-        {
-            builder.HasKey(e => new { e.ProductID, e.AttributeID });
-            builder
-                .HasOne(pa => pa.Product)
-                .WithMany(p => p.ProductAttributes)
-                .HasForeignKey(p => p.ProductID);
-            builder
-                .HasOne(pa => pa.Attribute)
-                .WithMany(p => p.ProductAttributes)
-                .HasForeignKey(p => p.AttributeID);
+
         }
     }
 }

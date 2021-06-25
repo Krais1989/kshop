@@ -55,7 +55,7 @@ namespace KShop.Carts.Persistence
                 result = new Cart
                 {
                     ID = id,
-                    Positions = new CartPositions()
+                    Positions = new List<CartPosition>()
                 };
                 await _cartStorage.InsertOneAsync(result, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
             };

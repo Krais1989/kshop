@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Identities.WebApi
 {
+
     [Route("api/auth")]
     [ApiController]
     [Authorize]

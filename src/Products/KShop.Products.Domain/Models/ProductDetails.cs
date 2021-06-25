@@ -1,4 +1,5 @@
 ﻿
+using KShop.Products.Persistence;
 using KShop.Shared.Domain.Contracts;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,17 @@ namespace KShop.Products.Domain
         public uint ID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public uint CategoryID { get; set; }
         public Money Price { get; set; }
+        public string Image { get; set; }
+
+        public ICollection<ProductDetailsAttribute> Attributes { get; set; }
     }
 
-    public class ProductShort
+    public class ProductDetailsAttribute
     {
         public uint ID { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
-        public Money Price { get; set; }
+        public string Value { get; set; }
     }
 }

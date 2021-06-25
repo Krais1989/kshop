@@ -1,5 +1,7 @@
-﻿using KShop.Carts.Persistence;
+﻿using KShop.Carts.Domain.Mediators;
+using KShop.Carts.Persistence;
 using KShop.Shared.Authentication;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,17 +12,16 @@ using System.Threading.Tasks;
 
 namespace KShop.Carts.WebApi
 {
-    public class CartPosition
+    public class SetCartPositionsRequestDto
     {
-        public uint ProductID { get; set; }
-        public uint Quantity { get; set; }
-        public CartPosition() { }
-        public CartPosition(uint productID, uint quantity)
-        {
-            ProductID = productID;
-            Quantity = quantity;
-        }
+        public List<CartPosition> positions { get; set; }
     }
+
+    public class RemoveCartPositionsRequestDto
+    {
+        public List<uint> productIds { get; set; }
+    }
+
 
     [ApiController]
     [Route("carts")]
@@ -28,53 +29,54 @@ namespace KShop.Carts.WebApi
     public class CartsController : ControllerBase
     {
         private readonly ILogger<CartsController> _logger;
-        private readonly ICartKVRepository _cartsRepo;
+        private readonly IMediator _mediator;
 
-        public CartsController(ILogger<CartsController> logger, ICartKVRepository cartsRepo)
+        public CartsController(ILogger<CartsController> logger, IMediator mediator)
         {
             _logger = logger;
-            _cartsRepo = cartsRepo;
+            _mediator = mediator;
         }
 
-        [HttpGet("my")]
+        [HttpGet("current")]
         public async Task<IActionResult> Get()
         {
-            var userId = this.GetCurrentUserID();
-            var cart = await _cartsRepo.GetAsync(userId.ToString());
-            return Ok(cart);
+            var response = await _mediator.Send(new GetCurrentCartMediatorRequest()
+            {
+                UserID = this.GetCurrentUserIDExcept()
+            });
+            return Ok(response);
         }
 
-        [HttpPost("set")]
-        public async Task<IActionResult> SetPosition([FromBody]CartPosition position)
+        [HttpPost("set-positions")]
+        public async Task<IActionResult> SetPosition([FromBody] SetCartPositionsRequestDto dto)
         {
-            var userId = this.GetCurrentUserID();
-            string cartId = userId.ToString();
-            var cart = await _cartsRepo.GetAsync(userId.ToString());
-            cart.Positions[position.ProductID] = position.Quantity;
-            await _cartsRepo.ReplaceAsync(cartId, cart);
-            return Ok();
+            var response = await _mediator.Send(new SetCartPositionsMediatorRequest()
+            {
+                UserID = this.GetCurrentUserIDExcept(),
+                Positions = dto.positions
+            });
+            return Ok(response);
         }
 
-        [HttpDelete("del/{productId}")]
-        public async Task<IActionResult> RemovePosition(uint productId)
+        [HttpDelete("remove-positions")]
+        public async Task<IActionResult> RemovePositions([FromBody] RemoveCartPositionsRequestDto dto)
         {
-            var userId = this.GetCurrentUserID();
-            string cartId = userId.ToString();
-            var cart = await _cartsRepo.GetAsync(userId.ToString());
-            cart.Positions.Remove(productId);
-            await _cartsRepo.ReplaceAsync(cartId, cart);
-            return Ok();
+            var response = await _mediator.Send(new RemoveCartPositionMediatorRequest
+            {
+                UserID = this.GetCurrentUserIDExcept(),
+                ProductIDs = dto.productIds
+            });
+            return Ok(response);
         }
 
         [HttpDelete("clear")]
         public async Task<IActionResult> Clear()
         {
-            var userId = this.GetCurrentUserID();
-            string cartId = userId.ToString();
-            var cart = await _cartsRepo.GetAsync(userId.ToString());
-            cart.Positions.Clear();
-            await _cartsRepo.ReplaceAsync(cartId, cart);
-            return Ok();
+            var response = await _mediator.Send(new ClearCartMediatorRequest
+            {
+                UserID = this.GetCurrentUserIDExcept()
+            });
+            return Ok(response);
         }
     }
 }

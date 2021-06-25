@@ -52,7 +52,7 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
             </div>
 
             <div className="kshop-product-card-price">
-                <span>{props.price.value} &#8381;</span>
+                <span>{props.price.price} &#8381;</span>
             </div>
 
             <div className="kshop-product-card-title">

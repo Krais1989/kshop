@@ -1,4 +1,4 @@
-import { BaseResult, Result } from "services/BaseResult";
+import { BaseResult } from "services/BaseResult";
 
 export class SignUpRequest {
     email?: string;
@@ -36,11 +36,11 @@ export class ChangePasswordRequest{
 export class ChangePasswordResponse extends BaseResult {}
 
 export interface IIdentityClient {
-    signUp(req: SignUpRequest): Promise<Result<SignUpResponse>>;
-    signIn(req: SignInRequest): Promise<Result<SignInResponse>>;
-    current(): Promise<Result<CurrentIdentityResponse>>;
-    changePassword(req: ChangePasswordRequest): Promise<Result<ChangePasswordResponse>>;
-    refresh(req: RefreshTokenRequest): Promise<Result<RefreshTokenResponse>>;
-    delete(): Promise<Result<DeleteIdentityResponse>>;
+    signUp(req: SignUpRequest): Promise<SignUpResponse>;
+    signIn(req: SignInRequest): Promise<SignInResponse>;
+    current(): Promise<CurrentIdentityResponse>;
+    changePassword(req: ChangePasswordRequest): Promise<ChangePasswordResponse>;
+    refresh(req: RefreshTokenRequest): Promise<RefreshTokenResponse>;
+    delete(): Promise<DeleteIdentityResponse>;
 
 }

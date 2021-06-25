@@ -37,6 +37,8 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
                     )
             );
 
+        
+
         setOrder(genOrders(5));
     }, []);
 
@@ -73,7 +75,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
                         {orderDet.createDate}
                     </div>
                     <div className="kshop-w-orders-list-row-header-price">
-                        Price {orderDet.price.value}
+                        Price {orderDet.price.price}
                     </div>
                 </div>
                 <div className="kshop-w-orders-list-row-body">

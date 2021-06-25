@@ -77,6 +77,8 @@ namespace KShop.Payments.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseKShopExceptionHandler();
+
             app.UseMetricsAllMiddleware();
             // Or to cherry-pick the tracking of interest
             // app.UseMetricsActiveRequestMiddleware();
@@ -106,6 +108,7 @@ namespace KShop.Payments.WebApi
             });
 
             app.UseRouting();
+            app.AddKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
 

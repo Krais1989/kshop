@@ -17,12 +17,6 @@ import { HttpClient } from "./HttpClient";
 export class IdentityClient implements IIdentityClient {
     private http: HttpClient = new HttpClient();
 
-    signUp = async (req: SignUpRequest) =>
-        await this.http.post<SignUpRequest, SignUpResponse>(
-            `${AppSettings.IdentityHost}/api/accounts/sign-up`,
-            req
-        );
-
     signIn = async (req: SignInRequest) =>
         await this.http.post<SignInRequest, SignInResponse>(
             `${AppSettings.IdentityHost}/api/auth/sign-in`,
@@ -32,6 +26,12 @@ export class IdentityClient implements IIdentityClient {
     current = async () =>
         await this.http.get<CurrentIdentityResponse>(
             `${AppSettings.IdentityHost}/api/auth/current`
+        );
+
+    signUp = async (req: SignUpRequest) =>
+        await this.http.post<SignUpRequest, SignUpResponse>(
+            `${AppSettings.IdentityHost}/api/accounts/sign-up`,
+            req
         );
 
     changePassword = async (req: ChangePasswordRequest) =>

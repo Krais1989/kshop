@@ -24,10 +24,17 @@ import AccountPage from "components/pages/account-page/account-page";
 import FavoritesPage from "components/pages/favorites-page/favorites-page";
 import ShoppingCartPage from "components/pages/shopping-cart-page/shopping-cart-page";
 import { HttpClient } from "services/clients/http/HttpClient";
+import { AuthContext, AuthData, useAuth } from "services/AuthContext";
 
 const App: React.FC = () => {
+    const rawAuth = localStorage.getItem("");
+    const authData: AuthData = rawAuth ? JSON.parse(rawAuth) : {};
+
+    const [auth, setAuth] = useAuth(authData);
+
     return (
         <div className="kshop-app">
+            <AuthContext.Provider value={{}}></AuthContext.Provider>
             <Router>
                 <AppHeader />
                 <Navbar />

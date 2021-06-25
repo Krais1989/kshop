@@ -76,16 +76,26 @@ namespace KShop.Shipments.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseKShopExceptionHandler();
+
+            app.UseMetricsAllMiddleware();
+            app.UseMetricsAllEndpoints();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KShop.Shipments.WebApi v1"));
             }
 
             app.UseHttpsRedirection();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Assembly.GetExecutingAssembly().GetName().Name} v1");
+            });
+
             app.UseRouting();
+            app.AddKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
 

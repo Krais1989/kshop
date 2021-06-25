@@ -14,7 +14,7 @@ using KShop.Shared.Domain.Contracts;
 namespace KShop.Products.Domain
 {
 
-    public class ProductsReserveMediatorResponse
+    public class ProductsReserveMediatorResponse : BaseResponse
     {
         public ProductsReserveMediatorResponse(ProductsReserveMap reservationData)
         {
@@ -30,8 +30,6 @@ namespace KShop.Products.Domain
         /// Данные в формате <id_продукта, id_резерва>
         /// </summary>
         public ProductsReserveMap ReservationData { get; private set; }
-        public string ErrorMessage { get; private set; }
-        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
     /// <summary>
     /// Запрос на резервацию заказа

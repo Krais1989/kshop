@@ -1,9 +1,9 @@
 export class Money {
+    price: number;
     currency: string;
-    value: number;
 
-    constructor(value: number, currency: string = "RUB"){
-        this.value = value;
+    constructor(price: number, currency: string = "RUB"){
+        this.price = price;
         this.currency = currency;
     }
 }

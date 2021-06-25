@@ -5,26 +5,14 @@ import { toast } from "react-toastify";
 import { AppServices } from "components/app/app-services";
 import { HttpClient } from "services/clients/http/HttpClient";
 import { AppSettings } from "components/app/app-settings";
+import { useAuth } from "services/AuthContext";
 
 interface IWLoginPanelProps {}
 
 const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
     const [email, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    
-    const http = new HttpClient();
-    
-    // const res:any = http.request<undefined, any>("GET", `${AppSettings.IdentityHost}/api/test/200`)
-    //     .then(r => {
-    //         if (r.IsSuccess()){
-    //             toast.success(r.Data);
-    //         } else{
-    //             toast.error(r.ErrorMessage);
-    //         }
-    //     })
-    //     .catch(err=>{
-    //     });
-
+        
     const submitCallback = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("Submit");
@@ -34,15 +22,16 @@ const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
             password: password,
         }).then((r) => {
 
-            if (r.IsSuccess()) {
-                toast.success(`Logged in: ${r.Data?.email}`);
+            if (!r.ErrorMessage) {
+                toast.success(`Logged in: ${r.email}`);
+
             } else {
                 console.log(r.ErrorMessage);
                 toast.error(`Logging fail: ${r.ErrorMessage}`);
             }
         });
     };
-    
+
     return (
         <form onSubmit={submitCallback} className="kshop-w-login-panel">
             <input

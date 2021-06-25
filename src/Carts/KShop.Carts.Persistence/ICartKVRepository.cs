@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace KShop.Carts.Persistence
 {
     /// <summary>
-    /// Cart Key/Kalue Repository
+    /// Cart Key/Value Repository
     /// </summary>
     public interface ICartKVRepository
     {

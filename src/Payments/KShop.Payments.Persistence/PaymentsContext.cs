@@ -35,6 +35,8 @@ namespace KShop.Payments.Persistence
 
         public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options)
         {
+            Database.EnsureCreated();
+            //try { Database.Migrate(); } catch (Exception e) { };
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

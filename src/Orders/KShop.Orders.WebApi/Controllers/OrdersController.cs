@@ -51,6 +51,18 @@ namespace KShop.Orders.WebApi
         }
 
         /// <summary>
+        /// Статус заказа 
+        /// Данные берутся из состояния соответствующей Саги
+        /// </summary>
+        [HttpGet("status/{orderId}")]
+        public async ValueTask<IActionResult> GetStatus(Guid orderId)
+        {
+            var customerId = this.GetCurrentUserIDExcept();
+            var response = await _mediator.Send(new OrderGetDetailsRequest { CustomerID = customerId, OrderID = orderId });
+            return ReturnBaseResponse(response);
+        }
+
+        /// <summary>
         /// Детали заказа
         /// </summary>
         [HttpGet("details/{orderId}")]

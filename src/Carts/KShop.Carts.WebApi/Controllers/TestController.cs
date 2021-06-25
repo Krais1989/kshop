@@ -35,7 +35,7 @@ namespace KShop.Carts.WebApi
             var cart = new Cart
             {
                 ID = "test_cart",
-                Positions = new CartPositions { { 1, 1}, { 2, 1 } }
+                Positions = new List<CartPosition> { new CartPosition(1, 1), new CartPosition(2, 1) }
             };
             var result = await _cartRepo.InsertAsync(cart);
 
@@ -43,10 +43,10 @@ namespace KShop.Carts.WebApi
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update([FromBody]string id)
+        public async Task<IActionResult> Update([FromBody] string id)
         {
             var cart = await _cartRepo.GetAsync(id);
-            cart.Positions.Add(cart.Positions.Last().Key + 1, 1);
+            cart.Positions.Add(new CartPosition(cart.Positions.Last().ProductID + 1, 1));
             await _cartRepo.ReplaceAsync(id, cart);
             return Ok(cart);
         }

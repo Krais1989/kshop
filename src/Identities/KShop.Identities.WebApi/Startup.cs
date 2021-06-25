@@ -41,14 +41,16 @@ namespace KShop.Identities.WebApi
             var config = (Configuration as IConfigurationRoot).GetDebugView();
             Log.Warning(config);
 
-            services.AddStackExchangeRedisCache(r => {
+            services.AddStackExchangeRedisCache(r =>
+            {
                 r.Configuration = Configuration.GetConnectionString("RedisConnection");
             });
 
             services.AddDbContext<IdentityContext>(db =>
             {
                 var constr = Configuration.GetConnectionString("DefaultConnection");
-                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)), x => {
+                db.UseMySql(constr, new MySqlServerVersion(new Version(8, 0)), x =>
+                {
                     x.EnableRetryOnFailure(10, TimeSpan.FromSeconds(5), null);
                 });
             });
@@ -64,7 +66,7 @@ namespace KShop.Identities.WebApi
             services.AddKShopMassTransitRabbitMq(Configuration,
                 busServices =>
                 {
-                    
+
                 },
                 (busContext, rabbigConfig) =>
                 {
@@ -74,7 +76,7 @@ namespace KShop.Identities.WebApi
 
             services.AddControllers()
                 .AddMetrics();
-                //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
+            //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,13 +89,18 @@ namespace KShop.Identities.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseKShopExceptionHandler();
+
             //app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
+
+
             app.UseRouting();
+            app.AddKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

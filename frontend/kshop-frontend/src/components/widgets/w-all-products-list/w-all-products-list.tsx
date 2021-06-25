@@ -14,16 +14,19 @@ interface IWAllProductsListProps {}
 const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
     props
 ) => {
-    let prods: ProductShort[] = [];
-    let page: number = 0;
+    const [page, setPage] = React.useState(0);
+    const [prods, setProds] = React.useState<ProductShort[]>([]);
 
     React.useEffect(() => {
-        const result = AppServices.Clients.Products.getProductsForHome({
+        AppServices.Clients.Products.getProductsForHome({
             page: 0,
         }).then((e) => {
-            if (e.IsSuccess()){
-                const resp = e.Data?.Data;
-                e.Data.
+
+            if (!e.ErrorMessage){
+                setProds(e.data);
+            }
+            else{
+                toast.warning(`Bad request: ${e.ErrorMessage}`);
             }
         });
     }, [page]);
@@ -31,7 +34,7 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
     const jsxProducts = prods.map(
         ({ id, title, price, description, image }, index) => (
             <ProductCard
-                key={index}
+                key={id}
                 id={id}
                 title={title}
                 price={price}

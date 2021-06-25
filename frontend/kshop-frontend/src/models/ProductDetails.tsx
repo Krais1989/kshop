@@ -1,16 +1,18 @@
+import { Money } from "./Money";
+
 export class ProductDetails {
-    id: number;
-    title: string;
-    price: number;
+    id?: number;
+    title?: string;
+    price?: Money;
     image?: string;
     description?: string;
 
     attributes?: ProductAttribute[];
 
     constructor(
-        id: number,
-        title: string,
-        price: number,
+        id?: number,
+        title?: string,
+        price?: Money,
         image?: string,
         description?: string
     ) {
@@ -23,11 +25,7 @@ export class ProductDetails {
 }
 
 export class ProductAttribute {
-    name: string;
-    value: string;
-
-    constructor(name: string, value: string) {
-        this.name = name;
-        this.value = value;
-    }
+    id?: number;
+    title?: string;
+    value?: string;
 }

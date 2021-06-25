@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Attribute = KShop.Products.Persistence.Attribute;
 
 namespace MarketCLI
 {
@@ -27,13 +28,29 @@ namespace MarketCLI
 
         public async Task ExecuteAsync(CancellationToken cancelToken)
         {
+            var attrs = new List<Attribute>();
+            for (int i = 0; i < 10; i++)
+            {
+                attrs.Add(new Attribute() { Title = $"Attribute {i}" });
+            }
+            await _dbContext.Attributes.AddRangeAsync(attrs);
+
             for (int i = 0; i < 100; i++)
             {
+                var prodAttrs = new List<ProductAttribute>();
+                for (int j = 0; j < prodAttrs.Count; j++)
+                {
+                    uint prodAttrId = (uint)(i % 10);
+                    prodAttrs.Add(
+                        new ProductAttribute { AttributeID = prodAttrId, Value = $"Value of Prod {i} - Attr {prodAttrId}" });
+                }
                 var prod = new Product()
                 {
                     Title = $"Product",
                     Money = new Money(100),
-                    Positions = new List<ProductPosition> { new ProductPosition() { Quantity = 100 } }
+                    Positions = new List<ProductPosition> { new ProductPosition() { Quantity = 100 } },
+                    Category = new Category { Name = "Category #0" },
+                    ProductAttributes = prodAttrs
                 };
                 await _dbContext.Products.AddAsync(prod, cancelToken);
 

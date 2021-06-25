@@ -1,8 +1,10 @@
 using FluentValidation.AspNetCore;
+using KShop.Carts.Domain.Mediators;
 using KShop.Carts.Persistence;
 using KShop.Shared.Authentication;
 using KShop.Shared.Integration.MassTransit;
 using KShop.Shared.WebApi;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -57,6 +59,8 @@ namespace KShop.Carts.WebApi
                 {
                 });
 
+            services.AddMediatR(typeof(GetCurrentCartMediatorHandler).Assembly);
+
             services.AddControllers()
                 .AddMetrics();
                 //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
@@ -65,6 +69,8 @@ namespace KShop.Carts.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseKShopExceptionHandler();
+
             app.UseMetricsAllMiddleware();
             app.UseMetricsAllEndpoints();
 
@@ -79,6 +85,7 @@ namespace KShop.Carts.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
             app.UseRouting();
+            app.AddKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

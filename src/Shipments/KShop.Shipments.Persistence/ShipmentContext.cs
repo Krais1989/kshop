@@ -32,6 +32,8 @@ namespace KShop.Shipments.Persistence
 
         public ShipmentContext(DbContextOptions<ShipmentContext> options) : base(options)
         {
+            Database.EnsureCreated();
+            //try { Database.Migrate(); } catch (Exception e) { };
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

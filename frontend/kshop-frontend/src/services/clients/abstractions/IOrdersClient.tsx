@@ -1,5 +1,5 @@
 import { OrderDetails } from "models/Orders";
-import { BaseResult, Result } from "services/BaseResult";
+import { BaseResult } from "services/BaseResult";
 
 export class CreateOrderRequest {}
 export class CreateOrderResponse extends BaseResult {
@@ -15,7 +15,7 @@ export class CancelOrderRequest {}
 export class CancelOrderResponse extends BaseResult{}
 
 export interface IOrdersClient {
-    createOrder(request: CreateOrderRequest): Promise<Result<CreateOrderResponse>>;
-    getOrders(request: GetOrdersRequest): Promise<Result<GetOrdersResponse>>;
-    cancelOrder(request: CancelOrderRequest): Promise<Result<CancelOrderResponse>>;
+    createOrder(request: CreateOrderRequest): Promise<CreateOrderResponse>;
+    getOrders(request: GetOrdersRequest): Promise<GetOrdersResponse>;
+    cancelOrder(request: CancelOrderRequest): Promise<CancelOrderResponse>;
 }

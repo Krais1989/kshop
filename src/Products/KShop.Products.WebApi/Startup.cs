@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace KShop.Products.WebApi
@@ -71,6 +72,8 @@ namespace KShop.Products.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseKShopExceptionHandler();
+
             app.UseMetricsAllMiddleware();
             app.UseMetricsAllEndpoints();
 
@@ -78,6 +81,8 @@ namespace KShop.Products.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.AddKShopTestData();
 
             app.UseHttpsRedirection();
 
@@ -88,6 +93,7 @@ namespace KShop.Products.WebApi
             });
 
             app.UseRouting();
+            app.AddKShopCors(Configuration);
 
             app.UseAuthentication();
             app.UseAuthorization();

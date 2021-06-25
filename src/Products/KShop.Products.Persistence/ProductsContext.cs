@@ -27,6 +27,8 @@ namespace KShop.Products.Persistence
 
     public class ProductsContext : DbContext
     {
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductPosition> ProductPositions { get; set; }
         public DbSet<ProductReserve> ProductReserves { get; set; }
@@ -37,6 +39,9 @@ namespace KShop.Products.Persistence
 
         public ProductsContext(DbContextOptions<ProductsContext> options) : base(options)
         {
+            //Database.EnsureDeleted();
+            //if (Database.GetPendingMigrations().Any())
+            //    Database.Migrate();
         }
 
         private static ILoggerFactory ContextLoggerFactory
@@ -46,6 +51,7 @@ namespace KShop.Products.Persistence
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductsContext).Assembly);
+
         }
 
     }

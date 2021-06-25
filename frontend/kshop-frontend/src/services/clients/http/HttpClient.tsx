@@ -1,14 +1,15 @@
 import { AppSettings, useAppSettings } from "components/app/app-settings";
+import { error } from "console";
 import { toast } from "react-toastify";
-import { BaseResult, Result } from "../../BaseResult";
+import { BaseResult} from "../../BaseResult";
 
 export class HttpClient {
-    async request<TData, TResult>(
+    async request<TData, TResult extends BaseResult>(
         method: string,
         url: string,
         data: TData | undefined = undefined,
         add_cfg: RequestInit | undefined = undefined
-    ): Promise<Result<TResult>> {
+    ): Promise<TResult> {
         let req_cfg: RequestInit = {
             method: method,
             mode: "cors",
@@ -26,40 +27,45 @@ export class HttpClient {
             req_cfg.body = JSON.stringify(data);
         }
 
-        // if (add_cfg) {
-        //     req_cfg = { ...req_cfg, ...add_cfg }; //Object.assign(req_cfg, add_cfg);
-        //     req_cfg.headers = { ...req_cfg.headers, ...add_cfg?.headers };
-        // }
+        if (add_cfg) {
+            req_cfg = { ...req_cfg, ...add_cfg }; //Object.assign(req_cfg, add_cfg);
+            req_cfg.headers = { ...req_cfg.headers, ...add_cfg?.headers };
+        }
 
         console.log(`HTTP Request ${method}: ${url}\n${data}`);
 
-        const resp = await fetch(url, req_cfg);
+        try {
+            const resp = await fetch(url, req_cfg);
+            if (resp.ok || resp.status === 400)
+            {
+                return (await resp.json()) as TResult;
+            } 
+            else if (resp.status === 400){
+                return {ErrorMessage: await resp.text()} as TResult;
+            }
+            else if (resp.status === 401){
+                toast.error("Not Authorized")
+                return {ErrorMessage: await resp.text()} as TResult;
+            }
+            else {
+                toast.error(`Internal Server Error: ${await resp.text()}`);
 
-        if (resp.ok || resp.status === 400)
-        {
-            return new Result<TResult>((await resp.json()) as TResult);
-        } else {
-            return new Result<TResult>(undefined, await resp.text());
+                return (await resp.json()) as TResult;
+            }
         }
-
-        //return result;
-        // .then(async (response) => {
-
-        //     if (response.ok)
-        //         toast.success("Http response success");
-        //     return await response.json() as TResult);
-        // })
-        // .catch((err) => {
-        //     console.error("Http response error: ");
-        //     console.error(err);
-        //     //toast.error(`Http response error: ${err.text()}`);
-        // });
+        catch (err) {
+            toast.error(`HttpClient request error:\n${err.message}`);
+            //toast.error(e.Message);
+            console.error(`HttpClient request error:`)
+            console.error(err);
+            throw err;
+        }
     }
 
-    async get<TResult>(
+    async get<TResult extends BaseResult>(
         url: string,
         add_cfg: RequestInit | undefined = undefined
-    ): Promise<Result<TResult>> {
+    ): Promise<TResult> {
         return await this.request<undefined, TResult>(
             "GET",
             url,
@@ -68,27 +74,27 @@ export class HttpClient {
         );
     }
 
-    async post<TData, TResult>(
+    async post<TData, TResult extends BaseResult>(
         url: string,
         data: TData,
         add_cfg: RequestInit | undefined = undefined
-    ): Promise<Result<TResult>> {
+    ): Promise<TResult> {
         return await this.request<TData, TResult>("POST", url, data, add_cfg);
     }
 
-    async put<TData, TResult>(
+    async put<TData, TResult extends BaseResult>(
         url: string,
         data: TData,
         add_cfg: RequestInit | undefined = undefined
-    ): Promise<Result<TResult>> {
+    ): Promise<TResult> {
         return await this.request<TData, TResult>("PUT", url, data, add_cfg);
     }
 
-    async delete<TData, TResult>(
+    async delete<TData, TResult extends BaseResult>(
         url: string,
         data: TData | undefined = undefined,
         add_cfg: RequestInit | undefined = undefined
-    ): Promise<Result<TResult>> {
+    ): Promise<TResult> {
         return await this.request<TData, TResult>("DELETE", url, data, add_cfg);
     }
 }
