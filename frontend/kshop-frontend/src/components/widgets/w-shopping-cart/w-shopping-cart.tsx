@@ -70,7 +70,7 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
         for (let i = 0; i < 10; i++) {
             let p = new CartPosition(
                 i,
-                2,
+                1,
                 false,
                 `Product ${i}`,
                 100,
@@ -82,7 +82,7 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
         setPositions(positions);
     }, []);
 
-    toast('Render');
+    toast.success('Render');
 
     const jsxPositions = positions.map((cartPos, index) => (
         <div key={cartPos.productId} className="kshop-w-shopping-cart-positions-row">

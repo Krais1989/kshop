@@ -1,16 +1,17 @@
+import { Money } from "./Money";
 
 
 export class ProductShort {
     id: number;
     title: string;
-    price: number;
+    price: Money;
     image?: string;
     description?: string;
 
     constructor(
         id:number, 
         title:string, 
-        price:number, 
+        price:Money, 
         image?:string, 
         description?:string) 
     {

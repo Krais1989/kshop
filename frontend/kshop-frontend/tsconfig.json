@@ -25,6 +25,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "appsettings.dev.json",
+    "appsettings.stage.json",
   ]
 }

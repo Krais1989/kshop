@@ -1,0 +1,59 @@
+.kshop-w-orders-list
+    display: flex
+    flex-flow: column wrap
+    align-content: stretch
+    justify-content: flex-start
+
+    padding: 5px
+
+    &-row
+        
+        background-color: #eeeeee
+        display: flex
+        flex-flow: column nowrap
+        margin: 10px 0
+
+        &-header
+            background-color: #aaaaaa
+            display: flex
+            flex-flow: row wrap
+            justify-content: space-between
+            padding: 5px 10px
+            
+            &-date
+            &-price
+                white-space: nowrap
+        &-body
+
+            display: flex
+            flex-flow: row nowrap
+            justify-content: space-between
+            padding: 5px 10px
+
+            @media screen and ( max-width: 600px )
+                flex-wrap: wrap
+                
+            &-history
+                ul
+                    padding: 0
+                    li
+                        border: 1px solid #dddddd
+                        padding: 2px 0
+
+                        display: flex
+                        flex-flow: row wrap
+                        justify-content: space-between
+                        white-space: nowrap
+                        span
+                            margin: 0px 10px
+                            
+            &-positions
+
+                margin-left: 10px
+
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+
+                a
+                    margin: 5px 5px

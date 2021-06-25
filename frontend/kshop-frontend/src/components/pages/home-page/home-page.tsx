@@ -3,11 +3,13 @@ import "styles/base-page.sass";
 
 import * as React from "react";
 import WAllProductsList from "components/widgets/w-all-products-list/w-all-products-list";
+import { AppSettings, useAppSettings } from "components/app/app-settings";
+import { AppServices } from "components/app/app-services";
+import RedirectService from "services/RedirectService";
 
 interface IHomePageProps {}
 
 const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
-
     return (
         <div className="kshop-base-page kshop-home-page">
             <h1>HomePage</h1>

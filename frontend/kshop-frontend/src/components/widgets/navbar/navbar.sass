@@ -2,11 +2,13 @@
 
     background-color: #d6dbd6
     display: flex
-    flex-flow: row nowrap
+    flex-flow: row wrap
     justify-content: flex-end
     align-items: stretch
     
-    
+    @media screen and ( max-width: 400px )
+        justify-content: center
+        
 
     position: sticky
     top: 0

@@ -13,9 +13,6 @@ const DropDown: React.FunctionComponent<IDropDownProps> = (props) => {
     let [isShow, setIsShow] = useState(false);
 
     let cssContent = `k-drop-down-content${isShow?"-show":""}`;
-    console.log(isShow);
-    console.log(cssContent);
-
     return (
         <div className={`k-drop-down ${props.className?props.className:""}`}>
             <button className="k-drop-down-btn" onClick={()=>setIsShow(!isShow)} >{props.title}</button>

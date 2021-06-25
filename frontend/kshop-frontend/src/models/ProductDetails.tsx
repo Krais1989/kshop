@@ -1,5 +1,3 @@
-import ProductAttribute from "./ProductAttribute";
-
 export class ProductDetails {
     id: number;
     title: string;
@@ -10,12 +8,12 @@ export class ProductDetails {
     attributes?: ProductAttribute[];
 
     constructor(
-        id:number, 
-        title:string, 
-        price:number, 
-        image?:string, 
-        description?:string) 
-    {
+        id: number,
+        title: string,
+        price: number,
+        image?: string,
+        description?: string
+    ) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -24,3 +22,12 @@ export class ProductDetails {
     }
 }
 
+export class ProductAttribute {
+    name: string;
+    value: string;
+
+    constructor(name: string, value: string) {
+        this.name = name;
+        this.value = value;
+    }
+}

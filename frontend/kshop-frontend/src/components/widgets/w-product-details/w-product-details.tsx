@@ -1,6 +1,5 @@
 import * as React from "react";
-import ProductAttribute from "../../../models/ProductAttribute";
-import { ProductDetails } from "../../../models/ProductDetails";
+import { ProductAttribute, ProductDetails } from "../../../models/ProductDetails";
 import "./w-product-details.sass";
 
 //import logo from "https://www.regard.ru/photo/goods/363952.png";
