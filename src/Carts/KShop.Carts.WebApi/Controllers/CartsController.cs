@@ -14,17 +14,17 @@ namespace KShop.Carts.WebApi
 {
     public class SetCartPositionsRequestDto
     {
-        public List<CartPosition> positions { get; set; }
+        public List<CartPosition> Positions { get; set; }
     }
 
     public class RemoveCartPositionsRequestDto
     {
-        public List<uint> productIds { get; set; }
+        public List<uint> ProductIDs { get; set; }
     }
 
 
     [ApiController]
-    [Route("carts")]
+    [Route("api/carts")]
     [Authorize]
     public class CartsController : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace KShop.Carts.WebApi
             var response = await _mediator.Send(new SetCartPositionsMediatorRequest()
             {
                 UserID = this.GetCurrentUserIDExcept(),
-                Positions = dto.positions
+                Positions = dto.Positions
             });
             return Ok(response);
         }
@@ -64,7 +64,7 @@ namespace KShop.Carts.WebApi
             var response = await _mediator.Send(new RemoveCartPositionMediatorRequest
             {
                 UserID = this.GetCurrentUserIDExcept(),
-                ProductIDs = dto.productIds
+                ProductIDs = dto.ProductIDs
             });
             return Ok(response);
         }

@@ -23,22 +23,13 @@ namespace KShop.Orders.WebApi
     {
         private readonly ILogger<OrdersController> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
-        private readonly OrderContext _orderContext;
-        private readonly IRequestClient<OrderGetStatusSagaRequest> _getOrderStatusClient;
-        private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
         private readonly IMediator _mediator;
 
         public OrdersController(ILogger<OrdersController> logger,
-                                IPublishEndpoint pubEndpoint,
-                                OrderContext orderContext,
-                                IRequestClient<OrderGetStatusSagaRequest> getOrderStatusClient,
-                                IRequestClient<OrderPlacingSagaRequest> createOrderClient, IMediator mediator)
+                                IPublishEndpoint pubEndpoint, IMediator mediator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
-            _orderContext = orderContext;
-            _getOrderStatusClient = getOrderStatusClient;
-            _createOrderClient = createOrderClient;
             _mediator = mediator;
         }
 
@@ -90,8 +81,9 @@ namespace KShop.Orders.WebApi
             var orderCreateRequest = new OrderPlacingSagaRequest
             {
                 OrderID = Guid.NewGuid(),
-                PaymentProvider = EPaymentProvider.Mock,
-                CustomerID = 1, // TODO: определять текущего юзера
+                Customer = this.User.GetUserID().Value,
+                PaymentProvider = dto.PaymentProvider,
+                ShippingMethod = dto.ShippingMethod,
                 Positions = dto.Positions
             };
 

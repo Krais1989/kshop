@@ -17,7 +17,7 @@ const ProductDetailsPage: React.FC<IProductDetailsPageProps> = (props) => {
     
     return (
             <div className="kshop-base-page kshop-product-details-page">
-                <WProductDetails productId = {Number(id)} />
+                <WProductDetails productID = {Number(id)} />
             </div>
     )
 };

@@ -44,7 +44,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
 
     const jsxOrderDetailsFunc = (orderDet: OrderDetails) => {
         const jsxPositionsFunc = (op: OrderPosition) => (
-            <a key={op.productId} href={`catalog/products/${op.productId}`}>
+            <a key={op.productID} href={`catalog/products/${op.productID}`}>
                 <span>
                     <img src={op.image} alt="" />
                 </span>

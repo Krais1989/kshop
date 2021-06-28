@@ -35,21 +35,6 @@ namespace KShop.Products.WebApi
             _mediator = mediator;
         }
 
-        [HttpGet("[action]/{productId}")]
-        public async ValueTask<IActionResult> TestProductReservePending(uint productId, uint quantity)
-        {
-            var entity = new ProductReserve()
-            {
-                OrderID = Guid.NewGuid(),
-                ProductID = productId,
-                Quantity = quantity,
-                Status = ProductReserve.EStatus.Pending
-            };
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return Ok(entity);
-        }
-
         [HttpGet("home/{page:int}")]
         public async ValueTask<IActionResult> GetProductsForHomePage(int page)
         {

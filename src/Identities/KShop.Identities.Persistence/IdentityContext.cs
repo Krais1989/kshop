@@ -33,7 +33,7 @@ namespace KShop.Identities.Persistence
             //if (!Database.EnsureCreated())
             //    Database.Migrate();
 
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

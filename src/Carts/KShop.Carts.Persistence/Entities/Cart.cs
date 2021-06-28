@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using KShop.Shared.Domain.Contracts;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using System;
@@ -13,11 +14,30 @@ namespace KShop.Carts.Persistence
     {
         public uint ProductID { get; set; }
         public uint Quantity { get; set; }
+        public bool Checked { get; set; }
+        public string Title { get; set; }
+        public Money Price { get; set; }
+        public string Descriptions { get; set; }
+        public string Image { get; set; }
+
         public CartPosition() { }
-        public CartPosition(uint productID, uint quantity)
+
+        public CartPosition(
+            uint productID,
+            uint quantity,
+            bool @checked,
+            string title,
+            Money price,
+            string descriptions,
+            string image)
         {
             ProductID = productID;
             Quantity = quantity;
+            Checked = @checked;
+            Title = title;
+            Price = price;
+            Descriptions = descriptions;
+            Image = image;
         }
     }
 
@@ -27,7 +47,7 @@ namespace KShop.Carts.Persistence
         [BsonRepresentation(BsonType.String)]
         public string ID { get; set; }
 
-//      [BsonDictionaryOptions(DictionaryRepresentation.)]
+        //      [BsonDictionaryOptions(DictionaryRepresentation.)]
         public List<CartPosition> Positions { get; set; } = new List<CartPosition>();
 
         public CartPosition Get(uint productId) => Positions.FirstOrDefault(e => e.ProductID == productId);
@@ -42,6 +62,7 @@ namespace KShop.Carts.Persistence
             else
             {
                 exist.Quantity = pos.Quantity;
+                exist.Checked = pos.Checked;
             }
         }
 

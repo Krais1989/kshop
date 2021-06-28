@@ -11,7 +11,7 @@ export class GetProductsForHomeResponse extends BaseResult {
 }
 
 export class GetProductDetailsRequest {
-    productId!:number;
+    productID!:number;
 }
 export class GetProductDetailsResponse extends BaseResult {
     data!: ProductDetails;

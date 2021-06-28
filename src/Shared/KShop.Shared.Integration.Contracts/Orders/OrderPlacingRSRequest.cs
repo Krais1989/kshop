@@ -11,7 +11,7 @@ namespace KShop.Shared.Integration.Contracts
     public class OrderPlacingRSRequest
     {
         public Guid OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public uint CustomerID { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
         public Money Price { get; set; }

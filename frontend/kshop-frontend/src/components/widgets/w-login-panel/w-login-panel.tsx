@@ -1,46 +1,64 @@
 import "./w-login-panel.sass";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AppServices } from "components/app/app-services";
-import { HttpClient } from "services/clients/http/HttpClient";
+import { AuthData, useAuth } from "components/contexts/AuthContext";
+import {
+    SignInRequest,
+    SignInResponse,
+} from "services/clients/abstractions/IIdentityClient";
 import { AppSettings } from "components/app/app-settings";
-import { useAuth } from "services/AuthContext";
+import { AuthService } from "services/AuthService";
 
 interface IWLoginPanelProps {}
 
 const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
     const [email, setLogin] = useState("");
     const [password, setPassword] = useState("");
-        
-    const submitCallback = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const { auth, setAuth, isAuthenticated, signOut } = useAuth();
+
+    const submitSignIn = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Submit");
 
         AppServices.Clients.Identity.signIn({
             email: email,
             password: password,
         }).then((r) => {
-
             if (!r.ErrorMessage) {
-                toast.success(`Logged in: ${r.email}`);
+                const auth: AuthData = {
+                    userId: r.email,
+                    token: r.token,
+                    refreshToken: ""
+                };
 
+                localStorage.setItem("auth", JSON.stringify(auth));
+                setAuth(auth);
             } else {
                 console.log(r.ErrorMessage);
                 toast.error(`Logging fail: ${r.ErrorMessage}`);
+                setAuth(new AuthData());
             }
         });
     };
 
-    return (
-        <form onSubmit={submitCallback} className="kshop-w-login-panel">
+    const signOutCallback = () => {
+        console.log("SignOut");
+        signOut();
+    };
+
+    const jsxSignIn = (
+        <form onSubmit={(e) => submitSignIn(e)} className="kshop-w-login-panel">
             <input
+                name="email"
                 type="text"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setLogin(e.target.value)}
             />
             <input
+                name="password"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -51,6 +69,22 @@ const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
             </button>
         </form>
     );
+
+    const jsxSignOut = (
+        <div>
+            {auth.userId} &nbsp;
+            <button
+                className={"kshop-button-yellow"}
+                onClick={(e) => signOutCallback()}
+            >
+                SignOut
+            </button>
+        </div>
+    );
+
+    const render = !isAuthenticated() ? jsxSignIn : jsxSignOut;
+
+    return render;
 };
 
 export default WLoginPanel;

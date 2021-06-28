@@ -9,4 +9,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Domain.Contracts\KShop.Shared.Domain.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Money } from "models/Money";
 import RedirectService from "services/RedirectService";
+import { useCart } from "components/contexts/CartContext";
 
 export interface IProductCardProps {
     id: number;
@@ -23,13 +24,28 @@ export interface IProductCardProps {
 }
 
 const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
-    
+    const { cart, addToCart, getQuantity } = useCart();
+
     const productLink = `catalog/products/${props.id}`;
     let title = `${props.title}`;
     if (props.description) title = `${title}, ${props.description}`;
 
     const max_title = 30;
     if (title.length > max_title) title = `${title.substr(0, max_title)}...`;
+
+    const addToCartCallback = () => {
+        toast(`В корзину ${props.id}`);
+        addToCart([
+            {
+                productID: props.id,
+                quantity: 1,
+                title: props.title,
+                description: props.description,
+                checked: false,
+                price: props.price,
+            },
+        ]);
+    };
 
     return (
         <div key={props.id} className="kshop-product-card">
@@ -62,20 +78,23 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
             </div>
 
             <div className="kshop-product-card-actions">
-                <button
-                    className="kshop-button-green"
-                    onClick={() => {
-                        toast(`В корзину ${props.id}`);
-                    }}
-                >
-                    В корзину <FontAwesomeIcon icon={faCartArrowDown} />{" "}
-                </button>
+                {getQuantity(props.id) === 0 ? (
+                    <button
+                        className="kshop-button-green"
+                        onClick={() => addToCartCallback()}
+                    >
+                        В корзину <FontAwesomeIcon icon={faCartArrowDown} />{" "}
+                    </button>
+                ) : (
+                    <div>Added</div>
+                )}
+
                 <DropDown
                     title="..."
                     className="kshop-product-card-actions-extra"
                 >
                     <a
-                        href="#"
+                        href="/"
                         onClick={() => {
                             toast("Action 1");
                         }}
@@ -83,7 +102,7 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
                         Action 1
                     </a>
                     <a
-                        href="#"
+                        href="/"
                         onClick={() => {
                             toast("Action 2");
                         }}
@@ -91,7 +110,7 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
                         Action 2
                     </a>
                     <a
-                        href="#"
+                        href="/"
                         onClick={() => {
                             toast("Action 3");
                         }}

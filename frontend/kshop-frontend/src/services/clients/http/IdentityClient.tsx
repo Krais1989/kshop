@@ -30,7 +30,7 @@ export class IdentityClient implements IIdentityClient {
 
     signUp = async (req: SignUpRequest) =>
         await this.http.post<SignUpRequest, SignUpResponse>(
-            `${AppSettings.IdentityHost}/api/accounts/sign-up`,
+            `${AppSettings.IdentityHost}/api/account/sign-up`,
             req
         );
 

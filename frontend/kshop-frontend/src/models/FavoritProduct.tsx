@@ -1,20 +1,20 @@
 import { Money } from "./Money";
 
 export class FavoritProduct {
-    productId: number;
+    productID: number;
     price: Money;
     title: string;
     description?: string;
     image?: string;
 
     constructor(
-        productId: number,
+        productID: number,
         title: string,
         price: Money,
         description?: string,
         image?: string
     ) {
-        this.productId = productId;
+        this.productID = productID;
         this.title = title;
         this.price = price;
         this.description = description;

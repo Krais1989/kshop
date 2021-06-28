@@ -15,7 +15,7 @@ namespace KShop.Carts.Domain.Mediators
 {
     public class GetCurrentCartMediatorResponse : BaseResponse
     {
-        public Cart Cart { get; set; }
+        public Cart Data { get; set; }
     }
     public class GetCurrentCartMediatorRequest : IRequest<GetCurrentCartMediatorResponse>
     {
@@ -41,7 +41,7 @@ namespace KShop.Carts.Domain.Mediators
 
             var cartId = $"cart-{request.UserID}";
             var cart = await _cartsRepo.GetAsync(cartId);
-            return new GetCurrentCartMediatorResponse() { Cart = cart };
+            return new GetCurrentCartMediatorResponse() { Data = cart };
         }
     }
 }

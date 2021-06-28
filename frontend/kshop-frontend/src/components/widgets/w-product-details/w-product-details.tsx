@@ -7,15 +7,15 @@ import "./w-product-details.sass";
 //import logo from "https://www.regard.ru/photo/goods/363952.png";
 
 interface IWProductDetailsProps {
-    productId: number;
+    productID: number;
 }
 
 const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
     props
 ) => {
-    const [details, setDetails] = React.useState<ProductDetails>({});
+    const [details, setDetails] = React.useState<ProductDetails>(new ProductDetails());
 
-    const { productId } = props;
+    const { productID: productID } = props;
 
     React.useEffect(() => {
         // let product_details = new ProductDetails(
@@ -33,14 +33,14 @@ const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
         // ];
 
         AppServices.Clients.Products.getProductDetails({
-            productId: productId,
+            productID: productID,
         }).then((r) => {
             if (!r.ErrorMessage) {
                 setDetails(r.data);
             } else {
             }
         });
-    }, [productId]);
+    }, [productID]);
 
     if (!details || Object.keys(details).length === 0) {
         return <h2>Product not found</h2>;

@@ -55,7 +55,7 @@ namespace KShop.Orders.WebApi
             var msg = new OrderPlacingSagaRequest()
             {
                 OrderID = Guid.NewGuid(),
-                CustomerID = 111,
+                Customer = 111,
                 Positions = new OrderPositionsMap() { { 1, 1 } },
                 PaymentProvider = EPaymentProvider.Mock
                 //Price = new Money(200),

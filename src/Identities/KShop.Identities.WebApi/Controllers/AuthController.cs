@@ -15,7 +15,6 @@ namespace KShop.Identities.WebApi
 
     [Route("api/auth")]
     [ApiController]
-    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
@@ -37,7 +36,7 @@ namespace KShop.Identities.WebApi
 
         [AllowAnonymous]
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn(SignInByEmailPasswordMediatorHandlerRequest request)
+        public async Task<IActionResult> SignIn([FromBody]SignInByEmailPasswordMediatorHandlerRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -45,7 +44,7 @@ namespace KShop.Identities.WebApi
 
         [AllowAnonymous]
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
+        public async Task<IActionResult> RefreshToken([FromBody]RefreshTokenRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);

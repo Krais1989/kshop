@@ -1,4 +1,5 @@
 ﻿using KShop.Carts.Persistence;
+using KShop.Shared.Domain.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,11 @@ namespace KShop.Carts.WebApi
             var cart = new Cart
             {
                 ID = "test_cart",
-                Positions = new List<CartPosition> { new CartPosition(1, 1), new CartPosition(2, 1) }
+                Positions = new List<CartPosition> {
+                    new CartPosition(1, 1, false, "Product #1", new Money(100), "", "" ),
+                    new CartPosition(2, 1, false, "Product #2", new Money(100), "", "" ),
+                    new CartPosition(3, 1, false, "Product #3", new Money(100), "", "" ),
+                }
             };
             var result = await _cartRepo.InsertAsync(cart);
 
@@ -46,7 +51,15 @@ namespace KShop.Carts.WebApi
         public async Task<IActionResult> Update([FromBody] string id)
         {
             var cart = await _cartRepo.GetAsync(id);
-            cart.Positions.Add(new CartPosition(cart.Positions.Last().ProductID + 1, 1));
+            var nextId = cart.Positions.Last().ProductID + 1;
+            cart.Positions.Add(
+                new CartPosition(nextId,
+                1,
+                false,
+                $"Product {nextId}",
+                new Money(100),
+                $"Description for product {nextId}",
+                ""));
             await _cartRepo.ReplaceAsync(id, cart);
             return Ok(cart);
         }

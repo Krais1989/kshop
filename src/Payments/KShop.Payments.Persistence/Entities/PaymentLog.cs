@@ -7,7 +7,7 @@ namespace KShop.Payments.Persistence
     /// </summary>
     public class PaymentLog
     {
-        public int ID { get; set; }
+        public uint ID { get; set; }
         public Guid PaymentID { get; set; }
         public DateTime ModifyDate { get; set; }
         public EPaymentStatus Status { get; set; }

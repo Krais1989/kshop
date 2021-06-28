@@ -20,15 +20,17 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
     React.useEffect(() => {
         AppServices.Clients.Products.getProductsForHome({
             page: 0,
-        }).then((e) => {
-
-            if (!e.ErrorMessage){
-                setProds(e.data);
-            }
-            else{
-                toast.warning(`Bad request: ${e.ErrorMessage}`);
-            }
-        });
+        })
+            .then((e) => {
+                if (!e.ErrorMessage) {
+                    setProds(e.data);
+                } else {
+                    toast.warning(`Bad request: ${e.ErrorMessage}`);
+                }
+            })
+            .catch((e) => {
+                toast.error(`Products for home loading error, page: ${page}`);
+            });
     }, [page]);
 
     const jsxProducts = prods.map(

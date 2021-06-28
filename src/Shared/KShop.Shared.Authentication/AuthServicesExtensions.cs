@@ -6,19 +6,25 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace KShop.Shared.Authentication
 {
     public static class AuthServicesExtensions
     {
-        public static uint? GetCurrentUserID(this ControllerBase controller)
+        public static uint? GetUserID(this ClaimsPrincipal principals)
         {
-            var idRaw = controller.User.Claims.SingleOrDefault(c => c.Type == "id")?.Value ?? null;
+            var idRaw = principals.Claims.SingleOrDefault(c => c.Type == "id")?.Value ?? null;
             if (uint.TryParse(idRaw, out uint res))
                 return res;
             else
                 return null;
+        }
+
+        public static uint? GetCurrentUserID(this ControllerBase controller)
+        {
+            return GetUserID(controller.User);
         }
 
         public static uint GetCurrentUserIDExcept(this ControllerBase controller)

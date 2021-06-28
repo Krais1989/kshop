@@ -1,6 +1,7 @@
 ﻿
 using KShop.Shared.Domain.Contracts;
 using System;
+using System.Security.Claims;
 using System.Text;
 
 namespace KShop.Shared.Integration.Contracts
@@ -11,10 +12,11 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderPlacingSagaRequest
     {
+        public uint Customer { get; set; }
         public Guid OrderID { get; set; }
-        public int CustomerID { get; set; }
         public OrderPositionsMap Positions { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
+        public EShippingMethod ShippingMethod { get; set; }
         //public Money Price { get; set; }
     }
 
@@ -23,8 +25,7 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderPlacingSagaResponse
     {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
+        public Guid OrderID { get; set; }
     }
 
 }

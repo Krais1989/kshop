@@ -16,7 +16,7 @@ export class ProductsClient implements IProductsClient {
         
 
     getProductDetails = async (data: GetProductDetailsRequest) =>
-        await this.http.get<GetProductDetailsResponse>(`${AppSettings.ProductsHost}/api/products/details/${data.productId}`);
+        await this.http.get<GetProductDetailsResponse>(`${AppSettings.ProductsHost}/api/products/details/${data.productID}`);
 
         // for (let i = 0; i < 60; i++) {
         //     prods.push(

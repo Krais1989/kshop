@@ -82,6 +82,10 @@ namespace KShop.Identities.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.AddKShopTestData(Configuration);
+
+            app.UseKShopExceptionHandler();
+
             app.UseMetricsAllMiddleware();
             app.UseMetricsAllEndpoints();
 
@@ -89,15 +93,13 @@ namespace KShop.Identities.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseKShopExceptionHandler();
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
-
 
             app.UseRouting();
             app.AddKShopCors(Configuration);

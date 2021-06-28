@@ -6,4 +6,13 @@
         Mock,
         Yookassa
     }
+
+    public enum EShippingMethod : int
+    {
+        /// <summary>
+        /// самовывоз
+        /// </summary>
+        Pickup,
+        Default
+    }
 }

@@ -22,7 +22,7 @@ namespace KShop.Shared.Authentication
                     issuer: _jwtSettings.Issuer,
                     audience: _jwtSettings.Audience,
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(_jwtSettings.AccessExpiration),
+                    expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessExpiration),
                     signingCredentials: _jwtSettings.GetSigningCredentials() // Подпись
                 );
 

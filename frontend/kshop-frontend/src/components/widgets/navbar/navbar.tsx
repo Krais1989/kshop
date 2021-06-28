@@ -14,12 +14,13 @@ import { useState } from "react";
 import { AppServices } from "components/app/app-services";
 import { toast } from "react-toastify";
 import { AppSettingsContext } from "components/app/app-settings";
+import { useAuth } from "components/contexts/AuthContext";
 
 interface INavbarProps {}
 
 const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
-    const [isAuth, setIsAuth] = useState(false);
-    
+    const { auth, isAuthenticated } = useAuth();
+
     // useEffect(() => {
     //     const svc = AppServices.CatalogsApi?.getProducts(new GetProductsRequest());
     // }, [])
@@ -45,17 +46,12 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             </Link>
         </React.Fragment>
     );
-    const jsxGuestTabs = <WLoginPanel />;
 
+    const isAuth = isAuthenticated();
     return (
         <div className="kshop-navbar">
-            <button
-                className="kshop-button-gray"
-                onClick={() => setIsAuth(!isAuth)}
-            >
-                {isAuth ? "test logout" : "test login"}
-            </button>
-            {isAuth ? jsxAuthTabs : jsxGuestTabs}
+            <WLoginPanel />
+            {isAuth && jsxAuthTabs}
             <Link to="/cart">
                 <FontAwesomeIcon icon={faShoppingCart} />
                 &nbsp;Cart

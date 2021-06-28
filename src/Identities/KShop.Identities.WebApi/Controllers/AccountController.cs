@@ -18,7 +18,7 @@ namespace KShop.Identities.WebApi
     } 
 
 
-    [Route("api/accounts")]
+    [Route("api/account")]
     [ApiController]
     [Authorize]
     public class AccountController : ControllerBase

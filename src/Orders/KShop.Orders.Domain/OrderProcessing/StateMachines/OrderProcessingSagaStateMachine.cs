@@ -18,17 +18,18 @@ namespace KShop.Orders.Domain
     public class OrderProcessingSagaState : SagaStateMachineInstance, ISagaVersion
     {
         public Guid CorrelationId { get; set; }
-        //public Guid OrderID => CorrelationId;
+        public uint CustomerID { get; set; }
         public ProductsReserveMap ProductsReserves { get; set; }
         //public Guid? OrderPlacingRSTrackingNumber { get; set; }
         public OrderPositionsMap OrderPositions { get; set; }
         public Money Money { get; set; }
+        public EShippingMethod ShippingMethod { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
 
         public Guid? PaymentID { get; set; }
         public Guid? ShipmentID { get; set; }
 
-        public int CustomerID { get; set; }
+
         public int CurrentState { get; set; }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace KShop.Orders.Domain
             //    e.ResetInterval = TimeSpan.FromSeconds(10);
             //    e.TripThreshold = 10;
             //});
-            
+
             base.ConfigureSaga(endpointConfigurator, sagaConfigurator);
         }
     }
@@ -113,18 +114,19 @@ namespace KShop.Orders.Domain
 
         private async Task HandleOnOrderPlacing(BehaviorContext<OrderProcessingSagaState, OrderPlacingSagaRequest> ctx)
         {
-            ctx.Instance.CustomerID = ctx.Data.CustomerID;
+            ctx.Instance.CustomerID = ctx.Data.Customer;
             ctx.Instance.OrderPositions = ctx.Data.Positions;
             //ctx.Instance.Money = ctx.Data.Price;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
+            ctx.Instance.ShippingMethod = ctx.Data.ShippingMethod;
 
             await ctx.Publish(new OrderPlacingRSRequest
             {
                 OrderID = ctx.Data.OrderID,
                 OrderPositions = ctx.Data.Positions,
-                CustomerID = ctx.Data.CustomerID,
+                CustomerID = ctx.Data.Customer,
                 PaymentProvider = ctx.Data.PaymentProvider,
-               // Price = ctx.Data.Price
+                // Price = ctx.Data.Price
             });
         }
         #endregion

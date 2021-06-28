@@ -24,18 +24,18 @@ export class OrderDetails {
 }
 
 export class OrderPosition {
-    productId: number;
+    productID: number;
     quantity: number;
     price: Money;
     image: string;
 
     constructor(
-        productId: number,
+        productID: number,
         quantity: number,
         price: Money,
         image: string
     ) {
-        this.productId = productId;
+        this.productID = productID;
         this.quantity = quantity;
         this.price = price;
         this.image = image;
