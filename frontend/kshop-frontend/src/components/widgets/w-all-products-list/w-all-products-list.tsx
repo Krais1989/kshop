@@ -1,12 +1,11 @@
 import * as React from "react";
 import { toast } from "react-toastify";
-import { ProductShort } from "../../../models/ProductShort";
+import { ProductPresentation } from "../../../models/ProductPresentation";
 import ProductCard from "../../controls/product-card/product-card";
 
 import "./w-all-products-list.sass";
 
 import "react-toastify/dist/ReactToastify.css";
-import { Money } from "models/Money";
 import { AppServices } from "components/app/app-services";
 
 interface IWAllProductsListProps {}
@@ -15,11 +14,11 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
     props
 ) => {
     const [page, setPage] = React.useState(0);
-    const [prods, setProds] = React.useState<ProductShort[]>([]);
+    const [prods, setProds] = React.useState<ProductPresentation[]>([]);
 
     React.useEffect(() => {
         AppServices.Clients.Products.getProductsForHome({
-            page: 0,
+            pageIndex: 0
         })
             .then((e) => {
                 if (!e.ErrorMessage) {

@@ -1,21 +1,39 @@
 import { OrderDetails } from "models/Orders";
+import { ProductQuantity } from "models/ProductQuantity";
 import { BaseResult } from "services/BaseResult";
 
-export class CreateOrderRequest {}
+
+export class CreateOrderRequest {
+    address: string = "";
+    paymentProvider: number = -1;
+    shippingMethod: number = -1;
+    orderContent: Array<ProductQuantity> = [];
+}
 export class CreateOrderResponse extends BaseResult {
-    OrderID: string | undefined;
+    orderID: string | undefined;
 }
 
-export class GetOrdersRequest {}
+export class GetOrderDetailsRequest {
+    orderID: string = "";
+}
+export class GetOrderDetailsResponse extends BaseResult {
+    details: OrderDetails | undefined;
+}
+
 export class GetOrdersResponse extends BaseResult {
-    Orders: Array<OrderDetails> | undefined;
+    orders: Array<OrderDetails> = [];
 }
 
-export class CancelOrderRequest {}
-export class CancelOrderResponse extends BaseResult{}
+export class CancelOrderRequest {
+    orderID: string = "";
+}
+export class CancelOrderResponse extends BaseResult {}
 
 export interface IOrdersClient {
     createOrder(request: CreateOrderRequest): Promise<CreateOrderResponse>;
-    getOrders(request: GetOrdersRequest): Promise<GetOrdersResponse>;
+    getOrders(): Promise<GetOrdersResponse>;
+    getOrderDetails(
+        request: GetOrderDetailsRequest
+    ): Promise<GetOrderDetailsResponse>;
     cancelOrder(request: CancelOrderRequest): Promise<CancelOrderResponse>;
 }

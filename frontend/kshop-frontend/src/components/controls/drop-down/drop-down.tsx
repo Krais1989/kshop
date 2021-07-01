@@ -12,10 +12,10 @@ const DropDown: React.FunctionComponent<IDropDownProps> = (props) => {
 
     let [isShow, setIsShow] = useState(false);
 
-    let cssContent = `k-drop-down-content${isShow?"-show":""}`;
+    let cssContent = `ks-dropdown-content${isShow?"-show":""}`;
     return (
-        <div className={`k-drop-down ${props.className?props.className:""}`}>
-            <button className="k-drop-down-btn" onClick={()=>setIsShow(!isShow)} >{props.title}</button>
+        <div className={`ks-dropdown ${props.className?props.className:""}`}>
+            <button className="ks-dropdown-btn" onClick={()=>setIsShow(!isShow)} >{props.title}</button>
             <div className={cssContent}>
                 {props.children}
             </div>

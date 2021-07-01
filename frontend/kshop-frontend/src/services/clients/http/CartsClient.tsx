@@ -1,6 +1,5 @@
 import { AppServices } from "components/app/app-services";
 import { AppSettings } from "components/app/app-settings";
-import { useAuth } from "components/contexts/AuthContext";
 import {
     ICartsClient,
     GetCartResponse,

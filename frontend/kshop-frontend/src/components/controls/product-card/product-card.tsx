@@ -4,15 +4,12 @@ import nophoto from "./nophoto.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCartArrowDown,
-    faHeart,
     faHeartBroken,
-    faShareSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import DropDown from "components/controls/drop-down/drop-down";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Money } from "models/Money";
-import RedirectService from "services/RedirectService";
 import { useCart } from "components/contexts/CartContext";
 
 export interface IProductCardProps {

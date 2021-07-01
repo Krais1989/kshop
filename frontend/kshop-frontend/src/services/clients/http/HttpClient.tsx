@@ -1,9 +1,4 @@
-import { AppServices } from "components/app/app-services";
-import { AppSettings, useAppSettings } from "components/app/app-settings";
-import { error } from "console";
 import { toast } from "react-toastify";
-import { AuthService } from "services/AuthService";
-import RedirectService from "services/RedirectService";
 import { BaseResult } from "../../BaseResult";
 
 export class HttpClient {

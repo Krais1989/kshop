@@ -3,9 +3,6 @@ import "styles/base-page.sass";
 
 import * as React from "react";
 import WAllProductsList from "components/widgets/w-all-products-list/w-all-products-list";
-import { AppSettings, useAppSettings } from "components/app/app-settings";
-import { AppServices } from "components/app/app-services";
-import RedirectService from "services/RedirectService";
 import { useAuth } from "components/contexts/AuthContext";
 
 interface IHomePageProps {}

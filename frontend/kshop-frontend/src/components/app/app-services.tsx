@@ -1,4 +1,3 @@
-import { AuthData } from "components/contexts/AuthContext";
 import { AuthService, IAuthService } from "services/AuthService";
 import { ICartsClient } from "services/clients/abstractions/ICartsClient";
 import { IIdentityClient } from "services/clients/abstractions/IIdentityClient";

@@ -6,14 +6,9 @@ import {
     faBox,
     faHeart,
     faShoppingCart,
-    faSignInAlt,
     faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import WLoginPanel from "components/widgets/w-login-panel/w-login-panel";
-import { useState } from "react";
-import { AppServices } from "components/app/app-services";
-import { toast } from "react-toastify";
-import { AppSettingsContext } from "components/app/app-settings";
 import { useAuth } from "components/contexts/AuthContext";
 
 interface INavbarProps {}
@@ -34,7 +29,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                 <FontAwesomeIcon icon={faUserCircle} />
                 &nbsp;Account{" "}
             </Link>
-            <Link to="/orders">
+            <Link to="/my-orders">
                 {" "}
                 <FontAwesomeIcon icon={faBox} />
                 &nbsp;Orders{" "}

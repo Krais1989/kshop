@@ -1,15 +1,9 @@
 import "./w-login-panel.sass";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { AppServices } from "components/app/app-services";
 import { AuthData, useAuth } from "components/contexts/AuthContext";
-import {
-    SignInRequest,
-    SignInResponse,
-} from "services/clients/abstractions/IIdentityClient";
-import { AppSettings } from "components/app/app-settings";
-import { AuthService } from "services/AuthService";
 
 interface IWLoginPanelProps {}
 

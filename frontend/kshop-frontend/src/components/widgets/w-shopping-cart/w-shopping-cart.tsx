@@ -1,19 +1,32 @@
-import { ProductShort } from "models/ProductShort";
 import * as React from "react";
-import { toast } from "react-toastify";
-import { useAuth } from "components/contexts/AuthContext";
 import "./w-shopping-cart.sass";
 import { useCart } from "components/contexts/CartContext";
-import { Cart, CartPosition } from "models/Cart";
+import { useRedirect } from "components/contexts/RedirectContext";
 
 interface IWShoppingCartProps {}
 
 const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
-    const { cart, setCart, removeFromCart, setQuantity, setChecked } =
-        useCart();
+    const {
+        cart,
+        setCart,
+        removeFromCart,
+        setQuantity,
+        setChecked,
+        clearCart,
+    } = useCart();
+
+    const redirect = useRedirect();
 
     const removePosition = (ids: Array<number>) => {
         removeFromCart(ids);
+    };
+
+    const submit = () => {
+        redirect.toOrdering();
+    };
+
+    const clear = () => {
+        clearCart();
     };
 
     // const setQuantity = (pos: CartPosition, quantity: number) => {
@@ -110,6 +123,9 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
 
     return (
         <div className="kshop-w-shopping-cart">
+            <div>
+                <button onClick={(e) => clear()}>Clear</button>
+            </div>
             <div className="kshop-w-shopping-cart-positions">
                 {jsxPositions}
             </div>
@@ -117,7 +133,9 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
                 <div className="kshop-w-shopping-cart-actions-priceinfo">
                     Price: 3334 &#8381;
                 </div>
-                <button className="kshop-button">Submit Order</button>
+                <button className="kshop-button" onClick={() => submit()}>
+                    Submit Order
+                </button>
             </div>
         </div>
     );

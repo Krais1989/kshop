@@ -1,24 +1,33 @@
 import { ProductDetails } from "models/ProductDetails";
-import { ProductShort } from "models/ProductShort";
+import { ProductPresentation } from "models/ProductPresentation";
 import { BaseResult } from "../../BaseResult";
 
 
 export class GetProductsForHomeRequest {
-    page!: number;
+    pageIndex: number = 0;
 }
 export class GetProductsForHomeResponse extends BaseResult {
-    data: Array<ProductShort> = [];
+    data: Array<ProductPresentation> = [];
 }
 
 export class GetProductDetailsRequest {
-    productID!:number;
+    productID:Array<number> = [];
 }
 export class GetProductDetailsResponse extends BaseResult {
-    data!: ProductDetails;
+    data: Array<ProductDetails> = [];
 }
+
+export class GetProductsForOrderRequest {
+    productIDs:Array<number> = [];
+}
+export class GetProductsForOrderResponse extends BaseResult {
+    data: Array<ProductPresentation> = [];
+}
+
 
 
 export interface IProductsClient {
     getProductsForHome(data: GetProductsForHomeRequest): Promise<GetProductsForHomeResponse>;
-    getProductDetails(request: GetProductDetailsRequest): Promise<GetProductDetailsResponse>;
+    getProductsForOrder(data: GetProductsForOrderRequest): Promise<GetProductsForOrderResponse>;
+    getProductsDetails(request: GetProductDetailsRequest): Promise<GetProductDetailsResponse>;
 }

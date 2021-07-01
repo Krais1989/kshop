@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./app.sass";
 
 import "styles/button.sass";
@@ -18,68 +18,81 @@ import AppContent from "./app-content/app-content";
 import AppFooter from "./app-footer/app-footer";
 import AppHeader from "./app-header/app-header";
 import ProductDetailsPage from "../pages/product-details-page/product-details-page";
-import OrdersPage from "../pages/orders-page/orders-page";
+import MyOrdersPage from "../pages/my-orders-page/my-orders-page";
 import AccountPage from "components/pages/account-page/account-page";
 import FavoritesPage from "components/pages/favorites-page/favorites-page";
 import ShoppingCartPage from "components/pages/shopping-cart-page/shopping-cart-page";
 import { AuthProvider } from "components/contexts/AuthContext";
 import { CartProvider } from "components/contexts/CartContext";
+import OrderingPage from "components/pages/ordering-page/ordering-page";
+import { RedirectProvider } from "components/contexts/RedirectContext";
 
 const App: React.FC = () => {
     return (
-        <AuthProvider>
-            <CartProvider>
-                <div className="kshop-app">
+        <div className="kshop-app">
+            <AuthProvider>
+                <CartProvider>
                     <Router>
-                        <AppHeader />
-                        <Navbar />
-                        <AppContent>
-                            <Switch>
-                                <Route exact path="/" component={HomePage} />
-                                <Route
-                                    exact
-                                    path="/catalog"
-                                    component={CatalogPage}
-                                />
-                                <Route
-                                    exact
-                                    path="/catalog/group/:id"
-                                    component={CatalogPage}
-                                />
-                                <Route
-                                    exact
-                                    path="/catalog/products/:id"
-                                    component={ProductDetailsPage}
-                                />
+                        <RedirectProvider>
+                            <AppHeader />
+                            <Navbar />
+                            <AppContent>
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path="/"
+                                        component={HomePage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/catalog"
+                                        component={CatalogPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/catalog/group/:id"
+                                        component={CatalogPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/catalog/products/:id"
+                                        component={ProductDetailsPage}
+                                    />
 
-                                <Route
-                                    exact
-                                    path="/account"
-                                    component={AccountPage}
-                                />
-                                <Route
-                                    exact
-                                    path="/orders"
-                                    component={OrdersPage}
-                                />
-                                <Route
-                                    exact
-                                    path="/favorites"
-                                    component={FavoritesPage}
-                                />
-                                <Route
-                                    exact
-                                    path="/cart"
-                                    component={ShoppingCartPage}
-                                />
-                                <Redirect to="/" />
-                            </Switch>
-                        </AppContent>
-                        <AppFooter />
+                                    <Route
+                                        exact
+                                        path="/account"
+                                        component={AccountPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/my-orders"
+                                        component={MyOrdersPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/ordering"
+                                        component={OrderingPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/favorites"
+                                        component={FavoritesPage}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/cart"
+                                        component={ShoppingCartPage}
+                                    />
+                                    <Redirect to="/" />
+                                </Switch>
+                            </AppContent>
+                            <AppFooter />
+                        </RedirectProvider>
                     </Router>
-                </div>
-            </CartProvider>
-        </AuthProvider>
+                </CartProvider>
+            </AuthProvider>
+        </div>
     );
 };
 

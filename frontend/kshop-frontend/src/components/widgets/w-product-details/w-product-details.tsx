@@ -1,5 +1,7 @@
 import { AppServices } from "components/app/app-services";
-import { ProductDetails, ProductAttribute } from "models/ProductDetails";
+import { useCart } from "components/contexts/CartContext";
+import { Money } from "models/Money";
+import { ProductDetails } from "models/ProductDetails";
 import * as React from "react";
 
 import "./w-product-details.sass";
@@ -13,7 +15,8 @@ interface IWProductDetailsProps {
 const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
     props
 ) => {
-    const [details, setDetails] = React.useState<ProductDetails>(new ProductDetails());
+    const [details, setDetails] = React.useState<ProductDetails | null>(null);
+    const { getQuantity, addToCart } = useCart();
 
     const { productID: productID } = props;
 
@@ -32,17 +35,18 @@ const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
         //     new ProductAttribute("Цена", `${details.price} руб.`),
         // ];
 
-        AppServices.Clients.Products.getProductDetails({
-            productID: productID,
+        AppServices.Clients.Products.getProductsDetails({
+            productID: [productID],
         }).then((r) => {
             if (!r.ErrorMessage) {
-                setDetails(r.data);
+                const d = r.data.length > 0 ? r.data[0] : null;
+                setDetails(d);
             } else {
             }
         });
     }, [productID]);
 
-    if (!details || Object.keys(details).length === 0) {
+    if (details === null) {
         return <h2>Product not found</h2>;
     }
 
@@ -63,18 +67,43 @@ const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
                     {details.title} #{details.id}
                 </span>
             </div>
-            <div className="kshop-w-product-details-topbar">Topbar</div>
+            <div className="kshop-w-product-details-topbar"></div>
 
             <div className="kshop-w-product-details-flex">
                 <div className="kshop-w-product-details-galery">
-                    <img src="https://www.regard.ru/photo/goods/363952.png" />
+                    <img
+                        alt={details.title}
+                        src={
+                            details.image ??
+                            "https://www.regard.ru/photo/goods/363952.png"
+                        }
+                    />
                     {/* {product_details.image ?? "No Image"} */}
                 </div>
                 <div className="kshop-w-product-details-price">
                     <span className="kshop-w-product-details-price-original">
                         {details.price?.price} {details.price?.currency};
                     </span>
-                    <button className="kshop-button-blue">Add to cart</button>
+                    {getQuantity(details.id) === 0 ? (
+                        <button
+                            onClick={(e) =>
+                                addToCart([
+                                    {
+                                        productID: details.id,
+                                        quantity: 1,
+                                        title: details.title,
+                                        checked: false,
+                                        price: details.price,
+                                    },
+                                ])
+                            }
+                            className="kshop-button-blue"
+                        >
+                            Add to cart
+                        </button>
+                    ) : (
+                        <h2>In cart</h2>
+                    )}
                 </div>
                 <div className="kshop-w-product-details-info">
                     <div className="kshop-w-product-details-info-attributes">

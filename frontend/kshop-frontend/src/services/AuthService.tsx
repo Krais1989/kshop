@@ -1,5 +1,4 @@
 import { AuthData } from "components/contexts/AuthContext";
-import RedirectService from "./RedirectService";
 
 /* Использовать вне React-компонентов, для чтения */
 export interface IAuthService {
