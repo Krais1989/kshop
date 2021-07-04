@@ -2,7 +2,7 @@ import * as React from 'react';
 import "./shopping-cart-page.sass";
 import "styles/base-page.sass";
 import WShoppingCart from 'components/widgets/w-shopping-cart/w-shopping-cart';
-import { AppSettingsContext } from 'components/app/app-settings';
+import { AppSettingsContext } from 'components/app/AppSettings';
 
 interface IShoppingCartPageProps { }
 

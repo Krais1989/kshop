@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
+using System.Linq;
 
 namespace KShop.Identities.Persistence
 {
@@ -29,11 +30,7 @@ namespace KShop.Identities.Persistence
 
         public IdentityContext(DbContextOptions options) : base(options)
         {
-            //Database.EnsureDeleted();
-            //if (!Database.EnsureCreated())
-            //    Database.Migrate();
-
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -105,6 +102,8 @@ namespace KShop.Identities.Persistence
                 e.ToTable("AspNetUserRoles");
                 e.HasKey(ur => new { ur.UserId, ur.RoleId });
             });
+
+            builder.SeedData();
         }
     }
 }

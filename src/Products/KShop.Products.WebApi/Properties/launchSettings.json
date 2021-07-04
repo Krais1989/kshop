@@ -4,9 +4,9 @@
     "CatalogueApi": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://127.0.0.1:5021;http://127.0.0.1:5020",
+      "applicationUrl": "https://127.0.0.1:54021;http://127.0.0.1:54020",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

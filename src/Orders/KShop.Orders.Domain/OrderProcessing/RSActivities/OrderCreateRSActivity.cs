@@ -19,7 +19,7 @@ namespace KShop.Orders.Domain
     {
         public Guid? OrderID { get; set; }
         public uint CustomerID { get; set; }
-        public OrderPositionsMap OrderPositions { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
     }
 
     public class OrderCreateRSActivity
@@ -50,7 +50,7 @@ namespace KShop.Orders.Domain
                 {
                     OrderID = context.Arguments.OrderID,
                     CustomerID = context.Arguments.CustomerID,
-                    Positions = context.Arguments.OrderPositions
+                    OrderContent = context.Arguments.OrderContent
                 });
 
             if (response.Message.IsSuccess)
@@ -69,11 +69,18 @@ namespace KShop.Orders.Domain
 
         public async Task<CompensationResult> Compensate(CompensateContext<OrderCreateRSActivityLog> context)
         {
-            var response = await _clCancel.GetResponse<OrderSetStatusSvcResponse>(new OrderSetStatusCancelledSvcRequest(context.Log.OrderID.Value));
-
-            if (response.Message.IsSuccess)
+            try
             {
+                var response = await _clCancel.GetResponse<OrderSetStatusSvcResponse>(new OrderSetStatusCancelledSvcRequest(context.Log.OrderID.Value));
 
+                if (response.Message.IsSuccess)
+                {
+
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message, e);
             }
 
             return context.Compensated();

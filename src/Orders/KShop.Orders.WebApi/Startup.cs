@@ -4,6 +4,7 @@ using KShop.Orders.Persistence;
 using KShop.Shared.Authentication;
 using KShop.Shared.Integration.Contracts;
 using KShop.Shared.Integration.MassTransit;
+using KShop.Shared.Persistence.Services;
 using KShop.Shared.WebApi;
 using MassTransit;
 using MediatR;
@@ -61,7 +62,7 @@ namespace KShop.Orders.WebApi
                 busServices =>
                 {
                     busServices.AddRequestClient<OrderGetStatusSagaRequest>();
-                    busServices.AddRequestClient<OrderPlacingSagaRequest>();
+                    busServices.AddRequestClient<OrderSubmitSagaRequest>();
                     busServices.AddRequestClient<OrderCreateSvcRequest>();
 
                     busServices.AddRequestClient<OrderSetStatusCancelledSvcRequest>();
@@ -89,6 +90,7 @@ namespace KShop.Orders.WebApi
 
             services.AddControllers()
                 .AddMetrics()
+                .AddEnumNameConverter()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
         }
 
@@ -104,14 +106,16 @@ namespace KShop.Orders.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            //app.UseHttpsRedirection();
+
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
+
             app.UseRouting();
-            app.AddKShopCors(Configuration);
+            app.UseKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

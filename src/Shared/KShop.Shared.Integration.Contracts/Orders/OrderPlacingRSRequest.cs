@@ -12,7 +12,7 @@ namespace KShop.Shared.Integration.Contracts
     {
         public Guid OrderID { get; set; }
         public uint CustomerID { get; set; }
-        public OrderPositionsMap OrderPositions { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
         public Money Price { get; set; }
     }

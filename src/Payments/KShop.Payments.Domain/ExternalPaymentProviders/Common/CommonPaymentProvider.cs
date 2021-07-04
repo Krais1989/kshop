@@ -27,7 +27,6 @@ namespace KShop.Payments.Domain
             switch (request.Provider)
             {
                 case EPaymentProvider.None:
-                    break;
                 case EPaymentProvider.Mock:
                     var mockResult = await _mockPaymentProvider.CreateAsync(
                         new MockExternalPaymentCreateRequest
@@ -71,7 +70,6 @@ namespace KShop.Payments.Domain
             switch (request.Provider)
             {
                 case EPaymentProvider.None:
-                    break;
                 case EPaymentProvider.Mock:
                     var mockResult = await _mockPaymentProvider.GetStatusAsync(
                         new MockExternalPaymentGetStatusRequest

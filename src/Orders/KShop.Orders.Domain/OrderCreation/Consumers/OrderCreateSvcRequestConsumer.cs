@@ -30,7 +30,7 @@ namespace KShop.Orders.Domain
                 {
                     OrderID = context.Message.OrderID,
                     CustomerID = context.Message.CustomerID,
-                    Positions = context.Message.Positions
+                    OrderContent = context.Message.OrderContent
                 };
 
                 var res = await _mediator.Send(createOrder);

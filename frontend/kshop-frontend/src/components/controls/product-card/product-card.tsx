@@ -10,7 +10,7 @@ import DropDown from "components/controls/drop-down/drop-down";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Money } from "models/Money";
-import { useCart } from "components/contexts/CartContext";
+import { useCart } from "components/providers/CartProvider";
 
 export interface IProductCardProps {
     id: number;
@@ -38,8 +38,9 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
                 quantity: 1,
                 title: props.title,
                 description: props.description,
-                checked: false,
+                checked: true,
                 price: props.price,
+                image: props.image
             },
         ]);
     };

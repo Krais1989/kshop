@@ -10,15 +10,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using KShop.Shared.Domain.Contracts;
+using KShop.Shared.Integration.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace KShop.Products.Domain
 {
 
     public class ProductsReserveMediatorResponse : BaseResponse
     {
-        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData)
+        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData, Money price)
         {
             ReservationData = reservationData;
+            OrderPrice = price;
         }
 
         public ProductsReserveMediatorResponse(string errorMessage)
@@ -30,6 +33,7 @@ namespace KShop.Products.Domain
         /// Данные в формате <id_продукта, id_резерва>
         /// </summary>
         public ProductsReserveMap ReservationData { get; private set; }
+        public Money OrderPrice { get; set; }
     }
     /// <summary>
     /// Запрос на резервацию заказа
@@ -38,7 +42,7 @@ namespace KShop.Products.Domain
     {
         public Guid OrderID { get; set; }
         public uint CustomerID { get; set; }
-        public OrderPositionsMap OrderPositions { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
     }
     public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>
     {
@@ -62,12 +66,12 @@ namespace KShop.Products.Domain
             var validatorDto = new ProductsReserveFluentValidatorDto() { };
             _validator.Validate(validatorDto);
 
-            var reserves = request.OrderPositions.Keys.Select(
-                prodId => new ProductReserve()
+            var reserves = request.OrderContent.Select(
+                e => new ProductReserve()
                 {
                     OrderID = request.OrderID,
-                    ProductID = prodId,
-                    Quantity = request.OrderPositions[prodId],
+                    ProductID = e.ProductID,
+                    Quantity = e.Quantity,
                     CreateDate = DateTime.UtcNow,
                     Status = ProductReserve.EStatus.Pending,
                     CustomerID = request.CustomerID
@@ -76,9 +80,18 @@ namespace KShop.Products.Domain
             await _context.AddRangeAsync(reserves);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));
 
-            return new ProductsReserveMediatorResponse(reservationData);
+            var order_content_map = reserves.ToDictionary(e => e.ProductID, e => e.Quantity);
+            var product_price_map = (await _context.Products.Where(e => order_content_map.Keys.Contains(e.ID))
+                .Select(e => new { e.ID, e.Price, e.Discount })
+                .ToListAsync()).ToDictionary(e => e.ID, e => e.Price * e.Discount / 100m);
+
+            var order_price = order_content_map.Aggregate(
+                new Money(0, product_price_map.Values.First().Currency),
+                (acc, cur) => acc + (cur.Value * product_price_map[cur.Key].Price));
+
+            var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));
+            return new ProductsReserveMediatorResponse(reservationData, order_price);
         }
     }
 }

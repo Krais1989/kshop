@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Payments.Persistence
+namespace KShop.Payments.Persistence.Migrations
 {
     [DbContext(typeof(PaymentsContext))]
     partial class PaymentsContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace KShop.Payments.Persistence
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.6");
 
-            modelBuilder.Entity("KShop.Payments.Persistence.Entities.Payment", b =>
+            modelBuilder.Entity("KShop.Payments.Persistence.Payment", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -46,11 +46,11 @@ namespace KShop.Payments.Persistence
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("KShop.Payments.Persistence.Entities.PaymentLog", b =>
+            modelBuilder.Entity("KShop.Payments.Persistence.PaymentLog", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int unsigned");
 
                     b.Property<string>("Message")
                         .HasColumnType("longtext");
@@ -71,9 +71,9 @@ namespace KShop.Payments.Persistence
                     b.ToTable("PaymentLogs");
                 });
 
-            modelBuilder.Entity("KShop.Payments.Persistence.Entities.Payment", b =>
+            modelBuilder.Entity("KShop.Payments.Persistence.Payment", b =>
                 {
-                    b.OwnsOne("KShop.Communications.Contracts.ValueObjects.Money", "Money", b1 =>
+                    b.OwnsOne("KShop.Shared.Domain.Contracts.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("PaymentID")
                                 .HasColumnType("char(36)");
@@ -98,12 +98,12 @@ namespace KShop.Payments.Persistence
                                 .HasForeignKey("PaymentID");
                         });
 
-                    b.Navigation("Money");
+                    b.Navigation("Price");
                 });
 
-            modelBuilder.Entity("KShop.Payments.Persistence.Entities.PaymentLog", b =>
+            modelBuilder.Entity("KShop.Payments.Persistence.PaymentLog", b =>
                 {
-                    b.HasOne("KShop.Payments.Persistence.Entities.Payment", "Payment")
+                    b.HasOne("KShop.Payments.Persistence.Payment", "Payment")
                         .WithMany("Logs")
                         .HasForeignKey("PaymentID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -112,7 +112,7 @@ namespace KShop.Payments.Persistence
                     b.Navigation("Payment");
                 });
 
-            modelBuilder.Entity("KShop.Payments.Persistence.Entities.Payment", b =>
+            modelBuilder.Entity("KShop.Payments.Persistence.Payment", b =>
                 {
                     b.Navigation("Logs");
                 });

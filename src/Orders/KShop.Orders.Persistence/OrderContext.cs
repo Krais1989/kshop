@@ -34,6 +34,9 @@ namespace KShop.Orders.Persistence
 
         public OrderContext(DbContextOptions<OrderContext> options) : base(options)
         {
+            Database.EnsureCreated();
+            //if (Database.GetPendingMigrations().Any())
+            //    Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Orders.Persistence
+namespace KShop.Orders.Persistence.Migrations
 {
     [DbContext(typeof(OrderContext))]
     partial class OrderContextModelSnapshot : ModelSnapshot
@@ -15,9 +15,9 @@ namespace KShop.Orders.Persistence
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.Order", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.Order", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -26,8 +26,8 @@ namespace KShop.Orders.Persistence
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
+                    b.Property<uint>("CustomerID")
+                        .HasColumnType("int unsigned");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint unsigned");
@@ -40,11 +40,11 @@ namespace KShop.Orders.Persistence
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.OrderLog", b =>
                 {
                     b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned");
+                        .HasColumnType("int unsigned");
 
                     b.Property<string>("Message")
                         .HasColumnType("longtext");
@@ -65,17 +65,17 @@ namespace KShop.Orders.Persistence
                     b.ToTable("OrderLog");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.OrderPosition", b =>
                 {
                     b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned");
+                        .HasColumnType("int unsigned");
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("char(36)");
 
                     b.Property<uint>("ProductID")
-                        .HasColumnType("bigint unsigned");
+                        .HasColumnType("int unsigned");
 
                     b.Property<uint>("Quantity")
                         .HasColumnType("int unsigned");
@@ -87,9 +87,39 @@ namespace KShop.Orders.Persistence
                     b.ToTable("OrderPositions");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderLog", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.Order", b =>
                 {
-                    b.HasOne("KShop.Orders.Persistence.Entities.Order", "Order")
+                    b.OwnsOne("KShop.Shared.Domain.Contracts.Money", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("OrderID")
+                                .HasColumnType("char(36)");
+
+                            b1.Property<string>("Currency")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("longtext")
+                                .HasDefaultValue("RUB")
+                                .HasColumnName("Currency");
+
+                            b1.Property<decimal>("Price")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("decimal(65,30)")
+                                .HasDefaultValue(0m)
+                                .HasColumnName("Price");
+
+                            b1.HasKey("OrderID");
+
+                            b1.ToTable("Orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderID");
+                        });
+
+                    b.Navigation("Price");
+                });
+
+            modelBuilder.Entity("KShop.Orders.Persistence.OrderLog", b =>
+                {
+                    b.HasOne("KShop.Orders.Persistence.Order", "Order")
                         .WithMany("Logs")
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -98,9 +128,9 @@ namespace KShop.Orders.Persistence
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.OrderPosition", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.OrderPosition", b =>
                 {
-                    b.HasOne("KShop.Orders.Persistence.Entities.Order", "Order")
+                    b.HasOne("KShop.Orders.Persistence.Order", "Order")
                         .WithMany("Positions")
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -109,7 +139,7 @@ namespace KShop.Orders.Persistence
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("KShop.Orders.Persistence.Entities.Order", b =>
+            modelBuilder.Entity("KShop.Orders.Persistence.Order", b =>
                 {
                     b.Navigation("Logs");
 

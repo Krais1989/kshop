@@ -15,7 +15,16 @@ namespace KShop.Shipments.WebApi
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                var host = CreateHostBuilder(args).Build();
+                host.Run();
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, "");
+                throw;
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

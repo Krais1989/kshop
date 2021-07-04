@@ -1,87 +1,107 @@
-import { AppServices } from "components/app/app-services";
-import { useCart } from "components/contexts/CartContext";
-import { useRedirect } from "components/contexts/RedirectContext";
-import { ProductQuantity } from "models/ProductQuantity";
+import Select, { SelectOption } from "components/controls/select/select";
+import { useCart } from "components/providers/CartProvider";
+import { useRedirect } from "components/providers/RedirectProvider";
 import * as React from "react";
 import { useState } from "react";
-import { CreateOrderRequest } from "services/clients/abstractions/IOrdersClient";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { OrdersClient } from "services/clients/OrdersClient";
 import "./w-ordering-dialog.sass";
 
 interface IWOrderingDialogProps {}
 
-const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (
-    props
-) => {
-    const cart = useCart();
+const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) => {
+    const { cart, removeFromCart } = useCart();
     const redirect = useRedirect();
     const [isLoad, setIsLoad] = useState(false);
-    const [data, setData] = useState<CreateOrderRequest>({
-        address: "",
-        paymentProvider: 0,
-        shippingMethod: 0,
-        orderContent: cart.cart.positions.map(
-            (e, i) => new ProductQuantity(e.productID, e.quantity)
-        ), // [{ productID: 3, quantity: 1 }],
-    });
+    // const [data, setData] = useState<CreateOrderRequest>({
+    //     address: "",
+    //     paymentProvider: 0,
+    //     shippingMethod: 0,
+    //     orderContent: cartData.cart.positions.map(
+    //         (e, i) => new ProductQuantity(e.productID, e.quantity)
+    //     ), // [{ productID: 3, quantity: 1 }],
+    // });
 
-    const jsxProducts = cart.cart.positions.map((e, i) => (
-        <img
-            key={e.productID}
-            alt={e.title}
-            onClick={() => redirect.toProductDetails(e.productID)}
-            src={e.image}
-        />
-    ));
+    const [payment, setPayment] = useState("0");
+    const [shipment, setShipment] = useState("0");
+    const [address, setAddress] = useState("");
+
+    const jsxProducts = cart.positions
+        .filter((e, i) => e.checked)
+        .map((e, i) => (
+            <Link to="/" key={e.productID}>
+                <img
+                    alt={e.title}
+                    onClick={() => redirect.toProductDetails(e.productID)}
+                    src={e.image}
+                />
+            </Link>
+        ));
 
     const submit = () => {
         if (isLoad) return;
-        AppServices.Clients.Orders.createOrder(data).then((r) => {
+        OrdersClient.createOrder({
+            address: address,
+            orderContent: cart.positions.filter((e, i) => e.checked),
+            paymentProvider: Number(payment),
+            shippingMethod: Number(shipment),
+        }).then((r) => {
+            removeFromCart(cart.positions.filter((e, i) => e.checked).map((e) => e.productID));
             setIsLoad(false);
             redirect.toMyOrders();
         });
         setIsLoad(true);
     };
 
+    const payment_opts: Array<SelectOption> = [
+        { value: "0", label: "Credit card" },
+        { value: "1", label: "Yoomoney" },
+    ];
+
+    const shipment_opts: Array<SelectOption> = [
+        { value: "0", label: "Delivery" },
+        { value: "1", label: "Pickup" },
+    ];
+
+    //const order_price = 111;
+
+    const base_price = cart.getCheckedPrice();
+    const products_price = base_price;
+    const shipment_price = 100;
+    const overall_price = base_price;
+
     return (
         <div className="ks-ordering">
             <div className="ks-ordering-info">
                 <div className="ks-ordering-info-panel">
-                    <span className="ks-ordering-info-panel-title">
-                        Payment method
-                    </span>
+                    <span className="ks-ordering-info-panel-title">Payment method</span>
                     <span>
-                        <select>
-                            <option value="">Credit card</option>
-                            <option value="">Yookass</option>
-                            <option value="">Qiwi</option>
-                        </select>
+                        <Select
+                            selected={payment}
+                            data={payment_opts}
+                            onChange={(e) => setPayment(e)}
+                        ></Select>
                     </span>
                 </div>
                 <div className="ks-ordering-info-panel">
-                    <span className="ks-ordering-info-panel-title">
-                        Receive method
-                    </span>
+                    <span className="ks-ordering-info-panel-title">Receive method</span>
                     <span>
-                        <select>
-                            <option value="">Pickup</option>
-                            <option value="">Delivery</option>
-                        </select>
+                        <Select
+                            selected={shipment}
+                            data={shipment_opts}
+                            onChange={(e) => setShipment(e)}
+                        ></Select>
                     </span>
                 </div>
                 <div className="ks-ordering-info-panel">
-                    <span className="ks-ordering-info-panel-title">
-                        Receiver info
-                    </span>
+                    <span className="ks-ordering-info-panel-title">Receiver info</span>
                     Address
-                    <textarea />
+                    <textarea onChange={(e) => setAddress(e.target.value)} value={address} />
                 </div>
                 <div className="ks-ordering-info-panel">
-                    <span className="ks-ordering-info-panel-title">
-                        Products
-                    </span>
-                    <div className="ks-ordering-info-panel-products">
-                        {jsxProducts}
-                    </div>
+                    <span className="ks-ordering-info-panel-title">Products</span>
+                    <div className="ks-ordering-info-panel-products">{jsxProducts}</div>
                 </div>
             </div>
 
@@ -94,18 +114,18 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (
                     Submit
                 </button>
                 <div className="ks-ordering-сtrl-element">
-                    <span>Price</span> <span>1000</span>
+                    <span>Price</span> <span>{base_price}</span>
                 </div>
                 <div className="ks-ordering-сtrl-element">
-                    <span>Products</span> <span>1000</span>
-                </div>
-
-                <div className="ks-ordering-сtrl-element">
-                    <span>Shipment</span> <span>1000</span>
+                    <span>Products</span> <span>{products_price}</span>
                 </div>
 
                 <div className="ks-ordering-сtrl-element">
-                    <span>Overall</span> <span>1000</span>
+                    <span>Shipment</span> <span>{shipment_price}</span>
+                </div>
+
+                <div className="ks-ordering-сtrl-element">
+                    <span>Overall</span> <span>{overall_price}</span>
                 </div>
             </div>
         </div>

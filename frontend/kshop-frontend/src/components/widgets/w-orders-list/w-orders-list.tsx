@@ -1,8 +1,10 @@
-import { AppServices } from "components/app/app-services";
+import { useAuth } from "components/providers/AuthProvider";
 import { Money } from "models/Money";
 import { OrderDetails, OrderLog, OrderPosition } from "models/Orders";
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { OrdersClient } from "services/clients/OrdersClient";
+import { ProductsClient } from "services/clients/ProductsClient";
 import "./w-orders-list.sass";
 
 interface IWOrdersListProps {}
@@ -48,6 +50,7 @@ class OrderDetailsView {
 
 const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
     const [data, setData] = React.useState<OrderDetailsView[]>([]);
+    const { auth } = useAuth();
 
     React.useEffect(() => {
         // const genPositions = (count: number, offset: number = 0) =>
@@ -79,10 +82,13 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
         //     );
 
         async function Prepare() {
-            const orders = (await AppServices.Clients.Orders.getOrders()).orders;
-            const prod_ids = orders.flatMap((e) => e.positions.map((p) => p.productID));
+            const orders = (await OrdersClient.getOrders()).orders;
+            if (orders.length === 0) return;
+
+            const orders_prods_ids = orders.flatMap((e) => e.positions.map((p) => p.productID));
+            const prod_ids = [...new Set(orders_prods_ids)];
             const products = (
-                await AppServices.Clients.Products.getProductsForOrder({
+                await ProductsClient.getProductsForOrder({
                     productIDs: prod_ids,
                 })
             ).data;
@@ -109,7 +115,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
             setData(views);
         }
         Prepare();
-    }, []);
+    }, [auth]);
 
     if (data.length === 0) return <h2>No orders</h2>;
 
@@ -143,7 +149,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
             <div key={orderDet.id} className="kshop-w-orders-list-row">
                 <div className="kshop-w-orders-list-row-header">
                     <div className="kshop-w-orders-list-row-header-date">{orderDet.createDate}</div>
-                    <div className="kshop-w-orders-list-row-header-price">Price {order_price}</div>
+                    <div className="kshop-w-orders-list-row-header-price">Price {orderDet.price.price}</div>
                 </div>
                 <div className="kshop-w-orders-list-row-body">
                     <div className="kshop-w-orders-list-row-body-history">

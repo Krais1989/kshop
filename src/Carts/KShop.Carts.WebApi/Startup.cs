@@ -85,7 +85,7 @@ namespace KShop.Carts.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{EntryAssemblyName} v1");
             });
             app.UseRouting();
-            app.AddKShopCors(Configuration);
+            app.UseKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

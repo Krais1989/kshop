@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace KShop.Identities.Persistence
+namespace KShop.Identities.Persistence.Migrations
 {
     [DbContext(typeof(IdentityContext))]
     partial class IdentityContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace KShop.Identities.Persistence
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.Role", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.Role", b =>
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.RoleClaim", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.RoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.User", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.User", b =>
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,9 +132,151 @@ namespace KShop.Identities.Persistence
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dc617a37-1f7a-4779-b5de-8648715473c2",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 2u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2390b6ec-eec5-48cc-aa93-c6eb100499cf",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 3u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0738d785-076f-4586-8064-8d44bffae525",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 4u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c8e3fcd8-aed8-4712-809a-8e5831bac073",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 5u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "613aeb00-bebb-4aa0-af88-dc62935999af",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 6u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0b165973-90e4-4f72-afee-b5b540000e9d",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 7u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "89bf2d76-d0f0-4671-b932-508e8ccea2a4",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 8u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "17f81736-97c0-461a-a05c-528bc6990af1",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 9u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "209207a3-d82f-4d6d-b805-9558e3b58c94",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        },
+                        new
+                        {
+                            Id = 10u,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0638960e-85fe-43cf-95e7-87a8b5590f78",
+                            Email = "asd@asd.ru",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumber = "123123123",
+                            PhoneNumberConfirmed = false,
+                            Status = (sbyte)0,
+                            TwoFactorEnabled = false,
+                            UserName = "asd"
+                        });
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserClaim", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -155,7 +297,7 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserLogin", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(255)");
@@ -181,7 +323,7 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserRole", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserRole", b =>
                 {
                     b.Property<uint>("UserId")
                         .HasColumnType("int unsigned");
@@ -201,7 +343,7 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserToken", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserToken", b =>
                 {
                     b.Property<uint>("UserId")
                         .HasColumnType("int unsigned");
@@ -225,70 +367,70 @@ namespace KShop.Identities.Persistence
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.RoleClaim", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.RoleClaim", b =>
                 {
-                    b.HasOne("KShop.Identities.Persistence.Entities.Role", null)
+                    b.HasOne("KShop.Identities.Persistence.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserClaim", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserClaim", b =>
                 {
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany("UserClaims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserLogin", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserLogin", b =>
                 {
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany("UserLogins")
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserRole", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserRole", b =>
                 {
-                    b.HasOne("KShop.Identities.Persistence.Entities.Role", null)
+                    b.HasOne("KShop.Identities.Persistence.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.UserToken", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.UserToken", b =>
                 {
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KShop.Identities.Persistence.Entities.User", null)
+                    b.HasOne("KShop.Identities.Persistence.User", null)
                         .WithMany("UserTokens")
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("KShop.Identities.Persistence.Entities.User", b =>
+            modelBuilder.Entity("KShop.Identities.Persistence.User", b =>
                 {
                     b.Navigation("UserClaims");
 

@@ -47,7 +47,7 @@ namespace MarketCLI
                 var prod = new Product()
                 {
                     Title = $"Product",
-                    Money = new Money(100),
+                    Price = new Money(100),
                     Positions = new List<ProductPosition> { new ProductPosition() { Quantity = 100 } },
                     Category = new Category { Name = "Category #0" },
                     ProductAttributes = prodAttrs
@@ -55,7 +55,7 @@ namespace MarketCLI
                 await _dbContext.Products.AddAsync(prod, cancelToken);
 
                 var pos = string.Join(',', prod.Positions.Select(e => $"{e.ID} - {e.Quantity}").ToList());
-                _logger.LogInformation($"{prod.ID} {prod.Title} {prod.Money} Positions:({pos})");
+                _logger.LogInformation($"{prod.ID} {prod.Title} {prod.Price} Positions:({pos})");
             }
             await _dbContext.SaveChangesAsync(cancelToken);
 

@@ -15,7 +15,7 @@ namespace KShop.Products.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.7");
 
             modelBuilder.Entity("KShop.Products.Persistence.Attribute", b =>
                 {
@@ -29,6 +29,58 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Attributes");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1u,
+                            Title = "Attribute #1"
+                        },
+                        new
+                        {
+                            ID = 2u,
+                            Title = "Attribute #2"
+                        },
+                        new
+                        {
+                            ID = 3u,
+                            Title = "Attribute #3"
+                        },
+                        new
+                        {
+                            ID = 4u,
+                            Title = "Attribute #4"
+                        },
+                        new
+                        {
+                            ID = 5u,
+                            Title = "Attribute #5"
+                        },
+                        new
+                        {
+                            ID = 6u,
+                            Title = "Attribute #6"
+                        },
+                        new
+                        {
+                            ID = 7u,
+                            Title = "Attribute #7"
+                        },
+                        new
+                        {
+                            ID = 8u,
+                            Title = "Attribute #8"
+                        },
+                        new
+                        {
+                            ID = 9u,
+                            Title = "Attribute #9"
+                        },
+                        new
+                        {
+                            ID = 10u,
+                            Title = "Attribute #10"
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.Category", b =>
@@ -43,6 +95,58 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1u,
+                            Name = "Category #1"
+                        },
+                        new
+                        {
+                            ID = 2u,
+                            Name = "Category #2"
+                        },
+                        new
+                        {
+                            ID = 3u,
+                            Name = "Category #3"
+                        },
+                        new
+                        {
+                            ID = 4u,
+                            Name = "Category #4"
+                        },
+                        new
+                        {
+                            ID = 5u,
+                            Name = "Category #5"
+                        },
+                        new
+                        {
+                            ID = 6u,
+                            Name = "Category #6"
+                        },
+                        new
+                        {
+                            ID = 7u,
+                            Name = "Category #7"
+                        },
+                        new
+                        {
+                            ID = 8u,
+                            Name = "Category #8"
+                        },
+                        new
+                        {
+                            ID = 9u,
+                            Name = "Category #9"
+                        },
+                        new
+                        {
+                            ID = 10u,
+                            Name = "Category #10"
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.Product", b =>
@@ -57,6 +161,9 @@ namespace KShop.Products.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<uint>("Discount")
+                        .HasColumnType("int unsigned");
+
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
@@ -68,6 +175,206 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasIndex("CategoryID");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1u,
+                            CategoryID = 1u,
+                            Description = "Description of product 1",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 1"
+                        },
+                        new
+                        {
+                            ID = 2u,
+                            CategoryID = 2u,
+                            Description = "Description of product 2",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 2"
+                        },
+                        new
+                        {
+                            ID = 3u,
+                            CategoryID = 3u,
+                            Description = "Description of product 3",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 3"
+                        },
+                        new
+                        {
+                            ID = 4u,
+                            CategoryID = 4u,
+                            Description = "Description of product 4",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 4"
+                        },
+                        new
+                        {
+                            ID = 5u,
+                            CategoryID = 5u,
+                            Description = "Description of product 5",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 5"
+                        },
+                        new
+                        {
+                            ID = 6u,
+                            CategoryID = 6u,
+                            Description = "Description of product 6",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 6"
+                        },
+                        new
+                        {
+                            ID = 7u,
+                            CategoryID = 7u,
+                            Description = "Description of product 7",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 7"
+                        },
+                        new
+                        {
+                            ID = 8u,
+                            CategoryID = 8u,
+                            Description = "Description of product 8",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 8"
+                        },
+                        new
+                        {
+                            ID = 9u,
+                            CategoryID = 9u,
+                            Description = "Description of product 9",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 9"
+                        },
+                        new
+                        {
+                            ID = 10u,
+                            CategoryID = 10u,
+                            Description = "Description of product 10",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 10"
+                        },
+                        new
+                        {
+                            ID = 11u,
+                            CategoryID = 1u,
+                            Description = "Description of product 11",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 11"
+                        },
+                        new
+                        {
+                            ID = 12u,
+                            CategoryID = 2u,
+                            Description = "Description of product 12",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 12"
+                        },
+                        new
+                        {
+                            ID = 13u,
+                            CategoryID = 3u,
+                            Description = "Description of product 13",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 13"
+                        },
+                        new
+                        {
+                            ID = 14u,
+                            CategoryID = 4u,
+                            Description = "Description of product 14",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 14"
+                        },
+                        new
+                        {
+                            ID = 15u,
+                            CategoryID = 5u,
+                            Description = "Description of product 15",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 15"
+                        },
+                        new
+                        {
+                            ID = 16u,
+                            CategoryID = 6u,
+                            Description = "Description of product 16",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 16"
+                        },
+                        new
+                        {
+                            ID = 17u,
+                            CategoryID = 7u,
+                            Description = "Description of product 17",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 17"
+                        },
+                        new
+                        {
+                            ID = 18u,
+                            CategoryID = 8u,
+                            Description = "Description of product 18",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 18"
+                        },
+                        new
+                        {
+                            ID = 19u,
+                            CategoryID = 9u,
+                            Description = "Description of product 19",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 19"
+                        },
+                        new
+                        {
+                            ID = 20u,
+                            CategoryID = 10u,
+                            Description = "Description of product 20",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 20"
+                        },
+                        new
+                        {
+                            ID = 21u,
+                            CategoryID = 1u,
+                            Description = "Description of product 21",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 21"
+                        },
+                        new
+                        {
+                            ID = 22u,
+                            CategoryID = 2u,
+                            Description = "Description of product 22",
+                            Discount = 0u,
+                            Image = "https://cdn1.ozone.ru/multimedia/wc250/1022638096.jpg",
+                            Title = "Product 22"
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.ProductAttribute", b =>
@@ -86,6 +393,1328 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasIndex("AttributeID");
 
                     b.ToTable("ProductAttribute");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 1u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 2u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 3u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 4u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 5u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 6u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 7u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 8u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 9u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 10u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 11u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 12u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 13u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 14u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 15u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 16u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 17u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 18u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 19u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 20u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 21u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 1u,
+                            Value = "Value of attribute 1"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 2u,
+                            Value = "Value of attribute 2"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 3u,
+                            Value = "Value of attribute 3"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 4u,
+                            Value = "Value of attribute 4"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 5u,
+                            Value = "Value of attribute 5"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 6u,
+                            Value = "Value of attribute 6"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 7u,
+                            Value = "Value of attribute 7"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 8u,
+                            Value = "Value of attribute 8"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 9u,
+                            Value = "Value of attribute 9"
+                        },
+                        new
+                        {
+                            ProductID = 22u,
+                            AttributeID = 10u,
+                            Value = "Value of attribute 10"
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.ProductPosition", b =>
@@ -108,6 +1737,162 @@ namespace KShop.Products.Persistence.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("ProductPositions");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 397, DateTimeKind.Utc).AddTicks(4507),
+                            ProductID = 1u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 2u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(541),
+                            ProductID = 2u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 3u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(578),
+                            ProductID = 3u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 4u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(596),
+                            ProductID = 4u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 5u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(614),
+                            ProductID = 5u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 6u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(690),
+                            ProductID = 6u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 7u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(707),
+                            ProductID = 7u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 8u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(725),
+                            ProductID = 8u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 9u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(769),
+                            ProductID = 9u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 10u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(837),
+                            ProductID = 10u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 11u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(855),
+                            ProductID = 11u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 12u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(872),
+                            ProductID = 12u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 13u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(888),
+                            ProductID = 13u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 14u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(951),
+                            ProductID = 14u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 15u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(967),
+                            ProductID = 15u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 16u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(984),
+                            ProductID = 16u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 17u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1000),
+                            ProductID = 17u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 18u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1018),
+                            ProductID = 18u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 19u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1081),
+                            ProductID = 19u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 20u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1098),
+                            ProductID = 20u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 21u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1114),
+                            ProductID = 21u,
+                            Quantity = 100u
+                        },
+                        new
+                        {
+                            ID = 22u,
+                            CreateDate = new DateTime(2021, 6, 30, 15, 45, 8, 398, DateTimeKind.Utc).AddTicks(1130),
+                            ProductID = 22u,
+                            Quantity = 100u
+                        });
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.ProductReserve", b =>
@@ -152,7 +1937,7 @@ namespace KShop.Products.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("KShop.Shared.Domain.Contracts.Money", "Money", b1 =>
+                    b.OwnsOne("KShop.Shared.Domain.Contracts.Money", "Price", b1 =>
                         {
                             b1.Property<uint>("ProductID")
                                 .HasColumnType("int unsigned");
@@ -175,11 +1960,145 @@ namespace KShop.Products.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductID");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ProductID = 1u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 2u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 3u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 4u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 5u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 6u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 7u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 8u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 9u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 10u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 11u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 12u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 13u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 14u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 15u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 16u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 17u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 18u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 19u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 20u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 21u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                },
+                                new
+                                {
+                                    ProductID = 22u,
+                                    Currency = "RUB",
+                                    Price = 100m
+                                });
                         });
 
                     b.Navigation("Category");
 
-                    b.Navigation("Money");
+                    b.Navigation("Price");
                 });
 
             modelBuilder.Entity("KShop.Products.Persistence.ProductAttribute", b =>

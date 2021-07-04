@@ -15,6 +15,7 @@ namespace KShop.Carts.WebApi
     public class SetCartPositionsRequestDto
     {
         public List<CartPosition> Positions { get; set; }
+        public bool UseMerge { get; set; }
     }
 
     public class RemoveCartPositionsRequestDto
@@ -53,10 +54,12 @@ namespace KShop.Carts.WebApi
             var response = await _mediator.Send(new SetCartPositionsMediatorRequest()
             {
                 UserID = this.GetCurrentUserIDExcept(),
-                Positions = dto.Positions
+                Positions = dto.Positions,
+                UseMerge = dto.UseMerge
             });
             return Ok(response);
         }
+
 
         [HttpDelete("remove-positions")]
         public async Task<IActionResult> RemovePositions([FromBody] RemoveCartPositionsRequestDto dto)

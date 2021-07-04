@@ -23,8 +23,7 @@ namespace KShop.Orders.Domain
     {
         public Guid? OrderID { get; set; }
         public uint CustomerID { get; set; }
-        public OrderPositionsMap Positions { get; set; }
-
+        public List<ProductQuantity> OrderContent { get; set; }
     }
     public class OrderCreateMediatorHandler : IRequestHandler<OrderCreateMediatorRequest, OrderCreateMediatorResponse>
     {
@@ -54,7 +53,7 @@ namespace KShop.Orders.Domain
                 ID = request.OrderID ?? default,
                 CustomerID = request.CustomerID,
                 CreateDate = DateTime.UtcNow,
-                Positions = request.Positions?.Select(e => new OrderPosition() { ProductID = e.Key, Quantity = e.Value }).ToList(),
+                Positions = request.OrderContent?.Select(e => new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity}).ToList(),
                 Logs = new List<OrderLog>()
             };
             entity.SetStatus(EOrderStatus.Initialized);

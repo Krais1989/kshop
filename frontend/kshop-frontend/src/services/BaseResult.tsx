@@ -1,12 +1,6 @@
-
 export class BaseResult {
-    ErrorMessage: string | undefined;
-    // public IsSuccess(): boolean {
-    //     return this.ErrorMessage === undefined || this.ErrorMessage === null || this.ErrorMessage === "";
-    // }
-    constructor(errorMessage: string | undefined = undefined) {
-        this.ErrorMessage = errorMessage;
-    }
+    readonly errorMessage: string | undefined = undefined;
+    readonly isSuccess: boolean = true;
 }
 
 // export class Result<T> {

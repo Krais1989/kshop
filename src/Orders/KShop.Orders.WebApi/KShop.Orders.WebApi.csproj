@@ -17,10 +17,11 @@
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.6" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.7" NoWarn="NU1605" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Persistence.Services\KShop.Shared.Persistence.Services.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Shared.WebApi\KShop.Shared.WebApi.csproj" />
     <ProjectReference Include="..\KShop.Orders.Domain\KShop.Orders.Domain.csproj" />
   </ItemGroup>

@@ -35,29 +35,28 @@ namespace KShop.Products.WebApi
             _mediator = mediator;
         }
 
-        [HttpGet("home/{page:int}")]
-        public async ValueTask<IActionResult> GetProductsForHomePage(int page)
+        [HttpGet("for-home")]
+        public async ValueTask<IActionResult> GetProductsForHomePage([FromQuery] GetProductsForHomeMediatorRequest request)
         {
             var user = this.User;
-            var request = new GetProductsForHomeMediatorRequest
-            {
-                PageIndex = page
-            };
-
             var response = await _mediator.Send(request);
 
             return Ok(response);
         }
 
-        [HttpGet("details/{productId:int}")]
-        public async ValueTask<IActionResult> GetProductDetails(uint productId)
+        [HttpGet("details")]
+        public async ValueTask<IActionResult> GetProductsDetails([FromQuery] GetProductDetailsMediatorRequest request)
+        {
+            //var user = this.User;
+            var response = await _mediator.Send(request);
+
+            return Ok(response);
+        }
+
+        [HttpGet("for-order")]
+        public async ValueTask<IActionResult> GetProductForOrder([FromQuery] GetProductsForOrderMediatorRequest request)
         {
             var user = this.User;
-            var request = new GetProductDetailsMediatorRequest
-            {
-                 ProductID = productId
-            };
-
             var response = await _mediator.Send(request);
 
             return Ok(response);

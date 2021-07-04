@@ -20,6 +20,7 @@ namespace KShop.Carts.Domain.Mediators
     {
         public uint UserID { get; set; }
         public List<CartPosition> Positions { get; set; }
+        public bool UseMerge { get; set; }
     }
     public class SetCartPositionsMediatorHandler : IRequestHandler<SetCartPositionsMediatorRequest, SetCartPositionsMediatorResponse>
     {
@@ -41,7 +42,12 @@ namespace KShop.Carts.Domain.Mediators
 
             var cartId = $"cart-{request.UserID}";
             var cart = await _cartsRepo.GetAsync(cartId);
-            cart.SetRange(request.Positions);         
+
+            if (request.UseMerge)
+                cart.MergeRange(request.Positions);
+            else
+                cart.SetRange(request.Positions);
+
             await _cartsRepo.ReplaceAsync(cartId, cart);
             return new SetCartPositionsMediatorResponse();
         }

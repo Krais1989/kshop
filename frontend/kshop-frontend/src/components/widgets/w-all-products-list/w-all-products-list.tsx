@@ -6,7 +6,7 @@ import ProductCard from "../../controls/product-card/product-card";
 import "./w-all-products-list.sass";
 
 import "react-toastify/dist/ReactToastify.css";
-import { AppServices } from "components/app/app-services";
+import { ProductsClient } from "services/clients/ProductsClient";
 
 interface IWAllProductsListProps {}
 
@@ -17,14 +17,14 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (
     const [prods, setProds] = React.useState<ProductPresentation[]>([]);
 
     React.useEffect(() => {
-        AppServices.Clients.Products.getProductsForHome({
+        ProductsClient.getProductsForHome({
             pageIndex: 0
         })
             .then((e) => {
-                if (!e.ErrorMessage) {
+                if (!e.errorMessage) {
                     setProds(e.data);
                 } else {
-                    toast.warning(`Bad request: ${e.ErrorMessage}`);
+                    toast.warning(`Bad request: ${e.errorMessage}`);
                 }
             })
             .catch((e) => {

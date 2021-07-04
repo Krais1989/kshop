@@ -16,7 +16,7 @@ namespace KShop.Products.Domain.Mediators
 
     public class GetProductsForHomeMediatorResponse : BaseResponse
     {
-        public List<ProductShort> Data { get; set; } = new List<ProductShort>();
+        public List<ProductPresentation> Data { get; set; } = new List<ProductPresentation>();
         public List<Category> Categories { get; set; } = new List<Category>();
     }
     public class GetProductsForHomeMediatorRequest : IRequest<GetProductsForHomeMediatorResponse>
@@ -44,13 +44,14 @@ namespace KShop.Products.Domain.Mediators
             //_validator.Validate(validatorDto);
             int pagesize = 10;
             var data = await _productsContext.Products.AsNoTracking()
-                .Select(e => new ProductShort
+                .Select(e => new ProductPresentation
                 {
                     ID = e.ID,
                     Title = e.Title,
                     Description = e.Description,
                     CategoryID = e.CategoryID,
-                    Price = e.Money
+                    Price = e.Price,
+                    Image = e.Image
                 })
                 .OrderByDescending(e => e.ID)
                 .Skip(request.PageIndex * pagesize)

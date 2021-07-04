@@ -10,7 +10,7 @@ namespace KShop.Shared.WebApi
 {
     public static class CorsExtensions
     {
-        public static IApplicationBuilder AddKShopCors(this IApplicationBuilder app, IConfiguration config)
+        public static IApplicationBuilder UseKShopCors(this IApplicationBuilder app, IConfiguration config)
         {
             app.UseCors(e =>
             {

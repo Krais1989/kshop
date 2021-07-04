@@ -18,6 +18,7 @@ using KShop.Payments.Domain;
 using KShop.Shared.Integration.MassTransit;
 using KShop.Shared.Authentication;
 using KShop.Shared.Integration.Contracts;
+using KShop.Shared.Persistence.Services;
 
 namespace KShop.Payments.WebApi
 {
@@ -108,7 +109,7 @@ namespace KShop.Payments.WebApi
             });
 
             app.UseRouting();
-            app.AddKShopCors(Configuration);
+            app.UseKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
 

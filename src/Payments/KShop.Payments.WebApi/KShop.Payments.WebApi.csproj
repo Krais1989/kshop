@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\KShop.Shared.Persistence.Services\KShop.Shared.Persistence.Services.csproj" />
     <ProjectReference Include="..\..\Shared\KShop.Shared.WebApi\KShop.Shared.WebApi.csproj" />
     <ProjectReference Include="..\KShop.Payments.Domain\KShop.Payments.Domain.csproj" />
   </ItemGroup>

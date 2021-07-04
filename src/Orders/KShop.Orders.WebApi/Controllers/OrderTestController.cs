@@ -21,13 +21,13 @@ namespace KShop.Orders.WebApi
     public class OrderTestController : ControllerBase
     {
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<OrderPlacingSagaRequest> _createOrderClient;
+        private readonly IRequestClient<OrderSubmitSagaRequest> _createOrderClient;
         private readonly OrderContext _orderContext;
         private readonly IDistributedCache _cache;
 
         public OrderTestController(
             IPublishEndpoint publishEndpoint,
-            IRequestClient<OrderPlacingSagaRequest> createOrderClient,
+            IRequestClient<OrderSubmitSagaRequest> createOrderClient,
             OrderContext orderContext, 
             IDistributedCache cache)
         {
@@ -45,34 +45,34 @@ namespace KShop.Orders.WebApi
             return "value";
         }
 
-        // POST api/<OrderTestController>
-        [HttpGet("[action]")]
-        public async ValueTask<IActionResult> PostTest()
-        {
-            await _cache.SetAsync("kshop-test", Encoding.UTF8.GetBytes("Data"));
+        //// POST api/<OrderTestController>
+        //[HttpGet("[action]")]
+        //public async ValueTask<IActionResult> PostTest()
+        //{
+        //    await _cache.SetAsync("kshop-test", Encoding.UTF8.GetBytes("Data"));
 
-            //TODO: вынести генерацию OrderID из контроллера
-            var msg = new OrderPlacingSagaRequest()
-            {
-                OrderID = Guid.NewGuid(),
-                Customer = 111,
-                Positions = new OrderPositionsMap() { { 1, 1 } },
-                PaymentProvider = EPaymentProvider.Mock
-                //Price = new Money(200),
-            };
+        //    //TODO: вынести генерацию OrderID из контроллера
+        //    var msg = new OrderPlacingSagaRequest()
+        //    {
+        //        OrderID = Guid.NewGuid(),
+        //        Customer = 111,
+        //        Positions = new List<ProductQuantity>() { { 1, 1 } },
+        //        PaymentProvider = EPaymentProvider.Mock
+        //        //Price = new Money(200),
+        //    };
 
-            await _publishEndpoint.Publish(msg);
+        //    await _publishEndpoint.Publish(msg);
 
-            //var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(
-            //    new OrderPlacingSagaRequest()
-            //    {
-            //        OrderID = Guid.NewGuid(),
-            //        CustomerID = 111,
-            //        Positions = new OrderPositionsMap()
-            //    });
+        //    //var response = await _createOrderClient.GetResponse<OrderPlacingSagaResponse>(
+        //    //    new OrderPlacingSagaRequest()
+        //    //    {
+        //    //        OrderID = Guid.NewGuid(),
+        //    //        CustomerID = 111,
+        //    //        Positions = new OrderPositionsMap()
+        //    //    });
 
-            return Ok(msg);
-        }
+        //    return Ok(msg);
+        //}
 
     }
 }

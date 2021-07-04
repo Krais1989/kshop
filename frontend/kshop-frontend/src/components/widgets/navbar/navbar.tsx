@@ -9,7 +9,7 @@ import {
     faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import WLoginPanel from "components/widgets/w-login-panel/w-login-panel";
-import { useAuth } from "components/contexts/AuthContext";
+import { useAuth } from "components/providers/AuthProvider";
 
 interface INavbarProps {}
 

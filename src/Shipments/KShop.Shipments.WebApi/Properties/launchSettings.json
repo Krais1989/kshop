@@ -4,9 +4,9 @@
     "KShop.Shipments.WebApi": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://127.0.0.1:5041;http://127.0.0.1:5040",
+      "applicationUrl": "https://127.0.0.1:54041;http://127.0.0.1:54040",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

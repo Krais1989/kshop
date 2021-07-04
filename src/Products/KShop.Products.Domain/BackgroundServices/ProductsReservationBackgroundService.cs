@@ -85,9 +85,7 @@ namespace KShop.Products.Domain
                             .Take(500)
                             .ToListAsync();
 
-
                 reserving = reserve_pendings.GroupBy(e => e.OrderID).ToDictionary(e => e.Key, e => e.ToList());
-
 
                 /* Политика резервирвания, варианты: */
                 /* 1. Если не удаётся зарезервировать хотя бы одну позицию - отмена всей резервации */

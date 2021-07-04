@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using KShop.Shared.Authentication;
 using KShop.Shared.Integration.MassTransit;
+using KShop.Shared.Persistence.Services;
 using KShop.Shared.WebApi;
 using KShop.Shipments.Domain;
 using KShop.Shipments.Persistence;
@@ -95,7 +96,7 @@ namespace KShop.Shipments.WebApi
             });
 
             app.UseRouting();
-            app.AddKShopCors(Configuration);
+            app.UseKShopCors(Configuration);
             app.UseAuthentication();
             app.UseAuthorization();
 

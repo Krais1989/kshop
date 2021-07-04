@@ -1,0 +1,70 @@
+﻿using FluentValidation;
+using KShop.Orders.Persistence;
+using KShop.Shared.Domain.Contracts;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace KShop.Orders.Domain
+{
+
+    public class GetCustomerOrdersResponse : BaseResponse
+    {
+        public List<OrderDetails> Orders { get; set; }
+    }
+    public class GetCustomerOrdersRequest : IRequest<GetCustomerOrdersResponse>
+    {
+        public ulong CustomerID { get; set; }
+    }
+    public class GetCustomerOrdersMediatorHandler : IRequestHandler<GetCustomerOrdersRequest, GetCustomerOrdersResponse>
+    {
+        private readonly ILogger<GetCustomerOrdersMediatorHandler> _logger;
+        private readonly OrderContext _orderContext;
+
+        public GetCustomerOrdersMediatorHandler(
+            ILogger<GetCustomerOrdersMediatorHandler> logger,
+            OrderContext orderContext)
+        {
+            _logger = logger;
+            _orderContext = orderContext;
+        }
+
+        public async Task<GetCustomerOrdersResponse> Handle(GetCustomerOrdersRequest request, CancellationToken cancellationToken)
+        {
+            var rawResult = await _orderContext.Orders.AsNoTracking()
+                .Include(e => e.Logs)
+                .Include(e => e.Positions)
+                .Where(e => e.CustomerID == request.CustomerID)
+                .Select(e => new OrderDetails
+                {
+                    ID = e.ID,
+                    CreateTime = e.CreateDate,
+                    Status = e.Status,
+                    Logs = e.Logs.Select(l => new OrderDetails.Log { Date = l.StatusDate, Status = l.NewStatus }),
+                    Positions = e.Positions.Select(pos => new OrderDetails.Position { ProductID = pos.ProductID, Quantity = pos.Quantity })
+                })
+                .ToListAsync();
+
+
+            //var result = rawResult.Select(e => new OrderDetails()
+            //{
+            //       ID = e.ID,
+            //       Status = e.Status,
+            //       CreateTime = e.CreateTime,
+            //       Logs = e.Logs.ToList(),
+            //       Positions
+            //});
+
+            return new GetCustomerOrdersResponse()
+            {
+                Orders = rawResult
+            };
+        }
+    }
+}

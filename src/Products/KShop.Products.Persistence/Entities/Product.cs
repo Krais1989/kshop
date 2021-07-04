@@ -10,7 +10,8 @@ namespace KShop.Products.Persistence
         public uint ID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public Money Money { get; set; }
+        public Money Price { get; set; }
+        public uint Discount { get; set; }
         public uint CategoryID { get; set; }
         public string Image { get; set; }
         

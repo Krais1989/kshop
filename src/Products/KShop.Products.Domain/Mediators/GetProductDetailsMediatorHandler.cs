@@ -16,11 +16,11 @@ namespace KShop.Products.Domain.Mediators
 
     public class GetProductDetailsMediatorResponse : BaseResponse
     {
-        public ProductDetails Data { get; set; }
+        public List<ProductDetails> Data { get; set; } = new List<ProductDetails>();
     }
     public class GetProductDetailsMediatorRequest : IRequest<GetProductDetailsMediatorResponse>
     {
-        public uint ProductID { get; set; }
+        public List<uint> ProductID { get; set; } = new List<uint>();
     }
     public class GetProductDetailsMediatorHandler : IRequestHandler<GetProductDetailsMediatorRequest, GetProductDetailsMediatorResponse>
     {
@@ -44,8 +44,7 @@ namespace KShop.Products.Domain.Mediators
                 .Include(e => e.Category)
                 .Include(e => e.ProductAttributes)
                 .ThenInclude(e => e.Attribute)
-                .Include(e => e.Positions)
-                .Where(e => e.ID == request.ProductID)
+                .Where(e => request.ProductID.Contains(e.ID))
                 .ToListAsync())
                 .Select(e => new ProductDetails
                 {
@@ -53,12 +52,13 @@ namespace KShop.Products.Domain.Mediators
                     Title = e.Title,
                     Description = e.Description,
                     CategoryID = e.CategoryID,
-                    Price = e.Money,
+                    Price = e.Price,
                     Image = e.Image,
-                    Attributes = e.ProductAttributes.Select(pa => 
-                        new ProductDetailsAttribute { ID = pa.AttributeID, Title = pa.Attribute.Title, Value = pa.Value }).ToList(),
+                    Attributes = e.ProductAttributes.Select(pa =>
+                        new ProductDetails.Attribute { ID = pa.AttributeID, Title = pa.Attribute.Title, Value = pa.Value }).ToList(),
                 })
-                .FirstOrDefault();
+                .ToList();
+
 
             return new GetProductDetailsMediatorResponse()
             {

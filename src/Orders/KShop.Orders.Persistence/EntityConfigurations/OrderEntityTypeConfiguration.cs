@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KShop.Shared.Domain.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,14 @@ namespace KShop.Orders.Persistence
             builder.HasMany(o => o.Logs).WithOne(l => l.Order).HasForeignKey(l => l.OrderID);
             //builder.HasMany(e => e.Positions).WithOne(pos => pos.Product).HasForeignKey(pos => pos.ProductID);
             //builder.HasMany(e => e.Reserves).WithOne(r => r.Product).HasForeignKey(r => r.ProductID);
+            builder.OwnsOne(e => e.Price, e => {
+                e.Property(p => p.Price)
+                    .HasColumnName("Price")
+                    .HasDefaultValue<decimal>(0.0);
+                e.Property(p => p.Currency)
+                    .HasColumnName("Currency")
+                    .HasDefaultValue(Money.CurrencySign.RUB);
+            });
         }
     }
 

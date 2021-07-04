@@ -1,8 +1,8 @@
-import { AppServices } from "components/app/app-services";
-import { useCart } from "components/contexts/CartContext";
+import { useCart } from "components/providers/CartProvider";
 import { Money } from "models/Money";
 import { ProductDetails } from "models/ProductDetails";
 import * as React from "react";
+import { ProductsClient } from "services/clients/ProductsClient";
 
 import "./w-product-details.sass";
 
@@ -35,10 +35,10 @@ const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
         //     new ProductAttribute("Цена", `${details.price} руб.`),
         // ];
 
-        AppServices.Clients.Products.getProductsDetails({
+        ProductsClient.getProductsDetails({
             productID: [productID],
         }).then((r) => {
-            if (!r.ErrorMessage) {
+            if (r.isSuccess) {
                 const d = r.data.length > 0 ? r.data[0] : null;
                 setDetails(d);
             } else {

@@ -20,7 +20,7 @@ namespace KShop.Orders.Domain
         public Guid OrderID { get; set; }
         public Guid ReserveID { get; set; }
         public uint CustomerID { get; set; }
-        public OrderPositionsMap OrderPositions { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
     }
 
     public class ProductsReserveRSActivity
@@ -46,32 +46,47 @@ namespace KShop.Orders.Domain
 
         public async Task<ExecutionResult> Execute(ExecuteContext<ProductsReserveRSActivityArgs> context)
         {
-            var response = await _clReserve.GetResponse<ProductsReserveSvcResponse>(
-               new ProductsReserveSvcRequest()
-               {
-                   OrderID = context.Arguments.OrderID,
-                   OrderPositions = context.Arguments.OrderPositions,
-                   CustomerID = context.Arguments.CustomerID
-               });
-
-            if (response.Message.IsSuccess)
+            try
             {
-                return context.Completed(
-                    new ProductsReserveRSActivityLog
-                    {
-                        OrderID = context.Arguments.OrderID
-                    });
+                var response = await _clReserve.GetResponse<ProductsReserveSvcResponse>(
+                   new ProductsReserveSvcRequest()
+                   {
+                       OrderID = context.Arguments.OrderID,
+                       OrderContent = context.Arguments.OrderContent,
+                       CustomerID = context.Arguments.CustomerID
+                   });
+
+                if (response.Message.IsSuccess)
+                {
+                    return context.Completed(
+                        new ProductsReserveRSActivityLog
+                        {
+                            OrderID = context.Arguments.OrderID
+                        });
+                }
+                else
+                {
+                    return context.Faulted();
+                }
             }
-            else
+            catch (Exception e)
             {
                 return context.Faulted();
             }
+
         }
 
         public async Task<CompensationResult> Compensate(CompensateContext<ProductsReserveRSActivityLog> context)
         {
-            var response = await _clReserveCancel.GetResponse<ProductsReserveCancelSvcResponse>(
-                new ProductsReserveCancelSvcRequest(context.Log.OrderID));
+            try
+            {
+                var response = await _clReserveCancel.GetResponse<ProductsReserveCancelSvcResponse>(
+                    new ProductsReserveCancelSvcRequest(context.Log.OrderID));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Compensation ERROR");
+            }
 
             return context.Compensated();
         }

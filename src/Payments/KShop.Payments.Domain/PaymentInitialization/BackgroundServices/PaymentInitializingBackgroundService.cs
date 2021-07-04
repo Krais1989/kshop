@@ -61,7 +61,7 @@ namespace KShop.Payments.Domain
                             {
                                 OrderID = payment.OrderID,
                                 Provider = payment.PaymentProvider,
-                                Money = payment.Money
+                                Money = payment.Price
                             });
 
                         payment.ExternalID = provider_result.ExternalPaymentID;

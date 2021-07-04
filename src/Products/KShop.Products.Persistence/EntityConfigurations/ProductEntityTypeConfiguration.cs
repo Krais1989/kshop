@@ -18,7 +18,7 @@ namespace KShop.Products.Persistence
             builder.HasMany(e => e.Positions).WithOne(pos => pos.Product).HasForeignKey(pos => pos.ProductID);
             builder.HasMany(e => e.Reserves).WithOne(r => r.Product).HasForeignKey(r => r.ProductID);
 
-            builder.OwnsOne(e => e.Money, e =>
+            builder.OwnsOne(e => e.Price, e =>
             {
                 e.Property(p => p.Price)
                     .HasColumnName("Price")

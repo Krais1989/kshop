@@ -66,12 +66,18 @@ namespace KShop.Carts.Persistence
             }
         }
 
-        public void SetRange(IEnumerable<CartPosition> positions)
+        public void MergeRange(IEnumerable<CartPosition> positions)
         {
             foreach (var pos in positions)
             {
                 SetPosition(pos);
             }
+        }
+
+        public void SetRange(IEnumerable<CartPosition> positions)
+        {
+            Clear();
+            MergeRange(positions);
         }
 
         public void RemovePosition(uint productId)
@@ -85,6 +91,11 @@ namespace KShop.Carts.Persistence
             {
                 RemovePosition(id);
             }
+        }
+
+        public void Clear()
+        {
+            Positions = new List<CartPosition>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KShop.Shared.Domain.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +42,8 @@ namespace KShop.Orders.Persistence
         /// Получатель заказа
         /// </summary>
         public uint CustomerID { get; set; }
+
+        public Money Price { get; set; }
 
         public EOrderStatus Status { get; set; }
 

@@ -21,7 +21,7 @@ namespace KShop.Orders.Domain
         public uint CustomerID { get; set; }
         public ProductsReserveMap ProductsReserves { get; set; }
         //public Guid? OrderPlacingRSTrackingNumber { get; set; }
-        public OrderPositionsMap OrderPositions { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
         public Money Money { get; set; }
         public EShippingMethod ShippingMethod { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
@@ -69,227 +69,237 @@ namespace KShop.Orders.Domain
     /// Включает создание записи заказа и резервации продуктов
     /// При успешном выполнение выбрасывает соответствующее событие
     /// </summary>
-    public class OrderProcessingSagaStateMachine : MassTransitStateMachine<OrderProcessingSagaState>
+    public partial class OrderProcessingSagaStateMachine : MassTransitStateMachine<OrderProcessingSagaState>
     {
         private readonly ILogger<OrderProcessingSagaStateMachine> _logger;
 
         #region Order Get Status
-        private Event<OrderGetStatusSagaRequest> OnGetStatus { get; set; }
-        void ConfigureOrderGetStatus()
-        {
-            Event(() => OnGetStatus, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
+        //private Event<OrderGetStatusSagaRequest> OnGetStatus { get; set; }
+        //void ConfigureOrderGetStatus()
+        //{
+        //    Event(() => OnGetStatus, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
 
-            DuringAny(When(OnGetStatus).ThenAsync(HandleOnGetStatus));
-        }
-        private async Task HandleOnGetStatus(BehaviorContext<OrderProcessingSagaState, OrderGetStatusSagaRequest> ctx)
-        {
-            await ctx.RespondAsync(new OrderGetStatusSagaResponse()
-            {
-                Status = ctx.Instance.CurrentState
-            });
-        }
+        //    DuringAny(When(OnGetStatus).ThenAsync(HandleOnGetStatus));
+        //}
+        //private async Task HandleOnGetStatus(BehaviorContext<OrderProcessingSagaState, OrderGetStatusSagaRequest> ctx)
+        //{
+        //    await ctx.RespondAsync(new OrderGetStatusSagaResponse()
+        //    {
+        //        Status = ctx.Instance.CurrentState
+        //    });
+        //}
         #endregion
 
         #region Order Placing 
-        private Event<OrderPlacingSagaRequest> OnOrderPlacing { get; set; }
+        //private Event<OrderPlacingSagaRequest> OnOrderPlacing { get; set; }
 
-        private void ConfigureOrderPlacing()
-        {
-            Event(() => OnOrderPlacing, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-                e.SelectId(ctx => ctx.Message.OrderID);
-                e.InsertOnInitial = true;
-            });
+        //private void ConfigureOrderPlacing()
+        //{
+        //    Event(() => OnOrderPlacing, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //        e.SelectId(ctx => ctx.Message.OrderID);
+        //        e.InsertOnInitial = true;
+        //    });
 
-            /* Событие размещения - запустить RS размещения заказа */
-            Initially(
-                When(OnOrderPlacing)
-                .ThenAsync(HandleOnOrderPlacing)
-                .TransitionTo(OrderReserving));
-        }
+        //    /* Событие размещения - запустить RS размещения заказа */
+        //    Initially(
+        //        When(OnOrderPlacing)
+        //        .ThenAsync(HandleOnOrderPlacing)
+        //        .TransitionTo(OrderReserving));
+        //}
 
-        private async Task HandleOnOrderPlacing(BehaviorContext<OrderProcessingSagaState, OrderPlacingSagaRequest> ctx)
-        {
-            ctx.Instance.CustomerID = ctx.Data.Customer;
-            ctx.Instance.OrderPositions = ctx.Data.Positions;
-            //ctx.Instance.Money = ctx.Data.Price;
-            ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
-            ctx.Instance.ShippingMethod = ctx.Data.ShippingMethod;
+        //private async Task HandleOnOrderPlacing(BehaviorContext<OrderProcessingSagaState, OrderPlacingSagaRequest> ctx)
+        //{
+        //    _logger.LogDebug($"Saga - Started - {ctx.Instance.CorrelationId}");
 
-            await ctx.Publish(new OrderPlacingRSRequest
-            {
-                OrderID = ctx.Data.OrderID,
-                OrderPositions = ctx.Data.Positions,
-                CustomerID = ctx.Data.Customer,
-                PaymentProvider = ctx.Data.PaymentProvider,
-                // Price = ctx.Data.Price
-            });
-        }
+        //    ctx.Instance.CustomerID = ctx.Data.Customer;
+        //    ctx.Instance.OrderContent = ctx.Data.OrderContent;
+        //    //ctx.Instance.Money = ctx.Data.Price;
+        //    ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
+        //    ctx.Instance.ShippingMethod = ctx.Data.ShippingMethod;
+
+        //    _logger.LogDebug($"Saga - Start Order Reservation");
+        //    await ctx.Publish(new OrderPlacingRSRequest
+        //    {
+        //        OrderID = ctx.Data.OrderID,
+        //        OrderContent = ctx.Data.OrderContent,
+        //        CustomerID = ctx.Data.Customer,
+        //        PaymentProvider = ctx.Data.PaymentProvider,
+        //        // Price = ctx.Data.Price
+        //    });
+        //}
         #endregion
 
         #region Order Reserving
-        private State OrderReserving { get; set; }
-        private State OrderReservingSuccess { get; set; }
-        private State OrderReservingFault { get; set; }
+        //private State OrderReserving { get; set; }
+        //private State OrderReservingSuccess { get; set; }
+        //private State OrderReservingFault { get; set; }
 
 
-        //private Event<OrderReservingCompletedRSEvent> OnOrderReservingRSCompleted { get; set; }
-        // NOTE: при ошибке RS выбрасывается OnOrderReserveFault
-        //private Event<OrderReservingFaultedRSEvent> OnOrderReservingRSFaulted { get; set; }
+        ////private Event<OrderReservingCompletedRSEvent> OnOrderReservingRSCompleted { get; set; }
+        //// NOTE: при ошибке RS выбрасывается OnOrderReserveFault
+        ////private Event<OrderReservingFaultedRSEvent> OnOrderReservingRSFaulted { get; set; }
 
-        private Event<ProductsReserveSuccessEvent> OnOrderReserved { get; set; }
-        private Event<ProductsReserveFaultEvent> OnOrderReserveFault { get; set; }
+        //private Event<ProductsReserveSuccessEvent> OnOrderReserved { get; set; }
+        //private Event<ProductsReserveFaultEvent> OnOrderReserveFault { get; set; }
 
-        private void ConfigureOrderReserving()
-        {
-            Event(() => OnOrderReserved, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
+        //private void ConfigureOrderReserving()
+        //{
+        //    Event(() => OnOrderReserved, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
 
-            Event(() => OnOrderReserveFault, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
+        //    Event(() => OnOrderReserveFault, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
 
-            /* RS размещения успешно завершен - выбросить событие о завершения саги */
-            During(OrderReserving,
-                When(OnOrderReserved)
-                .ThenAsync(HandleOnOrderReserved)
-                .TransitionTo(PaymentProcessing));
+        //    /* RS размещения успешно завершен - выбросить событие о завершения саги */
+        //    During(OrderReserving,
+        //        When(OnOrderReserved)
+        //        .ThenAsync(HandleOnOrderReserved)
+        //        .TransitionTo(PaymentProcessing));
 
-            /* При ошибке RS размещения заказа */
-            During(OrderReserving,
-                When(OnOrderReserveFault)
-                .ThenAsync(HandleOnOrderReserveFault)
-                .TransitionTo(OrderReservingFault));
-        }
+        //    /* При ошибке RS размещения заказа */
+        //    During(OrderReserving,
+        //        When(OnOrderReserveFault)
+        //        .ThenAsync(HandleOnOrderReserveFault)
+        //        .TransitionTo(OrderReservingFault));
+        //}
 
-        private async Task HandleOnOrderReserved(BehaviorContext<OrderProcessingSagaState, ProductsReserveSuccessEvent> ctx)
-        {
-            ctx.Instance.Statuses.Add(EOrderStatus.Reserved);
-            ctx.Instance.ProductsReserves = ctx.Data.ReservedProducts;
-            //TODO: выставить реальную стоимость заказа
-            ctx.Instance.Money = new Money(100);
+        //private async Task HandleOnOrderReserved(BehaviorContext<OrderProcessingSagaState, ProductsReserveSuccessEvent> ctx)
+        //{
+        //    _logger.LogDebug($"Saga - Reserve Completed");
 
-            await ctx.Publish(new PaymentCreateSvcCommand()
-            {
-                OrderID = ctx.Data.OrderID,
-                Money = ctx.Instance.Money,
-                PaymentPlatform = ctx.Instance.PaymentProvider
-            });
+        //    ctx.Instance.Statuses.Add(EOrderStatus.Reserved);
+        //    ctx.Instance.ProductsReserves = ctx.Data.ReservedProducts;
+        //    //TODO: выставить реальную стоимость заказа
+        //    ctx.Instance.Money = new Money(100);
 
-            await ctx.Publish(new OrderSetStatusReservedSvcRequest(ctx.Data.OrderID));
-        }
+        //    _logger.LogDebug($"Saga - Start Payment Inialization");
+        //    await ctx.Publish(new PaymentCreateSvcCommand()
+        //    {
+        //        OrderID = ctx.Data.OrderID,
+        //        Money = ctx.Instance.Money,
+        //        PaymentPlatform = ctx.Instance.PaymentProvider
+        //    });
 
-        private async Task HandleOnOrderReserveFault(BehaviorContext<OrderProcessingSagaState, ProductsReserveFaultEvent> ctx)
-        {
-            _logger.LogError($"RS OrderPlacing is FAULTED! {ctx.Data.OrderID}");
+        //    await ctx.Publish(new OrderSetStatusReservedSvcRequest(ctx.Data.OrderID));
+        //}
 
-            await Compensate(ctx);
-        }
+        //private async Task HandleOnOrderReserveFault(BehaviorContext<OrderProcessingSagaState, ProductsReserveFaultEvent> ctx)
+        //{
+        //    _logger.LogDebug($"Saga - Reserve Faulted");
+
+
+        //    await Compensate(ctx);
+        //}
         #endregion
 
         #region Order Payment
-        private State PaymentProcessing { get; set; }
-        private State PaymentProcessingSuccess { get; set; }
-        private State PaymentProcessingFault { get; set; }
+        //private State PaymentProcessing { get; set; }
+        //private State PaymentProcessingSuccess { get; set; }
+        //private State PaymentProcessingFault { get; set; }
 
-        private Event<PaymentCreateSuccessSvcEvent> OnPaymentSuccessed { get; set; }
-        private Event<PaymentCreateFaultSvcEvent> OnPaymentFaulted { get; set; }
+        //private Event<PaymentCreateSuccessSvcEvent> OnPaymentSuccessed { get; set; }
+        //private Event<PaymentCreateFaultSvcEvent> OnPaymentFaulted { get; set; }
 
-        private void ConfigureOrderPayment()
-        {
-            Event(() => OnPaymentSuccessed, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
-            Event(() => OnPaymentFaulted, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
+        //private void ConfigureOrderPayment()
+        //{
+        //    Event(() => OnPaymentSuccessed, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
+        //    Event(() => OnPaymentFaulted, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
 
-            During(PaymentProcessing,
-                When(OnPaymentSuccessed)
-                .ThenAsync(HandleOnPaymentSuccessed)
-                .TransitionTo(ShipmentProcessing));
+        //    During(PaymentProcessing,
+        //        When(OnPaymentSuccessed)
+        //        .ThenAsync(HandleOnPaymentSuccessed)
+        //        .TransitionTo(ShipmentProcessing));
 
-            During(PaymentProcessing,
-                When(OnPaymentFaulted)
-                .ThenAsync(HandleOnPaymentFaulted)
-                .TransitionTo(PaymentProcessingFault));
-        }
+        //    During(PaymentProcessing,
+        //        When(OnPaymentFaulted)
+        //        .ThenAsync(HandleOnPaymentFaulted)
+        //        .TransitionTo(PaymentProcessingFault));
+        //}
 
-        private async Task HandleOnPaymentSuccessed(BehaviorContext<OrderProcessingSagaState, PaymentCreateSuccessSvcEvent> ctx)
-        {
-            ctx.Instance.PaymentID = ctx.Data.PaymentID;
-            ctx.Instance.Statuses.Add(EOrderStatus.Payed);
+        //private async Task HandleOnPaymentSuccessed(BehaviorContext<OrderProcessingSagaState, PaymentCreateSuccessSvcEvent> ctx)
+        //{
+        //    _logger.LogDebug($"Saga - Payment Created");
 
-            await ctx.Publish(new ShipmentCreateSvcCommand()
-            {
-                OrderID = ctx.Data.OrderID,
-                OrderPositions = ctx.Instance.OrderPositions
-            });
+        //    ctx.Instance.PaymentID = ctx.Data.PaymentID;
+        //    ctx.Instance.Statuses.Add(EOrderStatus.Payed);
 
-            await ctx.Publish(new OrderSetStatusPayedSvcRequest(ctx.Data.OrderID));
-        }
+        //    _logger.LogDebug($"Saga - Start Shipment Initialization");
+        //    await ctx.Publish(new ShipmentCreateSvcCommand()
+        //    {
+        //        OrderID = ctx.Data.OrderID,
+        //        OrderContent = ctx.Instance.OrderContent
+        //    });
 
-        private async Task HandleOnPaymentFaulted(BehaviorContext<OrderProcessingSagaState, PaymentCreateFaultSvcEvent> ctx)
-        {
-            _logger.LogError(ctx.Data.ErrorMessage);
-            // TODO: вызвать компенсацию предыдущих шагов
+        //    await ctx.Publish(new OrderSetStatusPayedSvcRequest(ctx.Data.OrderID));
+        //}
 
-            await Compensate(ctx);
-        }
+        //private async Task HandleOnPaymentFaulted(BehaviorContext<OrderProcessingSagaState, PaymentCreateFaultSvcEvent> ctx)
+        //{
+        //    _logger.LogError(ctx.Data.ErrorMessage);
+        //    // TODO: вызвать компенсацию предыдущих шагов
+
+        //    await Compensate(ctx);
+        //}
         #endregion
 
         #region Shipment
-        private State ShipmentProcessing { get; set; }
-        private State ShipmentProcessingSuccess { get; set; }
-        private State ShipmentProcessingFault { get; set; }
+        //private State ShipmentProcessing { get; set; }
+        //private State ShipmentProcessingSuccess { get; set; }
+        //private State ShipmentProcessingFault { get; set; }
 
-        private Event<ShipmentCreateSuccessSvcEvent> OnShipmentSuccessed { get; set; }
-        private Event<ShipmentCreateFaultSvcEvent> OnShipmentFault { get; set; }
+        //private Event<ShipmentCreateSuccessSvcEvent> OnShipmentSuccessed { get; set; }
+        //private Event<ShipmentCreateFaultSvcEvent> OnShipmentFault { get; set; }
 
-        private void ConfigureOrderShipment()
-        {
-            Event(() => OnShipmentSuccessed, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
-            Event(() => OnShipmentFault, e =>
-            {
-                e.CorrelateById(ctx => ctx.Message.OrderID);
-            });
+        //private void ConfigureOrderShipment()
+        //{
+        //    Event(() => OnShipmentSuccessed, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
+        //    Event(() => OnShipmentFault, e =>
+        //    {
+        //        e.CorrelateById(ctx => ctx.Message.OrderID);
+        //    });
 
-            During(ShipmentProcessing,
-                When(OnShipmentSuccessed)
-                .ThenAsync(HandleOnOnShipmentSuccessed)
-                .TransitionTo(ShipmentProcessingSuccess));
+        //    During(ShipmentProcessing,
+        //        When(OnShipmentSuccessed)
+        //        .ThenAsync(HandleOnOnShipmentSuccessed)
+        //        .TransitionTo(ShipmentProcessingSuccess));
 
-            During(ShipmentProcessing,
-                When(OnShipmentFault)
-                .ThenAsync(HandleOnShipmentFault)
-                .TransitionTo(ShipmentProcessingFault));
-        }
+        //    During(ShipmentProcessing,
+        //        When(OnShipmentFault)
+        //        .ThenAsync(HandleOnShipmentFault)
+        //        .TransitionTo(ShipmentProcessingFault));
+        //}
 
-        private async Task HandleOnOnShipmentSuccessed(BehaviorContext<OrderProcessingSagaState, ShipmentCreateSuccessSvcEvent> ctx)
-        {
-            ctx.Instance.ShipmentID = ctx.Data.ShipmentID;
-            ctx.Instance.Statuses.Add(EOrderStatus.Shipped);
+        //private async Task HandleOnOnShipmentSuccessed(BehaviorContext<OrderProcessingSagaState, ShipmentCreateSuccessSvcEvent> ctx)
+        //{
+        //    ctx.Instance.ShipmentID = ctx.Data.ShipmentID;
+        //    ctx.Instance.Statuses.Add(EOrderStatus.Shipped);
 
-            await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Data.OrderID));
-        }
+        //    await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Data.OrderID));
+        //}
 
-        private async Task HandleOnShipmentFault(BehaviorContext<OrderProcessingSagaState, ShipmentCreateFaultSvcEvent> ctx)
-        {
-            _logger.LogError(ctx.Data.ErrorMessage);
-            await Compensate(ctx);
-        }
+        //private async Task HandleOnShipmentFault(BehaviorContext<OrderProcessingSagaState, ShipmentCreateFaultSvcEvent> ctx)
+        //{
+        //    _logger.LogError(ctx.Data.ErrorMessage);
+        //    await Compensate(ctx);
+        //}
 
         #endregion
 
@@ -344,7 +354,7 @@ namespace KShop.Orders.Domain
                 ShipmentProcessingSuccess,
                 ShipmentProcessingFault);
 
-            ConfigureOrderPlacing();
+            ConfigureOrderSubmiting();
             ConfigureOrderReserving();
             ConfigureOrderPayment();
             ConfigureOrderShipment();

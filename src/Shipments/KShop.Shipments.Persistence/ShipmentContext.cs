@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 using System;
+using System.Linq;
 
 namespace KShop.Shipments.Persistence
 {
@@ -27,13 +28,13 @@ namespace KShop.Shipments.Persistence
 
         public ShipmentContext()
         {
-
         }
 
         public ShipmentContext(DbContextOptions<ShipmentContext> options) : base(options)
         {
             Database.EnsureCreated();
-            //try { Database.Migrate(); } catch (Exception e) { };
+            //if (Database.GetPendingMigrations().Any())
+            //    Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

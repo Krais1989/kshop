@@ -1,19 +1,15 @@
+import { useCart } from "components/providers/CartProvider";
+import { useHttp } from "components/providers/HttpProvider";
+import { useRedirect } from "components/providers/RedirectProvider";
 import * as React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./w-shopping-cart.sass";
-import { useCart } from "components/contexts/CartContext";
-import { useRedirect } from "components/contexts/RedirectContext";
 
 interface IWShoppingCartProps {}
 
 const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
-    const {
-        cart,
-        setCart,
-        removeFromCart,
-        setQuantity,
-        setChecked,
-        clearCart,
-    } = useCart();
+    const { cart, removeFromCart, setQuantity, setChecked, clearCart } = useCart();
 
     const redirect = useRedirect();
 
@@ -28,6 +24,16 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
     const clear = () => {
         clearCart();
     };
+
+    const price =
+        cart.positions
+            .filter((e) => e.checked)
+            .map((e) => e.price.price)
+            .reduce((res, cur) => res + cur, 0) ?? 0;
+
+    const isEmpty = cart.positions.length === 0;
+
+    if (isEmpty) return <h2>Cart is empty</h2>;
 
     // const setQuantity = (pos: CartPosition, quantity: number) => {
     //     pos.quantity = quantity;
@@ -59,27 +65,26 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
     // }, [auth.userId]);
 
     const jsxPositions = cart.positions.map((cartPos, index) => (
-        <div
-            key={cartPos.productID}
-            className="kshop-w-shopping-cart-positions-row"
-        >
+        <div key={cartPos.productID} className="kshop-w-shopping-cart-positions-row">
             <div className="kshop-w-shopping-cart-positions-row-check">
                 <input
                     type="checkbox"
                     className="kshop-checkbox"
                     checked={cartPos.checked}
-                    onChange={(e) =>
-                        setChecked(cartPos.productID, e.target.checked)
-                    }
+                    onChange={(e) => setChecked(cartPos.productID, e.target.checked)}
                 />
             </div>
             <div className="kshop-w-shopping-cart-positions-row-image">
-                <img src={cartPos.image} alt="" />
+                <Link to={`catalog/products/${cartPos.productID}`}>
+                    <img src={cartPos.image} alt="" />
+                </Link>
             </div>
             <div className="kshop-w-shopping-cart-positions-row-info">
-                <div className="kshop-w-shopping-cart-positions-row-info-title">
-                    {cartPos.title} #{cartPos.productID}
-                </div>
+                <Link to={`catalog/products/${cartPos.productID}`}>
+                    <div className="kshop-w-shopping-cart-positions-row-info-title">
+                        {cartPos.title}
+                    </div>
+                </Link>
                 <div className="kshop-w-shopping-cart-positions-row-info-description">
                     {cartPos.description}
                 </div>
@@ -121,22 +126,29 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
         </div>
     ));
 
+    const jsxSummaryPanel = (
+        <div className="kshop-w-shopping-cart-actions">
+            <div className="kshop-w-shopping-cart-actions-priceinfo">
+                {price > 0 ? `Price: ${price}` : "Choose atleast one position"}
+            </div>
+            <button disabled={price === 0} className="kshop-button" onClick={() => submit()}>
+                Submit Order
+            </button>
+        </div>
+    );
+
     return (
         <div className="kshop-w-shopping-cart">
-            <div>
-                <button onClick={(e) => clear()}>Clear</button>
-            </div>
             <div className="kshop-w-shopping-cart-positions">
                 {jsxPositions}
-            </div>
-            <div className="kshop-w-shopping-cart-actions">
-                <div className="kshop-w-shopping-cart-actions-priceinfo">
-                    Price: 3334 &#8381;
+                <div>
+                    <button className="kshop-button-yellow" onClick={(e) => clear()}>
+                        Clear
+                    </button>
                 </div>
-                <button className="kshop-button" onClick={() => submit()}>
-                    Submit Order
-                </button>
             </div>
+            {jsxSummaryPanel}
+            {/* {price > 0 ? jsxSummaryPanel : <h2>Check atleast one position</h2>} */}
         </div>
     );
 };

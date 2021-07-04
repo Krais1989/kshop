@@ -2,8 +2,7 @@ import "./w-login-panel.sass";
 
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { AppServices } from "components/app/app-services";
-import { AuthData, useAuth } from "components/contexts/AuthContext";
+import { AuthData, useAuth } from "components/providers/AuthProvider";
 
 interface IWLoginPanelProps {}
 
@@ -11,29 +10,14 @@ const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
     const [email, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
-    const { auth, setAuth, isAuthenticated, signOut } = useAuth();
+    const { auth, isAuthenticated, signOut, signIn } = useAuth();
 
     const submitSignIn = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        AppServices.Clients.Identity.signIn({
+        signIn({
             email: email,
             password: password,
-        }).then((r) => {
-            if (!r.ErrorMessage) {
-                const auth: AuthData = {
-                    userId: r.email,
-                    token: r.token,
-                    refreshToken: ""
-                };
-
-                localStorage.setItem("auth", JSON.stringify(auth));
-                setAuth(auth);
-            } else {
-                console.log(r.ErrorMessage);
-                toast.error(`Logging fail: ${r.ErrorMessage}`);
-                setAuth(new AuthData());
-            }
         });
     };
 
@@ -66,7 +50,7 @@ const WLoginPanel: React.FunctionComponent<IWLoginPanelProps> = (props) => {
 
     const jsxSignOut = (
         <div>
-            {auth.userId} &nbsp;
+            {auth?.userId} &nbsp;
             <button
                 className={"kshop-button-yellow"}
                 onClick={(e) => signOutCallback()}

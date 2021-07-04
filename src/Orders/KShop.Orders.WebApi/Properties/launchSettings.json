@@ -4,9 +4,9 @@
     "OrderApi": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://127.0.0.1:5011;http://127.0.0.1:5010",
+      "applicationUrl": "https://127.0.0.1:54011;http://127.0.0.1:54010",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

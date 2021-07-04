@@ -13,9 +13,13 @@
     white-space: nowrap
 
     &:hover
-        filter: saturate(65%)
+        filter: saturate(165%)
         // background-color: #aaaaaa
         // color: white
+
+    &:disabled
+        filter: saturate(40%) brightness(100%)
+        cursor: default
 
 .kshop-button-green
     @extend .kshop-button

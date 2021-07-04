@@ -15,8 +15,6 @@ using System.Threading.Tasks;
 
 namespace KShop.Orders.Domain
 {
-
-
     /// <summary>
     /// 
     /// </summary>
@@ -77,7 +75,7 @@ namespace KShop.Orders.Domain
 
             builder.AddVariable("OrderID", context.Message.OrderID); // общая переменная routing slip
             builder.AddVariable("CustomerID", context.Message.CustomerID); // общая переменная routing slip
-            builder.AddVariable("OrderPositions", context.Message.OrderPositions); // общая переменная routing slip
+            builder.AddVariable("OrderContent", context.Message.OrderContent); // общая переменная routing slip
             builder.AddVariable(nameof(ConsumeContext.RequestId), context.RequestId);
             builder.AddVariable(nameof(ConsumeContext.ResponseAddress), context.ResponseAddress);
             builder.AddVariable("Request", context.Message);

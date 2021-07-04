@@ -29,13 +29,13 @@ namespace KShop.Products.Domain
                 {
                     CustomerID = context.Message.CustomerID,
                     OrderID = context.Message.OrderID,
-                    OrderPositions = context.Message.OrderPositions
+                    OrderContent = context.Message.OrderContent
                 };
 
                 var res = await _mediator.Send(productsReserve);
 
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
-                    await context.RespondAsync(new ProductsReserveSvcResponse { ProductsReserves = res.ReservationData });
+                    await context.RespondAsync(new ProductsReserveSvcResponse { ProductsReserves = res.ReservationData, OrderPrice = res.OrderPrice });
             }
             catch (Exception e)
             {

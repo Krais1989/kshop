@@ -10,11 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace KShop.Orders.WebApi
 {
+    public class OrderCreateRequestDto
+    {
+        public string Address { get; set; }
+        public EPaymentProvider PaymentProvider { get; set; }
+        public EShippingMethod ShippingMethod { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
+    }
+
+    public class OrderCancelDto
+    {
+        public Guid OrderID { get; set; }
+    }
 
     [ApiController]
     [Route("api/orders")]
@@ -67,28 +80,26 @@ namespace KShop.Orders.WebApi
         /// <summary>
         /// Заказа текущего пользователя
         /// </summary>
-        [HttpGet("all")]
-        public async ValueTask<IActionResult> GetAll()
+        [HttpGet]
+        public async ValueTask<IActionResult> GetCurrentCustomerOrders()
         {
             var customerId = this.GetCurrentUserIDExcept();
-            var response = await _mediator.Send(new OrderGetAllRequest { CustomerID = customerId });
+            var response = await _mediator.Send(new GetCustomerOrdersRequest { CustomerID = customerId });
             return ReturnBaseResponse(response);
         }
 
         [HttpPost]
         public async ValueTask<ActionResult> Create([FromBody] OrderCreateRequestDto dto)
         {
-            var orderCreateRequest = new OrderPlacingSagaRequest
+            var response = await _mediator.Send(new OrderPlacingMediatorRequest
             {
-                OrderID = Guid.NewGuid(),
-                Customer = this.User.GetUserID().Value,
+                UserID = this.GetCurrentUserIDExcept(),
+                Address = dto.Address,
+                OrderContent = dto.OrderContent,
                 PaymentProvider = dto.PaymentProvider,
-                ShippingMethod = dto.ShippingMethod,
-                Positions = dto.Positions
-            };
-
-            await _pubEndpoint.Publish(orderCreateRequest);
-            return Ok(orderCreateRequest);
+                ShippingMethod = dto.ShippingMethod
+            });
+            return Ok(response);
         }
 
         [HttpPost("cancel")]

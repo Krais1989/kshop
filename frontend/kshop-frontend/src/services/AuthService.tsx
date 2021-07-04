@@ -1,24 +1,23 @@
-import { AuthData } from "components/contexts/AuthContext";
+import { AuthData } from "../components/providers/AuthProvider";
 
-/* Использовать вне React-компонентов, для чтения */
-export interface IAuthService {
-    GetToken: () => string | undefined;
-    GetAuthHeader: () => RequestInit;
-}
 
-export class AuthService implements IAuthService {
-    GetToken: () => string | undefined = () => {
+class CAuthService {
+    public getToken() {
         const authRaw = localStorage.getItem("auth");
-        if (!authRaw || authRaw === "") return undefined;
+        if (!authRaw || authRaw === "")
+            return undefined;
         const auth = JSON.parse(authRaw) as AuthData;
         return auth.token;
-    };
+    }
 
-    GetAuthHeader: () => RequestInit = () => {
+    public getAuthHeader() {
         return {
             headers: {
-                Authorization: `Bearer ${this.GetToken()}`,
+                Authorization: `Bearer ${this.getToken()}`,
             },
         };
-    };
+    }
 }
+// Выведен в отдельный класс, тк впихивать в IdentityClient не вариант - это для работы с Api, 
+// а в AuthProvider нельзя, тк используется не компонентными классами
+export const AuthService: CAuthService = new CAuthService();

@@ -39,20 +39,17 @@ namespace KShop.Products.Persistence
 
         public ProductsContext(DbContextOptions<ProductsContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
-            //if (Database.GetPendingMigrations().Any())
-            //    Database.Migrate();
+            Database.EnsureCreated();
         }
-
-        private static ILoggerFactory ContextLoggerFactory
-            => LoggerFactory.Create(b => b.AddFilter("", LogLevel.Debug));
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductsContext).Assembly);
-
+            modelBuilder.SeedData();
         }
+
+
 
     }
 }

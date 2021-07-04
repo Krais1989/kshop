@@ -82,7 +82,7 @@ namespace KShop.Products.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.AddKShopTestData();
+            //app.AddKShopTestData();
 
             app.UseHttpsRedirection();
 
@@ -93,7 +93,7 @@ namespace KShop.Products.WebApi
             });
 
             app.UseRouting();
-            app.AddKShopCors(Configuration);
+            app.UseKShopCors(Configuration);
 
             app.UseAuthentication();
             app.UseAuthorization();

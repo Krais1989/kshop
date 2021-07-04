@@ -19,7 +19,7 @@ namespace KShop.Payments.Persistence
 
         public DateTime LastCheckingDate { get; set; }
 
-        public Money Money { get; set; }
+        public Money Price { get; set; }
 
         public ICollection<PaymentLog> Logs { get; set; } = new List<PaymentLog>();
 

@@ -44,7 +44,7 @@ namespace KShop.Payments.Domain
             {
                 OrderID = request.OrderID,
                 PaymentProvider = request.PaymentPlatform,
-                Money = request.Money
+                Price = request.Money
             };
 
             payment.SetStatus(EPaymentStatus.Initializing);

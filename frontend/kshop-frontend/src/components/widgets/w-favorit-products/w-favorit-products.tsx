@@ -32,6 +32,7 @@ const WFavoritProducts: React.FunctionComponent<IWFavoritProductsProps> = (
 
     const jsxFavoritProducts = products.map((fp, i) => (
         <ProductCard
+            key={fp.id}
             id={fp.id}
             title={fp.title}
             price={fp.price}

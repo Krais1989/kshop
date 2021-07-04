@@ -14,7 +14,7 @@ namespace KShop.Payments.Persistence
         {
             builder.HasKey(e => e.ID);
             builder.HasMany(e => e.Logs).WithOne(pos => pos.Payment).HasForeignKey(pos => pos.PaymentID);
-            builder.OwnsOne(e => e.Money, e => {
+            builder.OwnsOne(e => e.Price, e => {
                 e.Property(p => p.Price)
                     .HasColumnName("Price")
                     .HasDefaultValue<decimal>(0.0);
