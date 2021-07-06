@@ -5,6 +5,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { SubmitOrderRequest } from "services/clients/dtos/OrdersDtos";
 import { OrdersClient } from "services/clients/OrdersClient";
 import "./w-ordering-dialog.sass";
 
@@ -23,8 +24,8 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
     //     ), // [{ productID: 3, quantity: 1 }],
     // });
 
-    const [payment, setPayment] = useState("0");
-    const [shipment, setShipment] = useState("0");
+    const [paymentType, setPaymentType] = useState("Mock");
+    const [shipmentType, setShipmentType] = useState("Default");
     const [address, setAddress] = useState("");
 
     const jsxProducts = cart.positions
@@ -41,27 +42,33 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
 
     const submit = () => {
         if (isLoad) return;
-        OrdersClient.createOrder({
-            address: address,
+        const submitOrderRequest: SubmitOrderRequest = {
+            address: {data: address},
             orderContent: cart.positions.filter((e, i) => e.checked),
-            paymentProvider: Number(payment),
-            shippingMethod: Number(shipment),
-        }).then((r) => {
-            removeFromCart(cart.positions.filter((e, i) => e.checked).map((e) => e.productID));
-            setIsLoad(false);
-            redirect.toMyOrders();
+            payment: { type: paymentType },
+            shipment: { type: shipmentType },
+        };
+
+        OrdersClient.submitOrder(submitOrderRequest).then((r) => {
+            if (r.isSuccess) {
+                removeFromCart(cart.positions.filter((e, i) => e.checked).map((e) => e.productID));
+                setIsLoad(false);
+                redirect.toMyOrders();
+            } else{
+                console.log(r.errorMessage);
+            }            
         });
         setIsLoad(true);
     };
 
     const payment_opts: Array<SelectOption> = [
-        { value: "0", label: "Credit card" },
-        { value: "1", label: "Yoomoney" },
+        { value: "Mock", label: "Mock" },
+        { value: "Yookassa", label: "Yookassa" },
     ];
 
     const shipment_opts: Array<SelectOption> = [
-        { value: "0", label: "Delivery" },
-        { value: "1", label: "Pickup" },
+        { value: "Default", label: "Default" },
+        { value: "Pickup", label: "Pickup" },
     ];
 
     //const order_price = 111;
@@ -78,9 +85,9 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                     <span className="ks-ordering-info-panel-title">Payment method</span>
                     <span>
                         <Select
-                            selected={payment}
+                            selected={paymentType}
                             data={payment_opts}
-                            onChange={(e) => setPayment(e)}
+                            onChange={(e) => setPaymentType(e)}
                         ></Select>
                     </span>
                 </div>
@@ -88,9 +95,9 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                     <span className="ks-ordering-info-panel-title">Receive method</span>
                     <span>
                         <Select
-                            selected={shipment}
+                            selected={shipmentType}
                             data={shipment_opts}
-                            onChange={(e) => setShipment(e)}
+                            onChange={(e) => setShipmentType(e)}
                         ></Select>
                     </span>
                 </div>

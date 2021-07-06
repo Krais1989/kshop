@@ -44,10 +44,12 @@ class CHttpClient {
             } else if (resp.status === 400) {
                 const result = new resp_type();
                 return Object.assign(new resp_type(), {
+                    isSuccess: false,
                     errorMessage: await resp.text(),
                 }) as TResult;
             } else if (resp.status === 401) {
                 return Object.assign(new resp_type(), {
+                    isSuccess: false,
                     errorMessage: "Authorization request error",
                 }) as TResult;
             } else {
@@ -55,7 +57,7 @@ class CHttpClient {
                 //toast.error(`Internal Server Error: ${err_msg}`);
                 console.error(">>> Internal Server Error <<<");
                 console.error(err_msg);
-                return Object.assign(new resp_type(), { errorMessage: err_msg }) as TResult;
+                return Object.assign(new resp_type(), {isSuccess: false, errorMessage: err_msg }) as TResult;
             }
         } catch (err) {
             toast.error(`HttpClient request error:\n${err.message}`);

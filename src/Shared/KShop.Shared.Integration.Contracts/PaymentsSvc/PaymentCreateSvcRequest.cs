@@ -8,12 +8,14 @@ namespace KShop.Shared.Integration.Contracts
     /// <summary>
     /// Выставить чек
     /// </summary>
-    public class PaymentCreateSvcCommand
+    public class PaymentCreateSvcRequest
     {
         public Guid OrderID { get; set; }
+        public uint CustomerID { get; set; }
         public EPaymentProvider PaymentPlatform { get; set; }
         public Money Money { get; set; }
     }
+
 
     public class PaymentCreateSuccessSvcEvent
     {

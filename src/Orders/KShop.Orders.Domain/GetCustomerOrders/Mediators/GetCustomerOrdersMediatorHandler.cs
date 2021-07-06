@@ -46,6 +46,7 @@ namespace KShop.Orders.Domain
                     ID = e.ID,
                     CreateTime = e.CreateDate,
                     Status = e.Status,
+                    Price = e.Price,
                     Logs = e.Logs.Select(l => new OrderDetails.Log { Date = l.StatusDate, Status = l.NewStatus }),
                     Positions = e.Positions.Select(pos => new OrderDetails.Position { ProductID = pos.ProductID, Quantity = pos.Quantity })
                 })

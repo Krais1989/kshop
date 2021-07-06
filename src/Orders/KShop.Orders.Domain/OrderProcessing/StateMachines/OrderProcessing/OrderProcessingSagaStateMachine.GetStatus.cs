@@ -11,7 +11,7 @@ namespace KShop.Orders.Domain
     public partial class OrderProcessingSagaStateMachine
     {
         private Event<OrderGetStatusSagaRequest> OnGetStatus { get; set; }
-        void ConfigureOrderGetStatus()
+        void ConfigureGetStatus()
         {
             Event(() => OnGetStatus, e =>
             {

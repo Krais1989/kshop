@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KShop.Shared.Domain.Contracts;
+using System;
 
 namespace KShop.Shared.Integration.Contracts
 {
@@ -10,10 +11,7 @@ namespace KShop.Shared.Integration.Contracts
         public Guid PaymentID { get; set; }
     }
 
-    public class PaymentCancelSvcResponse
+    public class PaymentCancelSvcResponse : BaseResponse
     {
-        public string ErrorMessage { get; set; }
-
-        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     }
 }

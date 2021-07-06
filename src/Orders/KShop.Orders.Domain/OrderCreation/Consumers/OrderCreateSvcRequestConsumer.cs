@@ -15,11 +15,13 @@ namespace KShop.Orders.Domain
     {
         private readonly ILogger<OrderCreateSvcRequestConsumer> _logger;
         private readonly IMediator _mediator;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderCreateSvcRequestConsumer(ILogger<OrderCreateSvcRequestConsumer> logger, IMediator mediator)
+        public OrderCreateSvcRequestConsumer(ILogger<OrderCreateSvcRequestConsumer> logger, IMediator mediator, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _mediator = mediator;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task Consume(ConsumeContext<OrderCreateSvcRequest> context)
@@ -30,18 +32,22 @@ namespace KShop.Orders.Domain
                 {
                     OrderID = context.Message.OrderID,
                     CustomerID = context.Message.CustomerID,
-                    OrderContent = context.Message.OrderContent
+                    OrderContent = context.Message.OrderContent,
+                    OrderPrice = context.Message.OrderPrice
                 };
 
                 var res = await _mediator.Send(createOrder);
 
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                    await context.RespondAsync(new OrderCreateSvcResponse() { OrderID = res.OrderID });
+                await _publishEndpoint.Publish(new OrderCreateSuccessSvcEvent() { OrderID = res.OrderID });
+
+                //if (context.RequestId.HasValue && context.ResponseAddress != null)
+                //    await context.RespondAsync(new OrderCreateSuccessSvcEvent() { OrderID = res.OrderID });
             }
             catch (Exception e)
             {
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                    await context.RespondAsync(new OrderCreateSvcResponse() { ErrorMessage = e.Message });
+                await _publishEndpoint.Publish(new OrderCreateFaultSvcEvent() { });
+                //if (context.RequestId.HasValue && context.ResponseAddress != null)
+                //    await context.RespondAsync(new OrderCreateSuccessSvcEvent() { ErrorMessage = e.Message });
             }
         }
     }

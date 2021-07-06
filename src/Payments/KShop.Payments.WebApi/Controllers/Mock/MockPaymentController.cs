@@ -47,14 +47,14 @@ namespace KShop.Payments.WebApi
         private readonly ILogger<MockPaymentController> _logger;
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRequestClient<PaymentCreateSvcCommand> _createClient;
+        private readonly IRequestClient<PaymentCreateSvcRequest> _createClient;
         private readonly IRequestClient<PaymentCancelSvcRequest> _cancelClient;
 
         public MockPaymentController(
             ILogger<MockPaymentController> logger,
             IMediator mediator,
             IPublishEndpoint publishEndpoint,
-            IRequestClient<PaymentCreateSvcCommand> createClient,
+            IRequestClient<PaymentCreateSvcRequest> createClient,
             IRequestClient<PaymentCancelSvcRequest> cancelClient)
         {
             _logger = logger;
@@ -75,7 +75,7 @@ namespace KShop.Payments.WebApi
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentTest([FromBody] MockPaymentCreateRequestApiDto dto)
         {
-            var createBusReq = new PaymentCreateSvcCommand()
+            var createBusReq = new PaymentCreateSvcRequest()
             {
                 PaymentPlatform = EPaymentProvider.Mock,
                 OrderID = dto.OrderID,

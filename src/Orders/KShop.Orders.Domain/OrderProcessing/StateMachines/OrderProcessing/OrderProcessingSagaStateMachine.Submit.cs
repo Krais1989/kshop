@@ -11,11 +11,11 @@ namespace KShop.Orders.Domain
 {
     public partial class OrderProcessingSagaStateMachine
     {
-        private Event<OrderSubmitSagaRequest> OnOrderSubmiting { get; set; }
+        private Event<OrderSubmitSagaRequest> OnOrderSubmit { get; set; }
 
-        private void ConfigureOrderSubmiting()
+        private void ConfigureOrderSubmit()
         {
-            Event(() => OnOrderSubmiting, e =>
+            Event(() => OnOrderSubmit, e =>
             {
                 e.CorrelateById(ctx => ctx.Message.OrderID);
                 e.SelectId(ctx => ctx.Message.OrderID);
@@ -24,29 +24,36 @@ namespace KShop.Orders.Domain
 
             /* Событие размещения - запустить RS размещения заказа */
             Initially(
-                When(OnOrderSubmiting)
+                When(OnOrderSubmit)
                 .ThenAsync(HandleOnOrderSubmit)
-                .TransitionTo(OrderReserving));
+                .TransitionTo(ProductsReservation));
         }
 
         private async Task HandleOnOrderSubmit(BehaviorContext<OrderProcessingSagaState, OrderSubmitSagaRequest> ctx)
         {
             _logger.LogDebug($"Saga - Started - {ctx.Instance.CorrelationId}");
 
-            ctx.Instance.CustomerID = ctx.Data.Customer;
+            ctx.Instance.CustomerID = ctx.Data.CustomerID;
             ctx.Instance.OrderContent = ctx.Data.OrderContent;
-            //ctx.Instance.Money = ctx.Data.Price;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
             ctx.Instance.ShippingMethod = ctx.Data.ShippingMethod;
+            ctx.Instance.ShipmentAddress = ctx.Data.Address;
 
             _logger.LogDebug($"Saga - Start Order Reservation");
-            await ctx.Publish(new OrderPlacingRSRequest
+            //await ctx.Publish(new OrderPlacingRSRequest
+            //{
+            //    OrderID = ctx.Data.OrderID,
+            //    OrderContent = ctx.Data.OrderContent,
+            //    CustomerID = ctx.Data.CustomerID,
+            //    PaymentProvider = ctx.Data.PaymentProvider,
+            //    // Price = ctx.Data.Price
+            //});
+
+            await ctx.Publish(new ProductsReserveSvcRequest
             {
+                CustomerID = ctx.Data.CustomerID,
                 OrderID = ctx.Data.OrderID,
-                OrderContent = ctx.Data.OrderContent,
-                CustomerID = ctx.Data.Customer,
-                PaymentProvider = ctx.Data.PaymentProvider,
-                // Price = ctx.Data.Price
+                OrderContent = ctx.Data.OrderContent
             });
         }
     }

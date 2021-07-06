@@ -1,8 +1,8 @@
 import { AppSettings } from "components/app/AppSettings";
 import { AuthService } from "services/AuthService";
 import {
-    CreateOrderRequest,
-    CreateOrderResponse,
+    SubmitOrderRequest,
+    SubmitOrderResponse,
     GetOrdersResponse,
     GetOrderDetailsRequest,
     GetOrderDetailsResponse,
@@ -12,9 +12,9 @@ import {
 import { HttpClient } from "./HttpClient";
 
 class COrdersClient {
-    createOrder = async (data: CreateOrderRequest) =>
-        await HttpClient.post<CreateOrderRequest, CreateOrderResponse>(
-            CreateOrderResponse,
+    submitOrder = async (data: SubmitOrderRequest) =>
+        await HttpClient.post<SubmitOrderRequest, SubmitOrderResponse>(
+            SubmitOrderResponse,
             `${AppSettings.OrdersHost}/api/orders`,
             data,
             AuthService.getAuthHeader()

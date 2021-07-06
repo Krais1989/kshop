@@ -49,7 +49,7 @@ namespace KShop.Payments.WebApi
                 busServices =>
                 {
                     busServices.AddConsumers(typeof(PaymentCreateSvcConsumer).Assembly);
-                    busServices.AddRequestClient<PaymentCreateSvcCommand>();
+                    busServices.AddRequestClient<PaymentCreateSvcRequest>();
                     busServices.AddRequestClient<PaymentCancelSvcRequest>();
                 },
                 (busContext, rabbigConfig) =>

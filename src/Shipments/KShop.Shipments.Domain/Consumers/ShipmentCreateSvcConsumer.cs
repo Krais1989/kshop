@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KShop.Shipments.Domain
 {
-    public class ShipmentCreateSvcConsumer : IConsumer<ShipmentCreateSvcCommand>
+    public class ShipmentCreateSvcConsumer : IConsumer<ShipmentCreateSvcRequest>
     {
         private readonly ILogger<ShipmentCreateSvcConsumer> _logger;
         private readonly IMediator _mediator;
@@ -25,7 +25,7 @@ namespace KShop.Shipments.Domain
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<ShipmentCreateSvcCommand> context)
+        public async Task Consume(ConsumeContext<ShipmentCreateSvcRequest> context)
         {
             _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
 

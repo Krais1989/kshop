@@ -18,10 +18,9 @@ namespace KShop.Products.Domain
 
     public class ProductsReserveMediatorResponse : BaseResponse
     {
-        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData, Money price)
+        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData)
         {
             ReservationData = reservationData;
-            OrderPrice = price;
         }
 
         public ProductsReserveMediatorResponse(string errorMessage)
@@ -86,12 +85,12 @@ namespace KShop.Products.Domain
                 .Select(e => new { e.ID, e.Price, e.Discount })
                 .ToListAsync()).ToDictionary(e => e.ID, e => e.Price * e.Discount / 100m);
 
-            var order_price = order_content_map.Aggregate(
-                new Money(0, product_price_map.Values.First().Currency),
-                (acc, cur) => acc + (cur.Value * product_price_map[cur.Key].Price));
+            //var order_price = order_content_map.Aggregate(
+            //    new Money(0, product_price_map.Values.First().Currency),
+            //    (acc, cur) => acc + (cur.Value * product_price_map[cur.Key].Price));
 
             var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));
-            return new ProductsReserveMediatorResponse(reservationData, order_price);
+            return new ProductsReserveMediatorResponse(reservationData);
         }
     }
 }

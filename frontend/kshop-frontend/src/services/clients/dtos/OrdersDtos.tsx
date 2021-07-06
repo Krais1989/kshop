@@ -3,13 +3,22 @@ import { ProductQuantity } from "models/ProductQuantity";
 import { BaseResult } from "services/BaseResult";
 
 
-export class CreateOrderRequest {
-    address: string = "";
-    paymentProvider: number = -1;
-    shippingMethod: number = -1;
+export class PaymentDto{
+    type: string = "";
+}
+export class ShipmentDto{
+    type: string = "";
+}
+export class AddressDto {
+    data: string = "";
+}
+export class SubmitOrderRequest {
+    address: AddressDto = new AddressDto();
+    payment: PaymentDto = {type: ""};
+    shipment: ShipmentDto = {type: ""};
     orderContent: Array<ProductQuantity> = [];
 }
-export class CreateOrderResponse extends BaseResult {
+export class SubmitOrderResponse extends BaseResult {
     orderID: string | undefined;
 }
 

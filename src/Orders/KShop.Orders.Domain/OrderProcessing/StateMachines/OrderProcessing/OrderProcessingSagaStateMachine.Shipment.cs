@@ -13,13 +13,11 @@ namespace KShop.Orders.Domain
     public partial class OrderProcessingSagaStateMachine
     {
         private State ShipmentProcessing { get; set; }
-        private State ShipmentProcessingSuccess { get; set; }
-        private State ShipmentProcessingFault { get; set; }
 
         private Event<ShipmentCreateSuccessSvcEvent> OnShipmentSuccessed { get; set; }
         private Event<ShipmentCreateFaultSvcEvent> OnShipmentFault { get; set; }
 
-        private void ConfigureOrderShipment()
+        private void ConfigureShipment()
         {
             Event(() => OnShipmentSuccessed, e =>
             {
@@ -33,12 +31,12 @@ namespace KShop.Orders.Domain
             During(ShipmentProcessing,
                 When(OnShipmentSuccessed)
                 .ThenAsync(HandleOnOnShipmentSuccessed)
-                .TransitionTo(ShipmentProcessingSuccess));
+                .TransitionTo(OrderShipped));
 
             During(ShipmentProcessing,
                 When(OnShipmentFault)
                 .ThenAsync(HandleOnShipmentFault)
-                .TransitionTo(ShipmentProcessingFault));
+                .TransitionTo(ProcessingCompensation));
         }
 
         private async Task HandleOnOnShipmentSuccessed(BehaviorContext<OrderProcessingSagaState, ShipmentCreateSuccessSvcEvent> ctx)

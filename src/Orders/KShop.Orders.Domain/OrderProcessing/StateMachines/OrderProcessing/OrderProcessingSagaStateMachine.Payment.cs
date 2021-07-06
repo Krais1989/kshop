@@ -13,13 +13,11 @@ namespace KShop.Orders.Domain
     public partial class OrderProcessingSagaStateMachine
     {
         private State PaymentProcessing { get; set; }
-        private State PaymentProcessingSuccess { get; set; }
-        private State PaymentProcessingFault { get; set; }
 
         private Event<PaymentCreateSuccessSvcEvent> OnPaymentSuccessed { get; set; }
         private Event<PaymentCreateFaultSvcEvent> OnPaymentFaulted { get; set; }
 
-        private void ConfigureOrderPayment()
+        private void ConfigurePayment()
         {
             Event(() => OnPaymentSuccessed, e =>
             {
@@ -38,7 +36,7 @@ namespace KShop.Orders.Domain
             During(PaymentProcessing,
                 When(OnPaymentFaulted)
                 .ThenAsync(HandleOnPaymentFaulted)
-                .TransitionTo(PaymentProcessingFault));
+                .TransitionTo(ProcessingCompensation));
         }
 
         private async Task HandleOnPaymentSuccessed(BehaviorContext<OrderProcessingSagaState, PaymentCreateSuccessSvcEvent> ctx)
@@ -49,7 +47,7 @@ namespace KShop.Orders.Domain
             ctx.Instance.Statuses.Add(EOrderStatus.Payed);
 
             _logger.LogDebug($"Saga - Start Shipment Initialization");
-            await ctx.Publish(new ShipmentCreateSvcCommand()
+            await ctx.Publish(new ShipmentCreateSvcRequest()
             {
                 OrderID = ctx.Data.OrderID,
                 OrderContent = ctx.Instance.OrderContent

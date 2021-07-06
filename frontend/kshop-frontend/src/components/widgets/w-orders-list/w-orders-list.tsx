@@ -119,7 +119,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
 
     if (data.length === 0) return <h2>No orders</h2>;
 
-    const jsxOrderDetailsFunc = (orderDet: OrderDetailsView) => {
+    const jsxOrderDetailsFunc = (order_details: OrderDetailsView) => {
         const jsxPositionsFunc = (op: OrderDetailsPositionView) => (
             <Link to={`catalog/products/${op.productID}`} key={op.productID}>
                 <span>
@@ -137,19 +137,19 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
             </li>
         );
 
-        const jsxPositions = orderDet.positions?.map((od, i) => jsxPositionsFunc(od));
+        const jsxPositions = order_details.positions?.map((od, i) => jsxPositionsFunc(od));
 
-        const jsxHistory = orderDet.history?.map((hist, i) => jsxHistoryFunc(hist));
+        const jsxHistory = order_details.history?.map((hist, i) => jsxHistoryFunc(hist));
 
-        const order_price: number = orderDet.positions
-            .map((e) => e.price.price)
-            .reduce((prev, cur) => prev + cur);
+        // const order_price: number = orderDet.positions
+        //     .map((e) => e.price.price)
+        //     .reduce((prev, cur) => prev + cur);
 
         return (
-            <div key={orderDet.id} className="kshop-w-orders-list-row">
+            <div key={order_details.id} className="kshop-w-orders-list-row">
                 <div className="kshop-w-orders-list-row-header">
-                    <div className="kshop-w-orders-list-row-header-date">{orderDet.createDate}</div>
-                    <div className="kshop-w-orders-list-row-header-price">Price {orderDet.price.price}</div>
+                    <div className="kshop-w-orders-list-row-header-date">{order_details.createDate}</div>
+                    <div className="kshop-w-orders-list-row-header-price">Price {order_details.price.price}</div>
                 </div>
                 <div className="kshop-w-orders-list-row-body">
                     <div className="kshop-w-orders-list-row-body-history">

@@ -34,13 +34,13 @@ namespace KShop.Products.Domain
 
                 var res = await _mediator.Send(productsReserve);
 
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                    await context.RespondAsync(new ProductsReserveSvcResponse { ProductsReserves = res.ReservationData, OrderPrice = res.OrderPrice });
+                //if (context.RequestId.HasValue && context.ResponseAddress != null)
+                //    await context.RespondAsync(new ProductsReserveSvcResponse { ProductsReserves = res.ReservationData, OrderPrice = res.OrderPrice });
             }
             catch (Exception e)
             {
-                if (context.RequestId.HasValue && context.ResponseAddress != null)
-                    await context.RespondAsync(new ProductsReserveSvcResponse { ErrorMessage = e.Message });
+                //if (context.RequestId.HasValue && context.ResponseAddress != null)
+                //    await context.RespondAsync(new ProductsReserveSvcResponse { ErrorMessage = e.Message });
             }
         }
     }

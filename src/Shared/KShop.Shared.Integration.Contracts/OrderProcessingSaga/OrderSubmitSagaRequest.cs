@@ -12,20 +12,21 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderSubmitSagaRequest
     {
-        public uint Customer { get; set; }
         public Guid OrderID { get; set; }
+        public uint CustomerID { get; set; }
         public List<ProductQuantity> OrderContent { get; set; }
         public EPaymentProvider PaymentProvider { get; set; }
         public EShippingMethod ShippingMethod { get; set; }
-
-        public string Address { get; set; }
+        public Address Address { get; set; }
         //public Money Price { get; set; }
     }
+
+
 
     /// <summary>
     /// Ответ на запрос инициализации саги создания заказа
     /// </summary>
-    public class OrderPlacingSagaResponse
+    public class OrderSubmitSagaResponse : BaseResponse
     {
         public Guid OrderID { get; set; }
     }

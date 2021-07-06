@@ -5,7 +5,7 @@ using System.Text;
 
 namespace KShop.Shared.Integration.Contracts
 {
-    public class ShipmentCreateSvcCommand
+    public class ShipmentCreateSvcRequest
     {
         public Guid OrderID { get; set; }
         public List<ProductQuantity> OrderContent { get; set; }

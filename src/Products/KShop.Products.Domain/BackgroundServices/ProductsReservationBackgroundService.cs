@@ -107,19 +107,21 @@ namespace KShop.Products.Domain
                     try
                     {
                         var res_positions = reserving[orderId];
-                        var reserved_products = new ProductsReserveMap();
+                        var reserved_products = new List<ProductQuantity>();
+                        var summary = new Money(0);
 
                         foreach (var res_pos in res_positions)
                         {
+                            var db_positions = await db_context.ProductPositions
+                                .Include(e => e.Product)
+                                .FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
 
-
-                            var db_positions = await db_context.ProductPositions.FirstOrDefaultAsync(e => e.ProductID == res_pos.ProductID);
                             if (db_positions.Quantity >= res_pos.Quantity)
                             {
                                 db_positions.Quantity -= res_pos.Quantity;
                                 res_pos.Status = ProductReserve.EStatus.Reserved;
                                 res_pos.CompleteDate = DateTime.UtcNow;
-                                reserved_products.Add(res_pos.ProductID, res_pos.Quantity);
+                                reserved_products.Add(new ProductQuantity { ProductID = res_pos.ProductID, Quantity = res_pos.Quantity });
                             }
                             else
                             {
@@ -127,13 +129,16 @@ namespace KShop.Products.Domain
                                 res_pos.CompleteDate = DateTime.UtcNow;
                             }
 
+                            summary += db_positions.Product.Price * res_pos.Quantity;
+
                             db_context.ProductPositions.Update(db_positions);
                             db_context.ProductReserves.Update(res_pos);
                             await db_context.SaveChangesAsync();
                         }
+
                         /* Отправить сообщение о резервации продуктов */
                         if (reserved_products.Count > 0)
-                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products));
+                            await publish_endpoint.Publish(new ProductsReserveSuccessEvent(orderId, reserved_products, summary));
                         else
                             await publish_endpoint.Publish(new ProductsReserveFaultEvent(orderId, $"Not enought products for order"));
                     }

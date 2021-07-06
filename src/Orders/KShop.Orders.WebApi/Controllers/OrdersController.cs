@@ -16,15 +16,24 @@ using System.Threading.Tasks;
 
 namespace KShop.Orders.WebApi
 {
-    public class OrderCreateRequestDto
+    public class OrderSubmitRequestDto
     {
-        public string Address { get; set; }
-        public EPaymentProvider PaymentProvider { get; set; }
-        public EShippingMethod ShippingMethod { get; set; }
+        public class PaymentDto
+        {
+            public EPaymentProvider Type { get; set; }
+        }
+        public class ShipmentDto
+        {
+            public EShippingMethod Type { get; set; }
+        }
+
+        public Address Address { get; set; }
+        public PaymentDto Payment { get; set; }
+        public ShipmentDto Shipment { get; set; }
         public List<ProductQuantity> OrderContent { get; set; }
     }
 
-    public class OrderCancelDto
+    public class OrderCancelRequestDto
     {
         public Guid OrderID { get; set; }
     }
@@ -89,21 +98,21 @@ namespace KShop.Orders.WebApi
         }
 
         [HttpPost]
-        public async ValueTask<ActionResult> Create([FromBody] OrderCreateRequestDto dto)
+        public async ValueTask<ActionResult> Submit([FromBody] OrderSubmitRequestDto dto)
         {
-            var response = await _mediator.Send(new OrderPlacingMediatorRequest
+            var response = await _mediator.Send(new OrderSubmitMediatorRequest
             {
                 UserID = this.GetCurrentUserIDExcept(),
                 Address = dto.Address,
                 OrderContent = dto.OrderContent,
-                PaymentProvider = dto.PaymentProvider,
-                ShippingMethod = dto.ShippingMethod
+                PaymentProvider = dto.Payment.Type,
+                ShippingMethod = dto.Shipment.Type
             });
             return Ok(response);
         }
 
         [HttpPost("cancel")]
-        public async ValueTask<ActionResult> Cancel([FromBody] OrderCancelDto dto)
+        public async ValueTask<ActionResult> Cancel([FromBody] OrderCancelRequestDto dto)
         {
             /* Проверка данных для создания заказа */
             /* Создание заказа в БД */

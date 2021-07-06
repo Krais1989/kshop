@@ -63,7 +63,7 @@ namespace KShop.Orders.WebApi
                 {
                     busServices.AddRequestClient<OrderGetStatusSagaRequest>();
                     busServices.AddRequestClient<OrderSubmitSagaRequest>();
-                    busServices.AddRequestClient<OrderCreateSvcRequest>();
+                    busServices.AddRequestClient<PaymentCreateSvcRequest>();
 
                     busServices.AddRequestClient<OrderSetStatusCancelledSvcRequest>();
                     busServices.AddRequestClient<OrderSetStatusFaultedSvcRequest>();
@@ -76,7 +76,7 @@ namespace KShop.Orders.WebApi
                     busServices.AddRequestClient<ProductsReserveCancelSvcRequest>();
 
 
-                    busServices.AddActivities(typeof(OrderCreateRSActivity).Assembly);
+                    //busServices.AddActivities(typeof(OrderCreateRSActivity).Assembly);
 
                     busServices.AddConsumers(typeof(OrderCreateSvcRequestConsumer).Assembly);
                     busServices

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KShop.Shared.Integration.Contracts
+namespace KShop.Shared.Domain.Contracts
 {
     public class ProductQuantity
     {

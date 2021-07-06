@@ -8,31 +8,35 @@ namespace KShop.Orders.Persistence
 {
     public enum EOrderStatus : byte
     {
-        Initialized = 0,
+        None = 0,
         /// <summary>
-        /// Резервирование, 
+        /// Товары зарезервированы
         /// </summary>
         Reserved = 1,
         /// <summary>
-        /// Ожидание платежа
+        /// Создан
         /// </summary>
-        Payed = 2,
+        Created = 2,
         /// <summary>
-        /// Доставляется покупателю
+        /// Оплачен
         /// </summary>
-        Shipped = 3,
+        Payed = 3,
         /// <summary>
-        /// Ошибка обработки
+        /// Доставлен
         /// </summary>
-        Faulted = 4,
+        Shipped = 4,
+        /// <summary>
+        /// Ошибка
+        /// </summary>
+        Faulted = 5,
         /// <summary>
         /// Возвращен
         /// </summary>
-        Refunded = 5,
+        Refunded = 6,
         /// <summary>
         /// Отменен покупателем
         /// </summary>
-        Cancelled = 6
+        Cancelled = 7
     }
 
     public class Order
@@ -54,7 +58,7 @@ namespace KShop.Orders.Persistence
 
         public void SetStatus(EOrderStatus newStatus, string logMessage = null)
         {
-            if (Status != EOrderStatus.Initialized && Status == newStatus)
+            if (Status != EOrderStatus.Created && Status == newStatus)
             {
                 throw new Exception($"Exception while changing to same status ({newStatus})! OrderID: {ID}");
             }

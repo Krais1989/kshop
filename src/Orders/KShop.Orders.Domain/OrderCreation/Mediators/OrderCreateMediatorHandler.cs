@@ -24,6 +24,7 @@ namespace KShop.Orders.Domain
         public Guid? OrderID { get; set; }
         public uint CustomerID { get; set; }
         public List<ProductQuantity> OrderContent { get; set; }
+        public Money OrderPrice { get; set; }
     }
     public class OrderCreateMediatorHandler : IRequestHandler<OrderCreateMediatorRequest, OrderCreateMediatorResponse>
     {
@@ -54,9 +55,10 @@ namespace KShop.Orders.Domain
                 CustomerID = request.CustomerID,
                 CreateDate = DateTime.UtcNow,
                 Positions = request.OrderContent?.Select(e => new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity}).ToList(),
-                Logs = new List<OrderLog>()
+                Logs = new List<OrderLog>(),
+                Price = request.OrderPrice
             };
-            entity.SetStatus(EOrderStatus.Initialized);
+            entity.SetStatus(EOrderStatus.Created);
 
             _context.Add(entity);
 

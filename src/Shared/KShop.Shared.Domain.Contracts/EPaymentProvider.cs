@@ -12,7 +12,7 @@
         /// <summary>
         /// самовывоз
         /// </summary>
-        Pickup,
-        Default
+        Default,
+        Pickup
     }
 }

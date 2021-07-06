@@ -15,7 +15,7 @@ using KShop.Shared.Integration.Contracts;
 
 namespace KShop.Payments.Domain
 {
-    public class PaymentCreateSvcConsumer : IConsumer<PaymentCreateSvcCommand>
+    public class PaymentCreateSvcConsumer : IConsumer<PaymentCreateSvcRequest>
     {
         private readonly ILogger<PaymentCreateSvcConsumer> _logger;
         private readonly IMediator _mediator;
@@ -28,7 +28,7 @@ namespace KShop.Payments.Domain
             _mediator = mediator;
         }
 
-        public async Task Consume(ConsumeContext<PaymentCreateSvcCommand> context)
+        public async Task Consume(ConsumeContext<PaymentCreateSvcRequest> context)
         {
             try
             {
