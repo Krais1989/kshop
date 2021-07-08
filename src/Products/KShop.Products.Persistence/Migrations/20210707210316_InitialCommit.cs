@@ -99,6 +99,25 @@ namespace KShop.Products.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ProductBookmarks",
+                columns: table => new
+                {
+                    ProductID = table.Column<uint>(type: "int unsigned", nullable: false),
+                    CustomerID = table.Column<uint>(type: "int unsigned", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductBookmarks", x => new { x.ProductID, x.CustomerID });
+                    table.ForeignKey(
+                        name: "FK_ProductBookmarks_Products_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Products",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ProductPositions",
                 columns: table => new
                 {
@@ -441,28 +460,28 @@ namespace KShop.Products.Persistence.Migrations
                 columns: new[] { "ID", "CreateDate", "ProductID", "Quantity" },
                 values: new object[,]
                 {
-                    { 10u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9084), 10u, 100u },
-                    { 5u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8916), 5u, 100u },
-                    { 9u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9064), 9u, 100u },
-                    { 1u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(2888), 1u, 100u },
-                    { 11u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9102), 11u, 100u },
-                    { 21u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9420), 21u, 100u },
-                    { 2u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8728), 2u, 100u },
-                    { 12u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9119), 12u, 100u },
-                    { 22u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9437), 22u, 100u },
-                    { 3u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8763), 3u, 100u },
-                    { 13u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9185), 13u, 100u },
-                    { 4u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8897), 4u, 100u },
-                    { 14u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9205), 14u, 100u },
-                    { 15u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9222), 15u, 100u },
-                    { 6u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8935), 6u, 100u },
-                    { 16u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9285), 16u, 100u },
-                    { 7u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8952), 7u, 100u },
-                    { 17u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9303), 17u, 100u },
-                    { 8u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9019), 8u, 100u },
-                    { 18u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9322), 18u, 100u },
-                    { 19u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9339), 19u, 100u },
-                    { 20u, new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9356), 20u, 100u }
+                    { 10u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4271), 10u, 100u },
+                    { 5u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3840), 5u, 100u },
+                    { 9u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4233), 9u, 100u },
+                    { 1u, new DateTime(2021, 7, 7, 21, 3, 12, 100, DateTimeKind.Utc).AddTicks(4584), 1u, 100u },
+                    { 11u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4302), 11u, 100u },
+                    { 21u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4815), 21u, 100u },
+                    { 2u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3631), 2u, 100u },
+                    { 12u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4335), 12u, 100u },
+                    { 22u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4850), 22u, 100u },
+                    { 3u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3695), 3u, 100u },
+                    { 13u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4429), 13u, 100u },
+                    { 4u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3805), 4u, 100u },
+                    { 14u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4463), 14u, 100u },
+                    { 15u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4497), 15u, 100u },
+                    { 6u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3879), 6u, 100u },
+                    { 16u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4592), 16u, 100u },
+                    { 7u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3911), 7u, 100u },
+                    { 17u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4623), 17u, 100u },
+                    { 8u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4150), 8u, 100u },
+                    { 18u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4659), 18u, 100u },
+                    { 19u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4690), 19u, 100u },
+                    { 20u, new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4722), 20u, 100u }
                 });
 
             migrationBuilder.CreateIndex(
@@ -490,6 +509,9 @@ namespace KShop.Products.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ProductAttribute");
+
+            migrationBuilder.DropTable(
+                name: "ProductBookmarks");
 
             migrationBuilder.DropTable(
                 name: "ProductPositions");

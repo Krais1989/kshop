@@ -11,24 +11,24 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.Mediators
+namespace KShop.Products.Domain
 {
 
-    public class GetProductsForHomeMediatorResponse : BaseResponse
+    public class ProductsGetForHomeMediatorResponse : BaseResponse
     {
         public List<ProductPresentation> Data { get; set; } = new List<ProductPresentation>();
         public List<Category> Categories { get; set; } = new List<Category>();
     }
-    public class GetProductsForHomeMediatorRequest : IRequest<GetProductsForHomeMediatorResponse>
+    public class ProductsGetForHomeMediatorRequest : IRequest<ProductsGetForHomeMediatorResponse>
     {
         public int PageIndex { get; set; }
     }
-    public class GetProductsForHomeMediatorHandler : IRequestHandler<GetProductsForHomeMediatorRequest, GetProductsForHomeMediatorResponse>
+    public class ProductsGetForHomeMediatorHandler : IRequestHandler<ProductsGetForHomeMediatorRequest, ProductsGetForHomeMediatorResponse>
     {
-        private readonly ILogger<GetProductsForHomeMediatorHandler> _logger;
+        private readonly ILogger<ProductsGetForHomeMediatorHandler> _logger;
         private readonly ProductsContext _productsContext;
 
-        public GetProductsForHomeMediatorHandler(ILogger<GetProductsForHomeMediatorHandler> logger, ProductsContext productsContext)
+        public ProductsGetForHomeMediatorHandler(ILogger<ProductsGetForHomeMediatorHandler> logger, ProductsContext productsContext)
         {
             _logger = logger;
             _productsContext = productsContext;
@@ -36,7 +36,7 @@ namespace KShop.Products.Domain.Mediators
 
         //private readonly IValidator<GetProductsForHomeFluentValidatorDto> _validator;
 
-        public async Task<GetProductsForHomeMediatorResponse> Handle(GetProductsForHomeMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<ProductsGetForHomeMediatorResponse> Handle(ProductsGetForHomeMediatorRequest request, CancellationToken cancellationToken)
         {
             /* Запрашивать Product */
 
@@ -62,7 +62,7 @@ namespace KShop.Products.Domain.Mediators
 
             // Расчитать сколько осталось продуктов
 
-            return new GetProductsForHomeMediatorResponse() { Data = data };
+            return new ProductsGetForHomeMediatorResponse() { Data = data };
         }
     }
 }

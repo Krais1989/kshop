@@ -1,12 +1,12 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "OrderApi": {
+    "KShop.Accounts.WebApi": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://127.0.0.1:54011;http://127.0.0.1:54010",
+      "applicationUrl": "https://localhost:54061;http://localhost:54060",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

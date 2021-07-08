@@ -48,6 +48,7 @@ class CHttpClient {
                     errorMessage: await resp.text(),
                 }) as TResult;
             } else if (resp.status === 401) {
+                localStorage.setItem("auth_err", "");
                 return Object.assign(new resp_type(), {
                     isSuccess: false,
                     errorMessage: "Authorization request error",

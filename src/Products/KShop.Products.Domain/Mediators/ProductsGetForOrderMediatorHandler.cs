@@ -10,22 +10,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.Mediators
+namespace KShop.Products.Domain
 {
 
-    public class GetProductsForOrderMediatorResponse
+    public class ProductsGetForOrderMediatorResponse
     {
         public List<ProductPresentation> Data { get; set; } = new List<ProductPresentation>();
     }
-    public class GetProductsForOrderMediatorRequest : IRequest<GetProductsForOrderMediatorResponse>
+    public class ProductsGetForOrderMediatorRequest : IRequest<ProductsGetForOrderMediatorResponse>
     {
-        public uint[] ProductIDs { get; set; }
+        public uint[] ProductsIDs { get; set; }
     }
-    public class GetProductsForOrderMediatorHandler : IRequestHandler<GetProductsForOrderMediatorRequest, GetProductsForOrderMediatorResponse>
+    public class ProductsGetForOrderMediatorHandler : IRequestHandler<ProductsGetForOrderMediatorRequest, ProductsGetForOrderMediatorResponse>
     {
         private readonly ProductsContext _productsContext;
 
-        public GetProductsForOrderMediatorHandler(ProductsContext productsContext)
+        public ProductsGetForOrderMediatorHandler(ProductsContext productsContext)
         {
             _productsContext = productsContext;
         }
@@ -33,7 +33,7 @@ namespace KShop.Products.Domain.Mediators
         //private readonly ILogger<GetProductsForOrderMediatorHandler> _logger;
         //private readonly IValidator<GetProductsForOrderMediatorFluentValidatorDto> _validator;
 
-        public async Task<GetProductsForOrderMediatorResponse> Handle(GetProductsForOrderMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<ProductsGetForOrderMediatorResponse> Handle(ProductsGetForOrderMediatorRequest request, CancellationToken cancellationToken)
         {
             //var validatorDto = new GetProductsForOrderMediatorFluentValidatorDto() { };
             //_validator.Validate(validatorDto);
@@ -49,11 +49,11 @@ namespace KShop.Products.Domain.Mediators
                     Price = e.Price,
                     Image = e.Image
                 })
-                .Where(e => request.ProductIDs.Contains(e.ID))
+                .Where(e => request.ProductsIDs.Contains(e.ID))
                 .OrderByDescending(e => e.ID)
                 .ToListAsync();
 
-            return new GetProductsForOrderMediatorResponse() { Data = data };
+            return new ProductsGetForOrderMediatorResponse() { Data = data };
         }
     }
 }

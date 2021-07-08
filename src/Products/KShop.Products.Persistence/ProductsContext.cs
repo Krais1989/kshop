@@ -33,6 +33,8 @@ namespace KShop.Products.Persistence
         public DbSet<ProductPosition> ProductPositions { get; set; }
         public DbSet<ProductReserve> ProductReserves { get; set; }
 
+        public DbSet<ProductBookmark> ProductBookmarks { get; set; }
+
         public ProductsContext()
         {
         }

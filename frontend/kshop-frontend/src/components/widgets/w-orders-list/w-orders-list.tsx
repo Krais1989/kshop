@@ -53,34 +53,6 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
     const { auth } = useAuth();
 
     React.useEffect(() => {
-        // const genPositions = (count: number, offset: number = 0) =>
-        //     Array.from(Array(count).keys()).map(
-        //         (n, i) =>
-        //             new OrderPosition(
-        //                 n + offset,
-        //                 1,
-        //                 new Money(100),
-        //                 "https://cdn1.ozone.ru/multimedia/wc100/1024295937.jpg"
-        //             )
-        //     );
-
-        // const genHistory = (count: number, offset: number = 0) =>
-        //     Array.from(Array(count).keys()).map(
-        //         (n, i) => new OrderLog(`Status ${n}`, new Date().toDateString())
-        //     );
-
-        // const genOrders = (count: number, offset: number = 0) =>
-        //     Array.from(Array(count).keys()).map(
-        //         (n, i) =>
-        //             new OrderDetails(
-        //                 `AA-3432-B-${i}`,
-        //                 new Date().toDateString(),
-        //                 new Money(100),
-        //                 genHistory(5),
-        //                 genPositions(4)
-        //             )
-        //     );
-
         async function Prepare() {
             const orders = (await OrdersClient.getOrders()).orders;
             if (orders.length === 0) return;
@@ -89,7 +61,7 @@ const WOrdersList: React.FunctionComponent<IWOrdersListProps> = (props) => {
             const prod_ids = [...new Set(orders_prods_ids)];
             const products = (
                 await ProductsClient.getProductsForOrder({
-                    productIDs: prod_ids,
+                    productsIDs: prod_ids,
                 })
             ).data;
             const products_map = new Map(products.map((p) => [p.id, p]));

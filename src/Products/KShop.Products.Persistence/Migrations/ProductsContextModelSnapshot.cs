@@ -1717,6 +1717,19 @@ namespace KShop.Products.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("KShop.Products.Persistence.ProductBookmark", b =>
+                {
+                    b.Property<uint>("ProductID")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<uint>("CustomerID")
+                        .HasColumnType("int unsigned");
+
+                    b.HasKey("ProductID", "CustomerID");
+
+                    b.ToTable("ProductBookmarks");
+                });
+
             modelBuilder.Entity("KShop.Products.Persistence.ProductPosition", b =>
                 {
                     b.Property<uint>("ID")
@@ -1742,154 +1755,154 @@ namespace KShop.Products.Persistence.Migrations
                         new
                         {
                             ID = 1u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(2888),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 100, DateTimeKind.Utc).AddTicks(4584),
                             ProductID = 1u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 2u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8728),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3631),
                             ProductID = 2u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 3u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8763),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3695),
                             ProductID = 3u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 4u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8897),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3805),
                             ProductID = 4u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 5u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8916),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3840),
                             ProductID = 5u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 6u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8935),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3879),
                             ProductID = 6u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 7u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(8952),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(3911),
                             ProductID = 7u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 8u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9019),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4150),
                             ProductID = 8u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 9u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9064),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4233),
                             ProductID = 9u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 10u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9084),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4271),
                             ProductID = 10u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 11u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9102),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4302),
                             ProductID = 11u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 12u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9119),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4335),
                             ProductID = 12u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 13u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9185),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4429),
                             ProductID = 13u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 14u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9205),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4463),
                             ProductID = 14u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 15u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9222),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4497),
                             ProductID = 15u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 16u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9285),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4592),
                             ProductID = 16u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 17u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9303),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4623),
                             ProductID = 17u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 18u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9322),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4659),
                             ProductID = 18u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 19u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9339),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4690),
                             ProductID = 19u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 20u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9356),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4722),
                             ProductID = 20u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 21u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9420),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4815),
                             ProductID = 21u,
                             Quantity = 100u
                         },
                         new
                         {
                             ID = 22u,
-                            CreateDate = new DateTime(2021, 7, 6, 20, 43, 53, 754, DateTimeKind.Utc).AddTicks(9437),
+                            CreateDate = new DateTime(2021, 7, 7, 21, 3, 12, 101, DateTimeKind.Utc).AddTicks(4850),
                             ProductID = 22u,
                             Quantity = 100u
                         });
@@ -2120,6 +2133,17 @@ namespace KShop.Products.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("KShop.Products.Persistence.ProductBookmark", b =>
+                {
+                    b.HasOne("KShop.Products.Persistence.Product", "Product")
+                        .WithMany("ProductFavorits")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("KShop.Products.Persistence.ProductPosition", b =>
                 {
                     b.HasOne("KShop.Products.Persistence.Product", "Product")
@@ -2157,6 +2181,8 @@ namespace KShop.Products.Persistence.Migrations
                     b.Navigation("Positions");
 
                     b.Navigation("ProductAttributes");
+
+                    b.Navigation("ProductFavorits");
 
                     b.Navigation("Reserves");
                 });

@@ -12,7 +12,7 @@ export class SetCartPositionsRequest {
 export class SetCartPositionResponse extends BaseResult {}
 
 export class RemoveCartPositionRequest {
-    productIDs: Array<number> = [];
+    productsIDs: Array<number> = [];
 }
 export class RemoveCartPositionResponse extends BaseResult {}
 

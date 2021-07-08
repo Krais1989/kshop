@@ -28,7 +28,7 @@ class CIdentityClient {
     changePassword = async (req: ChangePasswordRequest) =>
         await HttpClient.post<ChangePasswordRequest, ChangePasswordResponse>(
             ChangePasswordResponse,
-            `${AppSettings.IdentityHost}/api/delete`,
+            `${AppSettings.IdentityHost}/api/account/change-password`,
             req,
             AuthService.getAuthHeader()
         );

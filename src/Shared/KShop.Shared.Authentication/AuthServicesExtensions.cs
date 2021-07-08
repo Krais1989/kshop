@@ -48,8 +48,12 @@ namespace KShop.Shared.Authentication
             {
                 opt.RequireHttpsMetadata = false;
                 opt.SaveToken = true;
+
                 opt.TokenValidationParameters = new TokenValidationParameters()
                 {
+                    ClockSkew = TimeSpan.FromSeconds(jwtSettings.AccessExpiration),
+                    RequireExpirationTime = true,
+
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = jwtSettings.GetSymmetricSecurityKey(),
 

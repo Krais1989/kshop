@@ -20,7 +20,7 @@ namespace KShop.Carts.WebApi
 
     public class RemoveCartPositionsRequestDto
     {
-        public List<uint> ProductIDs { get; set; }
+        public List<uint> ProductsIDs { get; set; }
     }
 
 
@@ -67,7 +67,7 @@ namespace KShop.Carts.WebApi
             var response = await _mediator.Send(new RemoveCartPositionMediatorRequest
             {
                 UserID = this.GetCurrentUserIDExcept(),
-                ProductIDs = dto.ProductIDs
+                ProductsIDs = dto.ProductsIDs
             });
             return Ok(response);
         }

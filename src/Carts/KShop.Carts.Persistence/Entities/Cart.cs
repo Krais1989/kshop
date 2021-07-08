@@ -85,9 +85,9 @@ namespace KShop.Carts.Persistence
             Positions.RemoveAll(e => e.ProductID == productId);
         }
 
-        public void RemoveRange(IEnumerable<uint> productIds)
+        public void RemoveRange(IEnumerable<uint> ProductsIDs)
         {
-            foreach (var id in productIds)
+            foreach (var id in ProductsIDs)
             {
                 RemovePosition(id);
             }

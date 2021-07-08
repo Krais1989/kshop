@@ -2,15 +2,13 @@ import * as React from "react";
 import "./product-card.sass";
 import nophoto from "./nophoto.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faCartArrowDown,
-    faHeartBroken,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCartArrowDown, faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 import DropDown from "components/controls/drop-down/drop-down";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Money } from "models/Money";
 import { useCart } from "components/providers/CartProvider";
+import { useBookmarks } from "components/providers/BookmarksProvider";
 
 export interface IProductCardProps {
     id: number;
@@ -22,6 +20,7 @@ export interface IProductCardProps {
 
 const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
     const { cart, addToCart, getQuantity } = useCart();
+    const { isBookmarked, addBookmarks, delBookmarks } = useBookmarks();
 
     const productLink = `catalog/products/${props.id}`;
     let title = `${props.title}`;
@@ -40,22 +39,37 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
                 description: props.description,
                 checked: true,
                 price: props.price,
-                image: props.image
+                image: props.image,
             },
         ]);
     };
 
+    const jsxBookmark = isBookmarked(props.id) ? (
+        <span className="kshop-product-card-fav">
+            <FontAwesomeIcon
+                onClick={() => {
+                    delBookmarks([props.id]);
+                    toast(`LIKE ${props.id}`, { autoClose: 2000 });
+                }}
+                icon={faHeartBroken}
+            />
+        </span>
+    ) : (
+        <span className="kshop-product-card-fav">
+            <FontAwesomeIcon
+                onClick={() => {
+                    addBookmarks([props.id]);
+                    toast(`LIKE ${props.id}`, { autoClose: 2000 });
+                }}
+                icon={faHeart}
+            />
+        </span>
+    );
+
     return (
         <div key={props.id} className="kshop-product-card">
             <div className="kshop-product-card-image">
-                <span className="kshop-product-card-fav">
-                    <FontAwesomeIcon
-                        onClick={() =>
-                            toast(`LIKE ${props.id}`, { autoClose: 2000 })
-                        }
-                        icon={faHeartBroken}
-                    />
-                </span>
+                {jsxBookmark}
                 <Link to={productLink}>
                     <img
                         className="kshop-product-card-image"
@@ -77,20 +91,14 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
 
             <div className="kshop-product-card-actions">
                 {getQuantity(props.id) === 0 ? (
-                    <button
-                        className="kshop-button-green"
-                        onClick={() => addToCartCallback()}
-                    >
+                    <button className="kshop-button-green" onClick={() => addToCartCallback()}>
                         В корзину <FontAwesomeIcon icon={faCartArrowDown} />{" "}
                     </button>
                 ) : (
                     <div>Added</div>
                 )}
 
-                <DropDown
-                    title="..."
-                    className="kshop-product-card-actions-extra"
-                >
+                <DropDown title="..." className="kshop-product-card-actions-extra">
                     <a
                         href="/"
                         onClick={() => {

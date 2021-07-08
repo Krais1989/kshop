@@ -82,7 +82,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Shared.Integration.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Shared.Integration.MassTransit", "Shared\KShop.Shared.Integration.MassTransit\KShop.Shared.Integration.MassTransit.csproj", "{D5409B87-71C4-4C6C-AEA5-6CA12B396D46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KShop.Shared.Persistence.Services", "Shared\KShop.Shared.Persistence.Services\KShop.Shared.Persistence.Services.csproj", "{4DC74438-3770-470E-B9BF-1A4F8E9BADC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KShop.Shared.Persistence.Services", "Shared\KShop.Shared.Persistence.Services\KShop.Shared.Persistence.Services.csproj", "{4DC74438-3770-470E-B9BF-1A4F8E9BADC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{0E61DC02-71BC-43A2-8A3A-D32A2F92DB6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KShop.Accounts.Domain", "Accounts\KShop.Accounts.Domain\KShop.Accounts.Domain.csproj", "{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KShop.Accounts.Persistence", "Accounts\KShop.Accounts.Persistence\KShop.Accounts.Persistence.csproj", "{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KShop.Accounts.WebApi", "Accounts\KShop.Accounts.WebApi\KShop.Accounts.WebApi.csproj", "{A22CE510-FD7E-4441-B170-7D8EFCE0F86C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -210,6 +218,18 @@ Global
 		{4DC74438-3770-470E-B9BF-1A4F8E9BADC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DC74438-3770-470E-B9BF-1A4F8E9BADC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DC74438-3770-470E-B9BF-1A4F8E9BADC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A22CE510-FD7E-4441-B170-7D8EFCE0F86C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A22CE510-FD7E-4441-B170-7D8EFCE0F86C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A22CE510-FD7E-4441-B170-7D8EFCE0F86C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A22CE510-FD7E-4441-B170-7D8EFCE0F86C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -245,6 +265,9 @@ Global
 		{9E06FE8A-4D8F-4AB0-860C-91822D1AD518} = {ACA406ED-A661-472F-968D-62F09D734778}
 		{D5409B87-71C4-4C6C-AEA5-6CA12B396D46} = {ACA406ED-A661-472F-968D-62F09D734778}
 		{4DC74438-3770-470E-B9BF-1A4F8E9BADC8} = {ACA406ED-A661-472F-968D-62F09D734778}
+		{F9D0F791-EF3E-4C3C-B2DC-A7B3523C8CC8} = {0E61DC02-71BC-43A2-8A3A-D32A2F92DB6C}
+		{CA1092BC-BB5D-4A78-8AC6-0127E2DDED3D} = {0E61DC02-71BC-43A2-8A3A-D32A2F92DB6C}
+		{A22CE510-FD7E-4441-B170-7D8EFCE0F86C} = {0E61DC02-71BC-43A2-8A3A-D32A2F92DB6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42DFB36-0387-4155-910C-9F61C0961023}

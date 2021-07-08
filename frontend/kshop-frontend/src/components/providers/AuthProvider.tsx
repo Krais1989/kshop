@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { SignInRequest, SignUpRequest } from "services/clients/dtos/IdentityDtos";
 import { IdentityClient } from "services/clients/IdentityClient";
+import { useRedirect } from "./RedirectProvider";
 
 export class AuthData {
     userId: string = "";
@@ -23,6 +24,8 @@ interface IProps {}
 
 export const AuthProvider: React.FunctionComponent<IProps> = (props) => {
 
+    const redirect = useRedirect();
+
     const getLocal = ():AuthData|null =>{
         const rawAuth = localStorage.getItem("auth");
         if (rawAuth === null) return null;
@@ -39,8 +42,6 @@ export const AuthProvider: React.FunctionComponent<IProps> = (props) => {
             localStorage.setItem("auth", JSON.stringify(a));
         setAuth(a);
     };
-
-
 
     const signOut = () => {
         set(null);
@@ -64,6 +65,16 @@ export const AuthProvider: React.FunctionComponent<IProps> = (props) => {
                 toast.error("User registration error");
             }
         });
+
+    // В случае ошибок 401
+    const auth_err_flag = localStorage.getItem("auth_err");
+    useEffect(() => {
+        if (auth_err_flag != null){
+            localStorage.removeItem("auth_err");
+            set(null);
+            redirect.toHome();
+        }
+    }, [auth_err_flag])
 
 
     return (

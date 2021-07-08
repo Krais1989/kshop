@@ -18,7 +18,7 @@ namespace KShop.Carts.Domain.Mediators
     public class RemoveCartPositionMediatorRequest : IRequest<RemoveCartPositionMediatorResponse>
     {
         public uint UserID { get; set; }
-        public List<uint> ProductIDs { get; set; }
+        public List<uint> ProductsIDs { get; set; }
     }
     public class RemoveCartPositionMediatorHandler : IRequestHandler<RemoveCartPositionMediatorRequest, RemoveCartPositionMediatorResponse>
     {
@@ -40,7 +40,7 @@ namespace KShop.Carts.Domain.Mediators
 
             var cartId = $"cart-{request.UserID}";
             var cart = await _cartsRepo.GetAsync(cartId);
-            cart.RemoveRange(request.ProductIDs);
+            cart.RemoveRange(request.ProductsIDs);
             await _cartsRepo.ReplaceAsync(cartId, cart);
 
             return new RemoveCartPositionMediatorResponse();

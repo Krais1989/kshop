@@ -20,6 +20,8 @@ namespace KShop.Products.Persistence
         public ICollection<ProductPosition> Positions { get; set; }
         public ICollection<ProductReserve> Reserves { get; set; }
         public ICollection<ProductAttribute> ProductAttributes { get; set; }
+
+        public ICollection<ProductBookmark> ProductFavorits { get; set; }
     }
 
     public class ProductAttribute

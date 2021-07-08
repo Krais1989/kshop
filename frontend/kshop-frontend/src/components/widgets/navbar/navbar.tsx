@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./navbar.sass";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+    faBookmark,
     faBox,
     faHeart,
     faShoppingCart,
@@ -36,8 +37,8 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             </Link>
             <Link to="/favorites">
                 {" "}
-                <FontAwesomeIcon icon={faHeart} />
-                &nbsp;Favorites{" "}
+                <FontAwesomeIcon icon={faBookmark} />
+                &nbsp;Bookmarks{" "}
             </Link>
         </React.Fragment>
     );

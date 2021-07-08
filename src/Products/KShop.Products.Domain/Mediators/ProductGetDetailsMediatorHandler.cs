@@ -11,23 +11,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KShop.Products.Domain.Mediators
+namespace KShop.Products.Domain
 {
 
-    public class GetProductDetailsMediatorResponse : BaseResponse
+    public class ProductGetDetailsMediatorResponse : BaseResponse
     {
         public List<ProductDetails> Data { get; set; } = new List<ProductDetails>();
     }
-    public class GetProductDetailsMediatorRequest : IRequest<GetProductDetailsMediatorResponse>
+    public class ProductGetDetailsMediatorRequest : IRequest<ProductGetDetailsMediatorResponse>
     {
         public List<uint> ProductID { get; set; } = new List<uint>();
     }
-    public class GetProductDetailsMediatorHandler : IRequestHandler<GetProductDetailsMediatorRequest, GetProductDetailsMediatorResponse>
+    public class ProductGetDetailsMediatorHandler : IRequestHandler<ProductGetDetailsMediatorRequest, ProductGetDetailsMediatorResponse>
     {
-        private readonly ILogger<GetProductDetailsMediatorHandler> _logger;
+        private readonly ILogger<ProductGetDetailsMediatorHandler> _logger;
         private readonly ProductsContext _productsContext;
 
-        public GetProductDetailsMediatorHandler(ILogger<GetProductDetailsMediatorHandler> logger, ProductsContext productsContext)
+        public ProductGetDetailsMediatorHandler(ILogger<ProductGetDetailsMediatorHandler> logger, ProductsContext productsContext)
         {
             _logger = logger;
             _productsContext = productsContext;
@@ -35,7 +35,7 @@ namespace KShop.Products.Domain.Mediators
 
         //private readonly IValidator<GetProductDetailsMediatorFluentValidatorDto> _validator;
 
-        public async Task<GetProductDetailsMediatorResponse> Handle(GetProductDetailsMediatorRequest request, CancellationToken cancellationToken)
+        public async Task<ProductGetDetailsMediatorResponse> Handle(ProductGetDetailsMediatorRequest request, CancellationToken cancellationToken)
         {
             //var validatorDto = new GetProductDetailsMediatorFluentValidatorDto() { };
             //_validator.Validate(validatorDto);
@@ -60,7 +60,7 @@ namespace KShop.Products.Domain.Mediators
                 .ToList();
 
 
-            return new GetProductDetailsMediatorResponse()
+            return new ProductGetDetailsMediatorResponse()
             {
                 Data = data
             };

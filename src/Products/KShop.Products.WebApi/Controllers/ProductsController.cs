@@ -10,7 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KShop.Products.Domain.Mediators;
+using KShop.Products.Domain;
+using KShop.Shared.Authentication;
 
 namespace KShop.Products.WebApi
 {
@@ -35,8 +36,19 @@ namespace KShop.Products.WebApi
             _mediator = mediator;
         }
 
+        [HttpGet("bookmarked")]
+        public async ValueTask<IActionResult> GetProductsBookmarked()
+        {
+            var response = await _mediator.Send(new ProductsGetBookmarkedMediatorRequest
+            {
+                UserID = this.GetCurrentUserID().Value
+            });
+
+            return Ok(response);
+        }
+
         [HttpGet("for-home")]
-        public async ValueTask<IActionResult> GetProductsForHomePage([FromQuery] GetProductsForHomeMediatorRequest request)
+        public async ValueTask<IActionResult> GetProductsForHomePage([FromQuery] ProductsGetForHomeMediatorRequest request)
         {
             var user = this.User;
             var response = await _mediator.Send(request);
@@ -45,7 +57,7 @@ namespace KShop.Products.WebApi
         }
 
         [HttpGet("details")]
-        public async ValueTask<IActionResult> GetProductsDetails([FromQuery] GetProductDetailsMediatorRequest request)
+        public async ValueTask<IActionResult> GetProductsDetails([FromQuery] ProductGetDetailsMediatorRequest request)
         {
             //var user = this.User;
             var response = await _mediator.Send(request);
@@ -54,7 +66,7 @@ namespace KShop.Products.WebApi
         }
 
         [HttpGet("for-order")]
-        public async ValueTask<IActionResult> GetProductForOrder([FromQuery] GetProductsForOrderMediatorRequest request)
+        public async ValueTask<IActionResult> GetProductForOrder([FromQuery] ProductsGetForOrderMediatorRequest request)
         {
             var user = this.User;
             var response = await _mediator.Send(request);

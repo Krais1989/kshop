@@ -15,6 +15,13 @@ namespace KShop.Identities.Domain
 
     public class ChangePasswordMediatorResponse : BaseResponse
     {
+        public ChangePasswordMediatorResponse(string error) : base(error)
+        {
+        }
+
+        public ChangePasswordMediatorResponse(bool isSuccess = true) : base(isSuccess)
+        {
+        }
     }
     public class ChangePasswordMediatorRequest : IRequest<ChangePasswordMediatorResponse>
     {
@@ -37,6 +44,8 @@ namespace KShop.Identities.Domain
         {
             var user = await _userMan.GetUserAsync(request.User);
             var result = await _userMan.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            if (!result.Succeeded)
+                return new ChangePasswordMediatorResponse(result.Errors.First().Description);
             return new ChangePasswordMediatorResponse();
         }
     }
