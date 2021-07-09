@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { Money } from "models/Money";
 import { useCart } from "components/providers/CartProvider";
 import { useBookmarks } from "components/providers/BookmarksProvider";
+import Submitter from "../submitter/Submitter";
 
 export interface IProductCardProps {
     id: number;
@@ -19,7 +20,7 @@ export interface IProductCardProps {
 }
 
 const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
-    const { cart, addToCart, getQuantity } = useCart();
+    const { addToCart, getQuantity } = useCart();
     const { isBookmarked, addBookmarks, delBookmarks } = useBookmarks();
 
     const productLink = `catalog/products/${props.id}`;
@@ -44,30 +45,34 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
         ]);
     };
 
-    const jsxBookmark = isBookmarked(props.id) ? (
-        <span className="kshop-product-card-fav">
-            <FontAwesomeIcon
-                onClick={() => {
-                    delBookmarks([props.id]);
-                    toast(`LIKE ${props.id}`, { autoClose: 2000 });
-                }}
-                icon={faHeartBroken}
-            />
-        </span>
-    ) : (
-        <span className="kshop-product-card-fav">
-            <FontAwesomeIcon
-                onClick={() => {
-                    addBookmarks([props.id]);
-                    toast(`LIKE ${props.id}`, { autoClose: 2000 });
-                }}
-                icon={faHeart}
-            />
+    const isBooked = isBookmarked(props.id);
+    const curIcon = isBooked ? faHeart : faHeart;
+    const bookmarkCallback = isBooked ? () => delBookmarks([props.id]) : () => addBookmarks([props.id]);
+    const curStyle = isBooked ? "kshop-product-card-fav-booked" : "kshop-product-card-fav";
+
+    const jsxBookmark = (
+        <span className={curStyle}>
+            <Submitter submit={() => bookmarkCallback()}>
+                <FontAwesomeIcon
+                    onClick={() => {
+                        bookmarkCallback();
+                    }}
+                    icon={curIcon}
+                />
+            </Submitter>
         </span>
     );
 
     return (
         <div key={props.id} className="kshop-product-card">
+            {/* <button
+                onClick={(e) => {
+                    addBookmarks([props.id]);
+                }}
+            >
+                ASD
+            </button> */}
+
             <div className="kshop-product-card-image">
                 {jsxBookmark}
                 <Link to={productLink}>

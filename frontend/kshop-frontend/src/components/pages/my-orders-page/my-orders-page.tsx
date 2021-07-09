@@ -9,7 +9,6 @@ interface IMyOrdersPageProps { }
 const MyOrdersPage: React.FunctionComponent<IMyOrdersPageProps> = (props) => {
     return (
         <div className="kshop-base-page kshop-orders-page">
-            Orders Page
             <WOrdersList />
         </div>
     )

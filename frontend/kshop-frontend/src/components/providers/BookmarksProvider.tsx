@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 import { ProductsClient } from "services/clients/ProductsClient";
 import { useAuth } from "./AuthProvider";
 
@@ -8,9 +9,9 @@ export class BookmarksData {
 }
 
 export class BookmarksContextData {
-    addBookmarks: (prodsIds: number[]) => void = () => {};
-    delBookmarks: (prodsIds: number[]) => void = () => {};
-    isBookmarked: (prodID: number) => boolean = (prodID) => false;
+    addBookmarks!: (prodsIds: number[]) => Promise<any>;
+    delBookmarks!: (prodsIds: number[]) => Promise<any>;
+    isBookmarked!: (prodID: number) => boolean;
 }
 
 const BookmarksContext = createContext<BookmarksContextData>(new BookmarksContextData());
@@ -32,19 +33,29 @@ export const BookmarksProvider: React.FunctionComponent<IProps> = (props) => {
     }, [auth]);
 
     const addBookmarks = (prodsIDs: number[]) => {
-        ProductsClient.addBookmarks({ productsIDs: prodsIDs });
-        const new_bookmarks = Object.assign(new BookmarksData(), {
-            productsIDs: [...new Set([...bookmarks.productsIDs, prodsIDs])],
+        return ProductsClient.addBookmarks({ productsIDs: prodsIDs }).then((r) => {
+            if (r.isSuccess) {
+                const new_bookmarks = Object.assign({
+                    productsIDs: [...new Set([...bookmarks.productsIDs, ...prodsIDs])],
+                });
+                setBookmarks(new_bookmarks);
+                console.log("ADD BOOKMARK");
+                toast.success(`Favorit added #${prodsIDs[0]}`, { autoClose: 2000 });
+            }
         });
-        setBookmarks(new_bookmarks);
     };
 
     const delBookmarks = (prodsIDs: number[]) => {
-        ProductsClient.delBookmarks({ productsIDs: prodsIDs });
-        const new_bookmarks = Object.assign(new BookmarksData(), {
-            productsIDs: bookmarks.productsIDs.filter((id) => !prodsIDs.includes(id)),
+        return ProductsClient.delBookmarks({ productsIDs: prodsIDs }).then((r) => {
+            if (r.isSuccess) {
+                const new_bookmarks = Object.assign({
+                    productsIDs: bookmarks.productsIDs.filter((id) => !prodsIDs.includes(id)),
+                });
+                setBookmarks(new_bookmarks);
+                console.log("DEL BOOKMARK");
+                toast.success(`Favorit removed #${prodsIDs[0]}`, { autoClose: 2000 });
+            }
         });
-        setBookmarks(new_bookmarks);
     };
 
     const isBookmarked = (prodID: number) => {

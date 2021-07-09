@@ -43,7 +43,7 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
     const submit = () => {
         if (isLoad) return;
         const submitOrderRequest: SubmitOrderRequest = {
-            address: {data: address},
+            address: { data: address },
             orderContent: cart.positions.filter((e, i) => e.checked),
             payment: { type: paymentType },
             shipment: { type: shipmentType },
@@ -54,9 +54,9 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                 removeFromCart(cart.positions.filter((e, i) => e.checked).map((e) => e.productID));
                 setIsLoad(false);
                 redirect.toMyOrders();
-            } else{
+            } else {
                 console.log(r.errorMessage);
-            }            
+            }
         });
         setIsLoad(true);
     };
@@ -74,9 +74,9 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
     //const order_price = 111;
 
     const base_price = cart.getCheckedPrice();
-    const products_price = base_price;
+    const discount_price = base_price;
     const shipment_price = 100;
-    const overall_price = base_price;
+    const overall_price = discount_price + shipment_price;
 
     return (
         <div className="ks-ordering">
@@ -85,6 +85,7 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                     <span className="ks-ordering-info-panel-title">Payment method</span>
                     <span>
                         <Select
+                            disabled={true}
                             selected={paymentType}
                             data={payment_opts}
                             onChange={(e) => setPaymentType(e)}
@@ -95,6 +96,7 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                     <span className="ks-ordering-info-panel-title">Receive method</span>
                     <span>
                         <Select
+                            disabled={true}
                             selected={shipmentType}
                             data={shipment_opts}
                             onChange={(e) => setShipmentType(e)}
@@ -124,7 +126,7 @@ const WOrderingDialog: React.FunctionComponent<IWOrderingDialogProps> = (props) 
                     <span>Price</span> <span>{base_price}</span>
                 </div>
                 <div className="ks-ordering-сtrl-element">
-                    <span>Products</span> <span>{products_price}</span>
+                    <span>With discount</span> <span>{discount_price}</span>
                 </div>
 
                 <div className="ks-ordering-сtrl-element">

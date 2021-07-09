@@ -44,12 +44,13 @@ namespace KShop.Orders.Domain
                 .Select(e => new OrderDetails
                 {
                     ID = e.ID,
-                    CreateTime = e.CreateDate,
+                    CreateDate = e.CreateDate,
                     Status = e.Status,
                     Price = e.Price,
                     Logs = e.Logs.Select(l => new OrderDetails.Log { Date = l.StatusDate, Status = l.NewStatus }),
                     Positions = e.Positions.Select(pos => new OrderDetails.Position { ProductID = pos.ProductID, Quantity = pos.Quantity })
                 })
+                .OrderByDescending(e => e.CreateDate)
                 .ToListAsync();
 
 

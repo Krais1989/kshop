@@ -7,7 +7,7 @@ interface IAccountPageProps {}
 const AccountPage: React.FunctionComponent<IAccountPageProps> = (props) => {
     return (
         <div className="kshop-base-page kshop-account-page">
-            AccountPage
+            <h2>Change password </h2>
             <WChangePassword />
         </div>
     );

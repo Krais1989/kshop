@@ -10,6 +10,7 @@ interface ISelectProps {
     selected: string;
     data: Array<SelectOption>;
     onChange: (value: string) => void;
+    disabled: boolean;
 }
 
 const Select: React.FunctionComponent<ISelectProps> = (props) => {
@@ -27,6 +28,7 @@ const Select: React.FunctionComponent<ISelectProps> = (props) => {
             value={props.selected}
             className="kshop-select"
             onChange={(e) => props.onChange(e.target.value)}
+            disabled={props.disabled}
         >
             {jsxOptions}
         </select>

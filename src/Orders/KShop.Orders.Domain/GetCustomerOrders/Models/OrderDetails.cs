@@ -24,7 +24,7 @@ namespace KShop.Orders.Domain
 
         public Guid ID { get; set; }
         public EOrderStatus Status { get; set; }
-        public DateTime CreateTime { get; set; }
+        public DateTime CreateDate { get; set; }
         public Money Price { get; set; }
 
         public IEnumerable<Log> Logs { get; set; }

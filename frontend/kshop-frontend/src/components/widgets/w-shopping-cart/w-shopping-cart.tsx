@@ -25,11 +25,12 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
         clearCart();
     };
 
-    const price =
-        cart.positions
-            .filter((e) => e.checked)
-            .map((e) => e.price.price)
-            .reduce((res, cur) => res + cur, 0) ?? 0;
+    const order_price = cart.getCheckedPrice();
+    // const price =
+    //     cart.positions
+    //         .filter((e) => e.checked)
+    //         .map((e) => e.price.price * e.quantity)
+    //         .reduce((res, cur) => res + cur, 0) ?? 0;
 
     const isEmpty = cart.positions.length === 0;
 
@@ -99,7 +100,7 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
             </div>
             <div className="kshop-w-shopping-cart-positions-row-price">
                 <span>
-                    {cartPos.price.price} {cartPos.price.currency} &#8381;
+                    {order_price} {cartPos.price.currency} &#8381;
                 </span>
             </div>
 
@@ -129,9 +130,9 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
     const jsxSummaryPanel = (
         <div className="kshop-w-shopping-cart-actions">
             <div className="kshop-w-shopping-cart-actions-priceinfo">
-                {price > 0 ? `Price: ${price}` : "Choose atleast one position"}
+                {order_price > 0 ? `Price: ${order_price}` : "Choose atleast one position"}
             </div>
-            <button disabled={price === 0} className="kshop-button" onClick={() => submit()}>
+            <button disabled={order_price === 0} className="kshop-button" onClick={() => submit()}>
                 Submit Order
             </button>
         </div>

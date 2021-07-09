@@ -16,11 +16,16 @@
         right: 5px
         z-index: 1
         cursor: pointer
-        color: #e98a8a
+        color: #f0bebe
+        //border: 1px solid #000000
         transition-duration: 0.2s
         font-size: 20px
         &:hover
             color: #e23f3f
+
+        &-booked
+            @extend .kshop-product-card-fav
+            color: #ff4444
     
     &-image
         position: relative
