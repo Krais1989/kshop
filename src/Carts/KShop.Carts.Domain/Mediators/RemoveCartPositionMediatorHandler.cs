@@ -17,8 +17,14 @@ namespace KShop.Carts.Domain.Mediators
     }
     public class RemoveCartPositionMediatorRequest : IRequest<RemoveCartPositionMediatorResponse>
     {
-        public uint UserID { get; set; }
-        public List<uint> ProductsIDs { get; set; }
+        public RemoveCartPositionMediatorRequest(uint userID, List<uint> productsIDs)
+        {
+            UserID = userID;
+            ProductsIDs = productsIDs;
+        }
+
+        public uint UserID { get; private set; }
+        public List<uint> ProductsIDs { get; private set; }
     }
     public class RemoveCartPositionMediatorHandler : IRequestHandler<RemoveCartPositionMediatorRequest, RemoveCartPositionMediatorResponse>
     {

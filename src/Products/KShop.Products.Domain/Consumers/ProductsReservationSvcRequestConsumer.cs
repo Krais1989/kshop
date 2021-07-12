@@ -25,12 +25,12 @@ namespace KShop.Products.Domain
         {
             try
             {
-                var productsReserve = new ProductsReserveMediatorRequest()
-                {
-                    CustomerID = context.Message.CustomerID,
-                    OrderID = context.Message.OrderID,
-                    OrderContent = context.Message.OrderContent
-                };
+                var productsReserve = new ProductsReserveMediatorRequest
+                (
+                    userID: context.Message.UserID,
+                    orderID: context.Message.OrderID,
+                    orderContent: context.Message.OrderContent
+                );
 
                 var res = await _mediator.Send(productsReserve);
 

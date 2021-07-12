@@ -10,29 +10,26 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class ProductsReserveSvcRequest
     {
-        public Guid OrderID { get; set; }
-        public uint CustomerID { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
-    }
+        public ProductsReserveSvcRequest(Guid orderID, uint userID, List<ProductQuantity> orderContent)
+        {
+            OrderID = orderID;
+            UserID = userID;
+            OrderContent = orderContent;
+        }
 
-    //public class ProductsReserveSvcResponse : BaseResponse
-    //{
-    //    public ProductsReserveMap ProductsReserves { get; set; }
-    //    public Money OrderPrice { get; set; }
-    //}
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
+    }
 
     /// <summary>
     /// Сообщение внутреннего обработчика о состоянии резервации 
     /// </summary>
     public class ProductsReserveSuccessEvent
     {
-        public Guid OrderID { get; set; }
-        /// <summary>
-        /// Зарезервированные продукты <product_id, quantity>
-        /// </summary>
-        public List<ProductQuantity> OrderContent { get; set; }
-
-        public Money Price { get; set; }
+        public Guid OrderID { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
+        public Money Price { get; private set; }
 
         public ProductsReserveSuccessEvent(Guid orderID, List<ProductQuantity> orderContent, Money price)
         {
@@ -42,15 +39,18 @@ namespace KShop.Shared.Integration.Contracts
         }
     }
 
-    public class ProductsReserveFaultEvent
+    public class ProductsReserveFaultEvent : BaseResponse
     {
-        public Guid OrderID { get; set; }
-        public string ErrorMessage { get; set; }
+        public Guid OrderID { get; private set; }
 
-        public ProductsReserveFaultEvent(Guid orderID, string errorMessage = null)
+        public ProductsReserveFaultEvent(Guid orderID)
         {
             OrderID = orderID;
-            ErrorMessage = errorMessage;
+        }
+
+        public ProductsReserveFaultEvent(Guid orderID, string error) : base(error)
+        {
+            OrderID = orderID;
         }
     }
 }

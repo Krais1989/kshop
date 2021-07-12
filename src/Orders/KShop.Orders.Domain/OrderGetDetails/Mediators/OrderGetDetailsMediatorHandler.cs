@@ -15,12 +15,23 @@ namespace KShop.Orders.Domain
 {
     public class OrderGetDetailsResponse : BaseResponse
     {
-        public Order Order { get; set; }
+        public OrderGetDetailsResponse(Order order)
+        {
+            Order = order;
+        }
+
+        public Order Order { get; private set; }
     }
     public class OrderGetDetailsRequest : IRequest<OrderGetDetailsResponse>
     {
-        public uint CustomerID { get; set; }
-        public Guid OrderID { get; set; }
+        public OrderGetDetailsRequest(uint userID, Guid orderID)
+        {
+            UserID = userID;
+            OrderID = orderID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
     }
     public class OrderGetDetailsHandler : IRequestHandler<OrderGetDetailsRequest, OrderGetDetailsResponse>
     {
@@ -43,12 +54,9 @@ namespace KShop.Orders.Domain
             var validatorDto = new OrderGetDetailsFluentValidatorDto() { };
             _validator.Validate(validatorDto);
 
-            var result = await _orderContext.Orders.AsNoTracking().FirstOrDefaultAsync(e => e.ID == request.OrderID);
+            var result = await _orderContext.Orders.AsNoTracking().FirstOrDefaultAsync(e => e.ID == request.OrderID && e.CustomerID == request.UserID);
 
-            return new OrderGetDetailsResponse()
-            {
-                Order = result
-            };
+            return new OrderGetDetailsResponse(result);
         }
     }
 }

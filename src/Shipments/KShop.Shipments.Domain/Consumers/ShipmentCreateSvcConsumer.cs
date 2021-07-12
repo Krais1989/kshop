@@ -31,10 +31,11 @@ namespace KShop.Shipments.Domain
 
             try
             {
-                var result = await _mediator.Send(new ShipmentInitializeMediatorRequest()
-                {
-                    OrderID = context.Message.OrderID
-                });
+                var result = await _mediator.Send(new ShipmentInitializeMediatorRequest
+                (
+                    orderID: context.Message.OrderID,
+                    userID: context.Message.UserID
+                ));
             }
             catch (Exception e)
             {

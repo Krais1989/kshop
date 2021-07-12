@@ -44,7 +44,7 @@ namespace KShop.Orders.Domain
             ctx.Instance.ShipmentID = ctx.Data.ShipmentID;
             ctx.Instance.Statuses.Add(EOrderStatus.Shipped);
 
-            await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Data.OrderID));
+            await ctx.Publish(new OrderSetStatusShippedSvcRequest(ctx.Instance.CustomerID, ctx.Data.OrderID, ""));
         }
 
         private async Task HandleOnShipmentFault(BehaviorContext<OrderProcessingSagaState, ShipmentCreateFaultSvcEvent> ctx)

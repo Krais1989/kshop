@@ -12,12 +12,28 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderSubmitSagaRequest
     {
-        public Guid OrderID { get; set; }
-        public uint CustomerID { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
-        public EPaymentProvider PaymentProvider { get; set; }
-        public EShippingMethod ShippingMethod { get; set; }
-        public Address Address { get; set; }
+        public OrderSubmitSagaRequest(
+            Guid orderID,
+            uint customerID,
+            List<ProductQuantity> orderContent,
+            EPaymentProvider paymentProvider,
+            EShippingMethod shippingMethod,
+            Address address)
+        {
+            OrderID = orderID;
+            UserID = customerID;
+            OrderContent = orderContent;
+            PaymentProvider = paymentProvider;
+            ShippingMethod = shippingMethod;
+            Address = address;
+        }
+
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
+        public EPaymentProvider PaymentProvider { get; private set; }
+        public EShippingMethod ShippingMethod { get; private set; }
+        public Address Address { get; private set; }
         //public Money Price { get; set; }
     }
 
@@ -28,7 +44,12 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderSubmitSagaResponse : BaseResponse
     {
-        public Guid OrderID { get; set; }
+        public OrderSubmitSagaResponse(Guid orderID)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; private set; }
     }
 
 }

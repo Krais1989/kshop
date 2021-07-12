@@ -41,6 +41,9 @@ namespace KShop.Payments.Persistence.Migrations
                     b.Property<DateTime>("StatusDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<uint>("UserID")
+                        .HasColumnType("int unsigned");
+
                     b.HasKey("ID");
 
                     b.ToTable("Payments");

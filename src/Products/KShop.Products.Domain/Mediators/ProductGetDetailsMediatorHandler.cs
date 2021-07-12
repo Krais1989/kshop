@@ -16,11 +16,23 @@ namespace KShop.Products.Domain
 
     public class ProductGetDetailsMediatorResponse : BaseResponse
     {
-        public List<ProductDetails> Data { get; set; } = new List<ProductDetails>();
+        public ProductGetDetailsMediatorResponse(List<ProductDetails> data)
+        {
+            Data = data;
+        }
+
+        public List<ProductDetails> Data { get; private set; } = new List<ProductDetails>();
     }
     public class ProductGetDetailsMediatorRequest : IRequest<ProductGetDetailsMediatorResponse>
     {
-        public List<uint> ProductID { get; set; } = new List<uint>();
+        public ProductGetDetailsMediatorRequest(uint[] productID, uint? userID)
+        {
+            ProductID = productID;
+            UserID = userID;
+        }
+
+        public uint? UserID { get; private set; }
+        public uint[] ProductID { get; private set; }
     }
     public class ProductGetDetailsMediatorHandler : IRequestHandler<ProductGetDetailsMediatorRequest, ProductGetDetailsMediatorResponse>
     {
@@ -60,10 +72,7 @@ namespace KShop.Products.Domain
                 .ToList();
 
 
-            return new ProductGetDetailsMediatorResponse()
-            {
-                Data = data
-            };
+            return new ProductGetDetailsMediatorResponse(data);
         }
     }
 }

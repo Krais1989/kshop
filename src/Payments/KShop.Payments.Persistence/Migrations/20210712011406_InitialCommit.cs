@@ -25,7 +25,8 @@ namespace KShop.Payments.Persistence.Migrations
                     LastCheckingDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Currency = table.Column<string>(type: "longtext", nullable: true, defaultValue: "RUB")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: true, defaultValue: 0m)
+                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: true, defaultValue: 0m),
+                    UserID = table.Column<uint>(type: "int unsigned", nullable: false)
                 },
                 constraints: table =>
                 {

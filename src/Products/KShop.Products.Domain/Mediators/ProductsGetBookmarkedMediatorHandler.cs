@@ -16,11 +16,21 @@ namespace KShop.Products.Domain
 
     public class ProductsGetBookmarkedMediatorResponse : BaseResponse
     {
-        public List<ProductPresentation> Data { get; set; }
+        public ProductsGetBookmarkedMediatorResponse(List<ProductPresentation> data)
+        {
+            Data = data;
+        }
+
+        public List<ProductPresentation> Data { get; private set; }
     }
     public class ProductsGetBookmarkedMediatorRequest : IRequest<ProductsGetBookmarkedMediatorResponse>
     {
-        public uint UserID { get; set; }
+        public ProductsGetBookmarkedMediatorRequest(uint userID)
+        {
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
     }
     public class ProductsGetBookmarkedMediatorHandler : IRequestHandler<ProductsGetBookmarkedMediatorRequest, ProductsGetBookmarkedMediatorResponse>
     {
@@ -55,7 +65,7 @@ namespace KShop.Products.Domain
                 })
                 .ToListAsync();
 
-            return new ProductsGetBookmarkedMediatorResponse { Data = data };
+            return new ProductsGetBookmarkedMediatorResponse(data);
         }
     }
 }

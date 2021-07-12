@@ -50,12 +50,13 @@ namespace KShop.Orders.Domain
 
             _logger.LogDebug($"Saga - Start Payment Inialization");
             
-            await ctx.Publish(new PaymentCreateSvcRequest()
-            {
-                OrderID = ctx.Data.OrderID,
-                Money = ctx.Instance.OrderPrice,
-                PaymentPlatform = ctx.Instance.PaymentProvider
-            });
+            await ctx.Publish(new PaymentCreateSvcRequest
+            (
+                orderID: ctx.Data.OrderID,
+                userID: ctx.Instance.CustomerID,
+                money: ctx.Instance.OrderPrice,
+                paymentPlatform: ctx.Instance.PaymentProvider
+            ));
 
         }
 

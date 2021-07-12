@@ -94,16 +94,16 @@ namespace KShop.Orders.Domain
                 switch (s)
                 {
                     case EOrderStatus.Reserved:
-                        await ctx.Publish(new ProductsReserveCancelSvcRequest(ctx.Instance.CorrelationId));
+                        await ctx.Publish(new ProductsReserveCancelSvcRequest(ctx.Instance.CorrelationId, ctx.Instance.CustomerID));
                         break;
                     case EOrderStatus.Created:
-                        await ctx.Publish(new OrderCancelSvcRequest(ctx.Instance.CorrelationId));
+                        await ctx.Publish(new OrderCancelSvcRequest(ctx.Instance.CorrelationId, ctx.Instance.CustomerID));
                         break;
                     case EOrderStatus.Payed:
-                        await ctx.Publish(new PaymentCancelSvcRequest() { PaymentID = ctx.Instance.PaymentID.Value });
+                        await ctx.Publish(new PaymentCancelSvcRequest(ctx.Instance.PaymentID.Value, ctx.Instance.CustomerID));
                         break;
                     case EOrderStatus.Shipped:
-                        await ctx.Publish(new ShipmentCancelSvcRequest() { ShipmentID = ctx.Instance.ShipmentID.Value });
+                        await ctx.Publish(new ShipmentCancelSvcRequest(ctx.Instance.ShipmentID.Value, ctx.Instance.CustomerID));
                         break;
                     case EOrderStatus.Faulted:
                         break;
@@ -116,7 +116,7 @@ namespace KShop.Orders.Domain
                 }
             }
 
-            await ctx.Publish(new OrderSetStatusCancelledSvcRequest(ctx.Instance.CorrelationId));
+            await ctx.Publish(new OrderSetStatusCancelledSvcRequest(ctx.Instance.CustomerID, ctx.Instance.CorrelationId, ""));
         }
 
 

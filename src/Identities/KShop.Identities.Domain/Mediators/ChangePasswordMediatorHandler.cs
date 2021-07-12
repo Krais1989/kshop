@@ -25,9 +25,16 @@ namespace KShop.Identities.Domain
     }
     public class ChangePasswordMediatorRequest : IRequest<ChangePasswordMediatorResponse>
     {
-        public ClaimsPrincipal User { get; set; }
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
+        public ChangePasswordMediatorRequest(ClaimsPrincipal user, string oldPassword, string newPassword)
+        {
+            User = user;
+            OldPassword = oldPassword;
+            NewPassword = newPassword;
+        }
+
+        public ClaimsPrincipal User { get; private set; }
+        public string OldPassword { get; private set; }
+        public string NewPassword { get; private set; }
     }
     public class ChangePasswordMediatorHandler : IRequestHandler<ChangePasswordMediatorRequest, ChangePasswordMediatorResponse>
     {

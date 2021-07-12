@@ -8,7 +8,14 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class PaymentCancelSvcRequest
     {
-        public Guid PaymentID { get; set; }
+        public PaymentCancelSvcRequest(Guid paymentID, uint userID)
+        {
+            UserID = userID;
+            PaymentID = paymentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
 
     public class PaymentCancelSvcResponse : BaseResponse

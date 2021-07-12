@@ -21,7 +21,14 @@ namespace KShop.Payments.Domain
     /// </summary>
     public class PaymentSetCanceledMediatorRequest : IRequest<PaymentCancelMediatorResponse>
     {
-        public Guid PaymentID { get; set; }
+        public PaymentSetCanceledMediatorRequest(uint userID, Guid paymentID)
+        {
+            UserID = userID;
+            PaymentID = paymentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
     public class PaymentSetCanceledMediatorHandler : IRequestHandler<PaymentSetCanceledMediatorRequest, PaymentCancelMediatorResponse>
     {

@@ -47,13 +47,10 @@ namespace KShop.Orders.Domain
             ctx.Instance.Statuses.Add(EOrderStatus.Payed);
 
             _logger.LogDebug($"Saga - Start Shipment Initialization");
-            await ctx.Publish(new ShipmentCreateSvcRequest()
-            {
-                OrderID = ctx.Data.OrderID,
-                OrderContent = ctx.Instance.OrderContent
-            });
+            await ctx.Publish(
+                new ShipmentCreateSvcRequest(orderID: ctx.Data.OrderID, orderContent: ctx.Instance.OrderContent, userID: ctx.Instance.CustomerID));
 
-            await ctx.Publish(new OrderSetStatusPayedSvcRequest(ctx.Data.OrderID));
+            await ctx.Publish(new OrderSetStatusPayedSvcRequest(ctx.Instance.CustomerID, ctx.Data.OrderID, ""));
         }
 
         private async Task HandleOnPaymentFaulted(BehaviorContext<OrderProcessingSagaState, PaymentCreateFaultSvcEvent> ctx)

@@ -15,16 +15,33 @@ using System.Threading.Tasks;
 namespace KShop.Orders.Domain
 {
 
-    public class OrderCreateMediatorResponse
+    public class OrderCreateMediatorResponse : BaseResponse
     {
+        public OrderCreateMediatorResponse(Guid orderID) : base()
+        {
+            OrderID = orderID;
+        }
+
         public Guid OrderID { get; set; }
     }
     public class OrderCreateMediatorRequest : IRequest<OrderCreateMediatorResponse>
     {
-        public Guid? OrderID { get; set; }
-        public uint CustomerID { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
+        public OrderCreateMediatorRequest(
+            Guid orderID,
+            uint customerID,
+            Money orderPrice,
+            List<ProductQuantity> orderContent)
+        {
+            OrderID = orderID;
+            UserID = customerID;
+            OrderPrice = orderPrice;
+            OrderContent = orderContent;
+        }
+
+        public Guid OrderID { get; set; }
+        public uint UserID { get; set; }
         public Money OrderPrice { get; set; }
+        public List<ProductQuantity> OrderContent { get; set; }
     }
     public class OrderCreateMediatorHandler : IRequestHandler<OrderCreateMediatorRequest, OrderCreateMediatorResponse>
     {
@@ -51,10 +68,10 @@ namespace KShop.Orders.Domain
 
             var entity = new Order
             {
-                ID = request.OrderID ?? default,
-                CustomerID = request.CustomerID,
+                ID = request.OrderID,
+                CustomerID = request.UserID,
                 CreateDate = DateTime.UtcNow,
-                Positions = request.OrderContent?.Select(e => new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity}).ToList(),
+                Positions = request.OrderContent?.Select(e => new OrderPosition() { ProductID = e.ProductID, Quantity = e.Quantity }).ToList(),
                 Logs = new List<OrderLog>(),
                 Price = request.OrderPrice
             };
@@ -65,18 +82,20 @@ namespace KShop.Orders.Domain
             try
             {
                 var strat = _context.Database.CreateExecutionStrategy();
-                await strat.ExecuteAsync((ct) => {
+                await strat.ExecuteAsync((ct) =>
+                {
                     //throw new Exception("test exception");
                     return _context.SaveChangesAsync(ct);
                 }, cancellationToken);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 _logger.LogError(e, "Cover strategy exception");
             }
 
 
 
-            return new OrderCreateMediatorResponse() { OrderID = entity.ID };
+            return new OrderCreateMediatorResponse(entity.ID);
         }
     }
 }

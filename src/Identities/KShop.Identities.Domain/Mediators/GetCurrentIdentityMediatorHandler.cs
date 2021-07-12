@@ -15,11 +15,21 @@ namespace KShop.Identities.Domain
 
     public class GetCurrentIdentityMediatorResponse
     {
-        public string Email { get; set; }
+        public GetCurrentIdentityMediatorResponse(string email)
+        {
+            Email = email;
+        }
+
+        public string Email { get; private set; }
     }
     public class GetCurrentIdentityMediatorRequest : IRequest<GetCurrentIdentityMediatorResponse>
     {
-        public ClaimsPrincipal User { get; set; }
+        public GetCurrentIdentityMediatorRequest(ClaimsPrincipal user)
+        {
+            User = user;
+        }
+
+        public ClaimsPrincipal User { get; private set; }
     }
     public class GetCurrentIdentityMediatorHandler : IRequestHandler<GetCurrentIdentityMediatorRequest, GetCurrentIdentityMediatorResponse>
     {
@@ -37,7 +47,7 @@ namespace KShop.Identities.Domain
         public async Task<GetCurrentIdentityMediatorResponse> Handle(GetCurrentIdentityMediatorRequest request, CancellationToken cancellationToken)
         {
             var user = await _userMan.GetUserAsync(request.User);
-            return new GetCurrentIdentityMediatorResponse() { Email = user.Email };
+            return new GetCurrentIdentityMediatorResponse(user.Email);
         }
     }
 }

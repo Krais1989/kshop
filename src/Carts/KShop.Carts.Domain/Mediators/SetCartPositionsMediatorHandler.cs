@@ -18,9 +18,16 @@ namespace KShop.Carts.Domain.Mediators
     }
     public class SetCartPositionsMediatorRequest : IRequest<SetCartPositionsMediatorResponse>
     {
-        public uint UserID { get; set; }
-        public List<CartPosition> Positions { get; set; }
-        public bool UseMerge { get; set; }
+        public SetCartPositionsMediatorRequest(uint userID, List<CartPosition> positions, bool useMerge)
+        {
+            UserID = userID;
+            Positions = positions;
+            UseMerge = useMerge;
+        }
+
+        public uint UserID { get; private set; }
+        public List<CartPosition> Positions { get; private set; }
+        public bool UseMerge { get; private set; }
     }
     public class SetCartPositionsMediatorHandler : IRequestHandler<SetCartPositionsMediatorRequest, SetCartPositionsMediatorResponse>
     {

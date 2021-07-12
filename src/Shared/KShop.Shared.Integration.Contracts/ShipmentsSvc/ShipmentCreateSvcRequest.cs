@@ -7,8 +7,16 @@ namespace KShop.Shared.Integration.Contracts
 {
     public class ShipmentCreateSvcRequest
     {
-        public Guid OrderID { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
+        public ShipmentCreateSvcRequest(Guid orderID, List<ProductQuantity> orderContent, uint userID)
+        {
+            OrderID = orderID;
+            OrderContent = orderContent;
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
     }
 
     public class ShipmentCreateSuccessSvcEvent
@@ -19,19 +27,22 @@ namespace KShop.Shared.Integration.Contracts
             ShipmentID = shipmentID;
         }
 
-        public Guid OrderID { get; set; }
-        public Guid ShipmentID { get; set; }
+        public Guid OrderID { get; private set; }
+        public Guid ShipmentID { get; private set; }
     }
 
-    public class ShipmentCreateFaultSvcEvent
+    public class ShipmentCreateFaultSvcEvent : BaseResponse
     {
-        public ShipmentCreateFaultSvcEvent(Guid orderID, string errorMessage = null)
+        public ShipmentCreateFaultSvcEvent(Guid orderID) : base()
         {
             OrderID = orderID;
-            ErrorMessage = errorMessage;
         }
 
-        public Guid OrderID { get; set; }
-        public string ErrorMessage { get; set; }
+        public ShipmentCreateFaultSvcEvent(Guid orderID, string errMsg) : base(errMsg)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; private set; }
     }
 }

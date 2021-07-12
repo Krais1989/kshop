@@ -14,14 +14,19 @@ using System.Threading.Tasks;
 namespace KShop.Shipments.Domain
 {
 
-    public class ShipmentCancelMediatorResponse
+    public class ShipmentCancelMediatorResponse : BaseResponse
     {
-        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
-        public string ErrorMessage { get; set; }
     }
     public class ShipmentCancelMediatorRequest : IRequest<ShipmentCancelMediatorResponse>
     {
-        public Guid ShipmentID { get; set; }
+        public ShipmentCancelMediatorRequest(uint userID, Guid shipmentID)
+        {
+            UserID = userID;
+            ShipmentID = shipmentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid ShipmentID { get; private set; }
     }
     public class ShipmentCancelMediatorHandler : IRequestHandler<ShipmentCancelMediatorRequest, ShipmentCancelMediatorResponse>
     {

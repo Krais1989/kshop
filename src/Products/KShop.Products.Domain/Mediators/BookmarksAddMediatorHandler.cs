@@ -16,8 +16,14 @@ namespace KShop.Products.Domain
     }
     public class BookmarksAddMediatorRequest : IRequest<BookmarksAddMediatorResponse>
     {
-        public uint UserID { get; set; }
-        public uint[] ProductsIDs { get; set; }
+        public BookmarksAddMediatorRequest(uint userID, uint[] productsIDs)
+        {
+            UserID = userID;
+            ProductsIDs = productsIDs;
+        }
+
+        public uint UserID { get; private set; }
+        public uint[] ProductsIDs { get; private set; }
     }
     public class BookmarksAddMediatorHandler : IRequestHandler<BookmarksAddMediatorRequest, BookmarksAddMediatorResponse>
     {

@@ -35,12 +35,12 @@ namespace KShop.Payments.Domain
                 _logger.LogInformation($"{context.Message.GetType().Name}: {JsonSerializer.Serialize(context.Message)}");
 
                 /* Создание платежа */
-                var result = await _mediator.Send(new PaymentInitializeMediatorRequest()
-                {
-                    OrderID = context.Message.OrderID,
-                    Money = context.Message.Money,
-                    PaymentPlatform = context.Message.PaymentPlatform
-                });
+                var result = await _mediator.Send(new PaymentInitializeMediatorRequest
+                (
+                    orderID: context.Message.OrderID,
+                    money: context.Message.Money,
+                    paymentPlatform: context.Message.PaymentPlatform
+                ));
             }
             catch (Exception e)
             {

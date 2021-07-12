@@ -71,7 +71,7 @@ namespace KShop.Orders.WebApi
         public async ValueTask<IActionResult> GetStatus(Guid orderId)
         {
             var customerId = this.GetCurrentUserIDExcept();
-            var response = await _mediator.Send(new OrderGetDetailsRequest { CustomerID = customerId, OrderID = orderId });
+            var response = await _mediator.Send(new OrderGetDetailsRequest ( userID: customerId, orderID: orderId ));
             return ReturnBaseResponse(response);
         }
 
@@ -82,7 +82,7 @@ namespace KShop.Orders.WebApi
         public async ValueTask<IActionResult> GetDetails(Guid orderId)
         {
             var customerId = this.GetCurrentUserIDExcept();
-            var response = await _mediator.Send(new OrderGetDetailsRequest { CustomerID = customerId, OrderID = orderId });
+            var response = await _mediator.Send(new OrderGetDetailsRequest ( userID: customerId, orderID: orderId ));
             return ReturnBaseResponse(response);
         }
 
@@ -93,7 +93,7 @@ namespace KShop.Orders.WebApi
         public async ValueTask<IActionResult> GetCurrentCustomerOrders()
         {
             var customerId = this.GetCurrentUserIDExcept();
-            var response = await _mediator.Send(new GetCustomerOrdersRequest { CustomerID = customerId });
+            var response = await _mediator.Send(new GetCustomerOrdersRequest(customerId));
             return ReturnBaseResponse(response);
         }
 
@@ -101,13 +101,13 @@ namespace KShop.Orders.WebApi
         public async ValueTask<ActionResult> Submit([FromBody] OrderSubmitRequestDto dto)
         {
             var response = await _mediator.Send(new OrderSubmitMediatorRequest
-            {
-                UserID = this.GetCurrentUserIDExcept(),
-                Address = dto.Address,
-                OrderContent = dto.OrderContent,
-                PaymentProvider = dto.Payment.Type,
-                ShippingMethod = dto.Shipment.Type
-            });
+            (
+                userID: this.GetCurrentUserIDExcept(),
+                address: dto.Address,
+                orderContent: dto.OrderContent,
+                paymentProvider: dto.Payment.Type,
+                shippingMethod: dto.Shipment.Type
+            ));
             return Ok(response);
         }
 

@@ -15,7 +15,7 @@ namespace KShop.Identities.WebApi
     {
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }
-    } 
+    }
 
 
     [Route("api/account")]
@@ -42,21 +42,21 @@ namespace KShop.Identities.WebApi
 
         [AllowAnonymous]
         [HttpPost("sign-up")]
-        public async Task<IActionResult> Register([FromBody]SignUpMediatorRequest dto)
+        public async Task<IActionResult> Register([FromBody] SignUpMediatorRequest dto)
         {
             var result = await _mediator.Send(dto);
             return Return(result);
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordRequestDto dto)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
         {
             var request = new ChangePasswordMediatorRequest
-            {
-                User = this.User,
-                OldPassword = dto.OldPassword,
-                NewPassword = dto.NewPassword
-            };
+            (
+                user: this.User,
+                oldPassword: dto.OldPassword,
+                newPassword: dto.NewPassword
+            );
             var result = await _mediator.Send(request);
             return Ok(result);
         }
@@ -72,7 +72,7 @@ namespace KShop.Identities.WebApi
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete()
         {
-            var request = new DeleteAccountMediatorRequest {  };
+            var request = new DeleteAccountMediatorRequest(User);
             var result = await _mediator.Send(request);
             return Ok(result);
         }

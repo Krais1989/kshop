@@ -15,11 +15,23 @@ namespace KShop.Shipments.Domain
 
     public class ShipmentGetByIdResponse
     {
-        public Shipment Shipment { get; set; }
+        public ShipmentGetByIdResponse(Shipment shipment)
+        {
+            Shipment = shipment;
+        }
+
+        public Shipment Shipment { get; private set; }
     }
     public class ShipmentGetByIdRequest : IRequest<ShipmentGetByIdResponse>
     {
-        public Guid ShipmentID { get; set; }
+        public ShipmentGetByIdRequest(uint userID, Guid shipmentID)
+        {
+            UserID = userID;
+            ShipmentID = shipmentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid ShipmentID { get; private set; }
     }
     public class ShipmentGetByIdHandler : IRequestHandler<ShipmentGetByIdRequest, ShipmentGetByIdResponse>
     {
@@ -36,10 +48,7 @@ namespace KShop.Shipments.Domain
         {
             var shipment = await _shipmentContext.Shipments.FirstOrDefaultAsync(e => e.ID == request.ShipmentID);
 
-            return new ShipmentGetByIdResponse
-            {
-                Shipment = shipment
-            };
+            return new ShipmentGetByIdResponse(shipment);
         }
     }
 }

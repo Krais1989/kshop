@@ -16,13 +16,29 @@ namespace KShop.Identities.Domain
 {
     public class SignUpMediatorResponse : BaseResponse
     {
-        public uint ID { get; set; }
+        public SignUpMediatorResponse(uint iD)
+        {
+            ID = iD;
+        }
+
+        public SignUpMediatorResponse(string error) : base(error)
+        {
+        }
+
+        public uint ID { get; private set; }
     }
     public class SignUpMediatorRequest : IRequest<SignUpMediatorResponse>
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string PhoneNumber { get; set; }
+        public SignUpMediatorRequest(string email, string password, string phoneNumber)
+        {
+            Email = email;
+            Password = password;
+            PhoneNumber = phoneNumber;
+        }
+
+        public string Email { get; private set; }
+        public string Password { get; private set; }
+        public string PhoneNumber { get; private set; }
     }
     public class SignUpMediatorHandler : IRequestHandler<SignUpMediatorRequest, SignUpMediatorResponse>
     {
@@ -52,9 +68,9 @@ namespace KShop.Identities.Domain
             var createResult = await _userMan.CreateAsync(user, request.Password);
 
             if (createResult.Succeeded)
-                return new SignUpMediatorResponse { ID = user.Id };
+                return new SignUpMediatorResponse(user.Id);
             else
-                return new SignUpMediatorResponse { ErrorMessage = string.Join("\n", createResult.Errors.Select(e => e.Description)) };
+                return new SignUpMediatorResponse(string.Join("\n", createResult.Errors.Select(e => e.Description)));
         }
     }
 }

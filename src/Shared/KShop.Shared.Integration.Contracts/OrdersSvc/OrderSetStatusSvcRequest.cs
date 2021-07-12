@@ -3,53 +3,22 @@ using System;
 
 namespace KShop.Shared.Integration.Contracts
 {
-    //public enum EStatus : byte
-    //{
-    //    Initial = 0,
-    //    /// <summary>
-    //    /// Резервирование, 
-    //    /// </summary>
-    //    Reserving = 1,
-    //    /// <summary>
-    //    /// Ожидание платежа
-    //    /// </summary>
-    //    Processing = 2,
-    //    /// <summary>
-    //    /// Доставляется покупателю
-    //    /// </summary>
-    //    Shipping = 3,
-    //    /// <summary>
-    //    /// Доставлен покупателю
-    //    /// </summary>
-    //    Completed = 4,
-    //    /// <summary>
-    //    /// Ошибка обработки
-    //    /// </summary>
-    //    Failed = 5,
-    //    /// <summary>
-    //    /// Возвращен
-    //    /// </summary>
-    //    Refunded = 6,
-    //    /// <summary>
-    //    /// Отменен покупателем
-    //    /// </summary>
-    //    Cancelled = 7
-    //}
-
     public class OrderSetStatusReservedSvcRequest
     {
         public OrderSetStatusReservedSvcRequest()
         {
         }
 
-        public OrderSetStatusReservedSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusReservedSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
 
     public class OrderSetStatusPayedSvcRequest
@@ -58,14 +27,16 @@ namespace KShop.Shared.Integration.Contracts
         {
         }
 
-        public OrderSetStatusPayedSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusPayedSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
 
     public class OrderSetStatusShippedSvcRequest
@@ -74,14 +45,16 @@ namespace KShop.Shared.Integration.Contracts
         {
         }
 
-        public OrderSetStatusShippedSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusShippedSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
 
     public class OrderSetStatusFaultedSvcRequest
@@ -90,14 +63,16 @@ namespace KShop.Shared.Integration.Contracts
         {
         }
 
-        public OrderSetStatusFaultedSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusFaultedSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
 
     public class OrderSetStatusRefundedSvcRequest
@@ -106,14 +81,16 @@ namespace KShop.Shared.Integration.Contracts
         {
         }
 
-        public OrderSetStatusRefundedSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusRefundedSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
     public class OrderSetStatusCancelledSvcRequest
     {
@@ -121,14 +98,16 @@ namespace KShop.Shared.Integration.Contracts
         {
         }
 
-        public OrderSetStatusCancelledSvcRequest(Guid orderID, string comment = null)
+        public OrderSetStatusCancelledSvcRequest(uint userID, Guid orderID, string comment)
         {
+            UserID = userID;
             OrderID = orderID;
             Comment = comment;
         }
 
-        public Guid OrderID { get; set; }
-        public string Comment { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public string Comment { get; private set; }
     }
 
 

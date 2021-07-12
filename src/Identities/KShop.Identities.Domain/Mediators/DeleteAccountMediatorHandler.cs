@@ -18,7 +18,12 @@ namespace KShop.Identities.Domain
     }
     public class DeleteAccountMediatorRequest : IRequest<DeleteAccountMediatorResponse>
     {
-        public ClaimsPrincipal User { get; set; }
+        public DeleteAccountMediatorRequest(ClaimsPrincipal user)
+        {
+            User = user;
+        }
+
+        public ClaimsPrincipal User { get; private set; }
     }
     public class DeleteAccountMediatorHandler : IRequestHandler<DeleteAccountMediatorRequest, DeleteAccountMediatorResponse>
     {

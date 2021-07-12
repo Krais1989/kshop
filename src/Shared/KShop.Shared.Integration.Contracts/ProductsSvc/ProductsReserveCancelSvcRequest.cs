@@ -4,12 +4,14 @@ namespace KShop.Shared.Integration.Contracts
 {
     public class ProductsReserveCancelSvcRequest
     {
-        public ProductsReserveCancelSvcRequest(Guid orderID)
+        public ProductsReserveCancelSvcRequest(Guid orderID, uint userID)
         {
             OrderID = orderID;
+            UserID = userID;
         }
 
-        public Guid OrderID { get; set; }
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
     }
 
     public class ProductsReserveCancelSvcResponse
@@ -19,6 +21,6 @@ namespace KShop.Shared.Integration.Contracts
             OrderID = orderID;
         }
 
-        public Guid OrderID { get; set; }
+        public Guid OrderID { get; private set; }
     }
 }

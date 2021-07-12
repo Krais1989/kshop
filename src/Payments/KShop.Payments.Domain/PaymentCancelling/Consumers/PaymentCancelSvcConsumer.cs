@@ -28,10 +28,11 @@ namespace KShop.Payments.Domain
 
             try
             {
-                var result = await _mediator.Send(new PaymentSetCanceledMediatorRequest()
-                {
-                    PaymentID = context.Message.PaymentID
-                });
+                var result = await _mediator.Send(new PaymentSetCanceledMediatorRequest
+                (
+                    paymentID: context.Message.PaymentID,
+                    userID: context.Message.UserID
+                ));
 
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {

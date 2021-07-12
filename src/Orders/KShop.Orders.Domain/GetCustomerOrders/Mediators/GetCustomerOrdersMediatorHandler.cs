@@ -16,11 +16,21 @@ namespace KShop.Orders.Domain
 
     public class GetCustomerOrdersResponse : BaseResponse
     {
-        public List<OrderDetails> Orders { get; set; }
+        public GetCustomerOrdersResponse(List<OrderDetails> orders)
+        {
+            Orders = orders;
+        }
+
+        public List<OrderDetails> Orders { get; private set; }
     }
     public class GetCustomerOrdersRequest : IRequest<GetCustomerOrdersResponse>
     {
-        public ulong CustomerID { get; set; }
+        public GetCustomerOrdersRequest(ulong userID)
+        {
+            UserID = userID;
+        }
+
+        public ulong UserID { get; private set; }
     }
     public class GetCustomerOrdersMediatorHandler : IRequestHandler<GetCustomerOrdersRequest, GetCustomerOrdersResponse>
     {
@@ -40,7 +50,7 @@ namespace KShop.Orders.Domain
             var rawResult = await _orderContext.Orders.AsNoTracking()
                 .Include(e => e.Logs)
                 .Include(e => e.Positions)
-                .Where(e => e.CustomerID == request.CustomerID)
+                .Where(e => e.CustomerID == request.UserID)
                 .Select(e => new OrderDetails
                 {
                     ID = e.ID,
@@ -63,10 +73,7 @@ namespace KShop.Orders.Domain
             //       Positions
             //});
 
-            return new GetCustomerOrdersResponse()
-            {
-                Orders = rawResult
-            };
+            return new GetCustomerOrdersResponse(rawResult);
         }
     }
 }

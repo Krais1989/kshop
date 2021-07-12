@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KShop.Payments.Persistence.Migrations
 {
     [DbContext(typeof(PaymentsContext))]
-    [Migration("20210703223038_InitialCommit")]
+    [Migration("20210712011406_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace KShop.Payments.Persistence.Migrations
 
                     b.Property<DateTime>("StatusDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<uint>("UserID")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("ID");
 

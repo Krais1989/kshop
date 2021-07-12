@@ -14,13 +14,25 @@ namespace KShop.Payments.Domain
 {
     public class PaymentInitializeMediatorResponse
     {
-        public Guid PaymentID { get; set; }
+        public PaymentInitializeMediatorResponse(Guid paymentID)
+        {
+            PaymentID = paymentID;
+        }
+
+        public Guid PaymentID { get; private set; }
     }
     public class PaymentInitializeMediatorRequest : IRequest<PaymentInitializeMediatorResponse>
     {
-        public EPaymentProvider PaymentPlatform { get; set; }
-        public Guid OrderID { get; set; }
-        public Money Money { get; set; }
+        public PaymentInitializeMediatorRequest(EPaymentProvider paymentPlatform, Guid orderID, Money money)
+        {
+            PaymentPlatform = paymentPlatform;
+            OrderID = orderID;
+            Money = money;
+        }
+
+        public EPaymentProvider PaymentPlatform { get; private set; }
+        public Guid OrderID { get; private set; }
+        public Money Money { get; private set; }
     }
     public class PaymentInitializeMediatorHandler : IRequestHandler<PaymentInitializeMediatorRequest, PaymentInitializeMediatorResponse>
     {
@@ -52,10 +64,7 @@ namespace KShop.Payments.Domain
             await _paymentsContext.AddAsync(payment);
             await _paymentsContext.SaveChangesAsync();
 
-            return new PaymentInitializeMediatorResponse()
-            {
-                PaymentID = payment.ID,
-            };
+            return new PaymentInitializeMediatorResponse(payment.ID);
         }
     }
 }

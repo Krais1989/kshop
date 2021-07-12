@@ -15,13 +15,23 @@ namespace KShop.Shipments.Domain
 
     public class ShipmentInitializeMediatorResponse
     {
-        public Guid ShipmentID { get; set; }
-        public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
-        public string ErrorMessage { get; set; }
+        public ShipmentInitializeMediatorResponse(Guid shipmentID)
+        {
+            ShipmentID = shipmentID;
+        }
+
+        public Guid ShipmentID { get; private set; }
     }
     public class ShipmentInitializeMediatorRequest : IRequest<ShipmentInitializeMediatorResponse>
     {
-        public Guid OrderID { get; set; }
+        public ShipmentInitializeMediatorRequest(uint userID, Guid orderID)
+        {
+            UserID = userID;
+            OrderID = orderID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
     }
     public class ShipmentInitializeMediatorHandler : IRequestHandler<ShipmentInitializeMediatorRequest, ShipmentInitializeMediatorResponse>
     {
@@ -55,10 +65,7 @@ namespace KShop.Shipments.Domain
             await _shipmentContext.AddAsync(shipment);
             await _shipmentContext.SaveChangesAsync();
 
-            return new ShipmentInitializeMediatorResponse()
-            {
-                ShipmentID = shipment.ID
-            };
+            return new ShipmentInitializeMediatorResponse(shipment.ID);
         }
     }
 }

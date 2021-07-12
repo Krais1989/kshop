@@ -21,7 +21,14 @@ namespace KShop.Payments.Domain
     /// </summary>
     public class PaymentSetPaidMediatorRequest : IRequest<PaymentSetPaidMediatorResponse>
     {
-        public Guid PaymentID { get; set; }
+        public PaymentSetPaidMediatorRequest(Guid paymentID, uint userID)
+        {
+            PaymentID = paymentID;
+            UserID = userID;
+        }
+
+        public Guid PaymentID { get; private set; }
+        public uint UserID { get; private set; }
     }
     public class PaymentSetPaidMediatorHandler : IRequestHandler<PaymentSetPaidMediatorRequest, PaymentSetPaidMediatorResponse>
     {
@@ -38,7 +45,8 @@ namespace KShop.Payments.Domain
 
         public async Task<PaymentSetPaidMediatorResponse> Handle(PaymentSetPaidMediatorRequest request, CancellationToken cancellationToken)
         {
-            var payment = await _paymentsContext.Payments.Include(e => e.Logs).FirstOrDefaultAsync(e => e.ID == request.PaymentID);
+            var payment = await _paymentsContext.Payments.Include(e => e.Logs)
+                .FirstOrDefaultAsync(e => e.ID == request.PaymentID && e.UserID == request.UserID);
             payment.SetStatus(EPaymentStatus.Paid);
             await _paymentsContext.SaveChangesAsync();
             return new PaymentSetPaidMediatorResponse();

@@ -13,13 +13,21 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderCreateSvcRequest
     {
-        public Guid OrderID { get; set; }
-        public uint CustomerID { get; set; }
+        public OrderCreateSvcRequest(Guid orderID, uint userID, List<ProductQuantity> orderContent, Money orderPrice)
+        {
+            OrderID = orderID;
+            UserID = userID;
+            OrderContent = orderContent;
+            OrderPrice = orderPrice;
+        }
+
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
         
         /* Данные продуктов для хранения в БД  */
-        public List<ProductQuantity> OrderContent { get; set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
 
-        public Money OrderPrice { get; set; }
+        public Money OrderPrice { get; private set; }
     }
 
     /// <summary>
@@ -27,7 +35,12 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderCreateSuccessSvcEvent : BaseResponse
     {
-        public Guid OrderID { get; set; }
+        public OrderCreateSuccessSvcEvent(Guid orderID)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; private set; }
     }
 
 
@@ -37,6 +50,11 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderCreateFaultSvcEvent
     {
-        public Guid OrderID { get; set; }
+        public OrderCreateFaultSvcEvent(Guid orderID)
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; private set; }
     }
 }

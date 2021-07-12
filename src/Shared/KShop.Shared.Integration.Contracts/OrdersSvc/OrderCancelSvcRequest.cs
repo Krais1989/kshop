@@ -5,12 +5,14 @@ namespace KShop.Shared.Integration.Contracts
 {
     public class OrderCancelSvcRequest
     {
-        public OrderCancelSvcRequest(Guid orderID)
+        public OrderCancelSvcRequest(Guid orderID, uint userID)
         {
             OrderID = orderID;
+            UserID = userID;
         }
 
-        public Guid OrderID { get; set; }
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
     }
 
     public class OrderCancelSvcResponse : BaseResponse

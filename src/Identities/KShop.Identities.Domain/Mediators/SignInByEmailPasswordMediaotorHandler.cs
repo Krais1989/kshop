@@ -16,14 +16,31 @@ namespace KShop.Identities.Domain
 {
     public class SignInByEmailPasswordMediatorResponse : BaseResponse
     {
-        public string Email { get; set; }
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
+        public SignInByEmailPasswordMediatorResponse(string error) : base(error)
+        {
+        }
+
+        public SignInByEmailPasswordMediatorResponse(string email, string token, string refreshToken)
+        {
+            Email = email;
+            Token = token;
+            RefreshToken = refreshToken;
+        }
+
+        public string Email { get; private set; }
+        public string Token { get; private set; }
+        public string RefreshToken { get; private set; }
     }
     public class SignInByEmailPasswordMediatorHandlerRequest : IRequest<SignInByEmailPasswordMediatorResponse>
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public SignInByEmailPasswordMediatorHandlerRequest(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+
+        public string Email { get; private set; }
+        public string Password { get; private set; }
     }
     public class SignInByEmailPasswordMediaotorHandler : IRequestHandler<SignInByEmailPasswordMediatorHandlerRequest, SignInByEmailPasswordMediatorResponse>
     {
@@ -42,11 +59,11 @@ namespace KShop.Identities.Domain
         {
             var user = await _userMan.FindByEmailAsync(request.Email);
             if (user == null)
-                return new SignInByEmailPasswordMediatorResponse() { ErrorMessage = "Invalid Email or Password" };
+                return new SignInByEmailPasswordMediatorResponse("Invalid Email or Password");
 
             var passCheck = await _userMan.CheckPasswordAsync(user, request.Password);
             if (!passCheck)
-                return new SignInByEmailPasswordMediatorResponse() { ErrorMessage = "Invalid Email or Password" };
+                return new SignInByEmailPasswordMediatorResponse("Invalid Email or Password");
 
 
             var tokenClaims = new List<Claim>
@@ -55,11 +72,12 @@ namespace KShop.Identities.Domain
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            return new SignInByEmailPasswordMediatorResponse()
-            {
-                Email = user.Email,
-                Token = _jwtFactory.Generate(tokenClaims)
-            };
+            return new SignInByEmailPasswordMediatorResponse
+            (
+                email: user.Email,
+                token: _jwtFactory.Generate(tokenClaims),
+                refreshToken: ""
+            );
         }
     }
 

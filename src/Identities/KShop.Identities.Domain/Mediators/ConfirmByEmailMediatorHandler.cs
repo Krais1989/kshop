@@ -17,8 +17,14 @@ namespace KShop.Identities.Domain
     }
     public class ConfirmByEmailMediatorRequest : IRequest<ConfirmByEmailMediatorResponse>
     {
-        public string Email { get; set; }
-        public string ConfirmToken { get; set; }
+        public ConfirmByEmailMediatorRequest(string email, string confirmToken)
+        {
+            Email = email;
+            ConfirmToken = confirmToken;
+        }
+
+        public string Email { get; private set; }
+        public string ConfirmToken { get; private set; }
     }
     public class ConfirmByEmailMediatorHandler : IRequestHandler<ConfirmByEmailMediatorRequest, ConfirmByEmailMediatorResponse>
     {

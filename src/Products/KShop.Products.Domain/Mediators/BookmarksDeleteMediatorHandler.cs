@@ -17,8 +17,14 @@ namespace KShop.Products.Domain
     }
     public class BookmarksDeleteMediatorRequest : IRequest<BookmarksDeleteMediatorResponse>
     {
-        public uint UserID { get; set; }
-        public uint[] ProductsIDs { get; set; }
+        public BookmarksDeleteMediatorRequest(uint userID, uint[] productsIDs)
+        {
+            UserID = userID;
+            ProductsIDs = productsIDs;
+        }
+
+        public uint UserID { get; private set; }
+        public uint[] ProductsIDs { get; private set; }
     }
     public class BookmarksDeleteMediatorHandler : IRequestHandler<BookmarksDeleteMediatorRequest, BookmarksDeleteMediatorResponse>
     {

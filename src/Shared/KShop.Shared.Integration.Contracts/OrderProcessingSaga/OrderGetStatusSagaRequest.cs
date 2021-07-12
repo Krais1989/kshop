@@ -8,12 +8,24 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class OrderGetStatusSagaRequest
     {
-        public Guid OrderID { get; set; }
+        public OrderGetStatusSagaRequest(Guid orderID, uint userID)
+        {
+            OrderID = orderID;
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
     }
 
     public class OrderGetStatusSagaResponse : BaseResponse
     {
-        public int Status { get; set; } = -1;
+        public OrderGetStatusSagaResponse(int status)
+        {
+            Status = status;
+        }
+
+        public int Status { get; private set; } = -1;
     }
 }
 

@@ -13,6 +13,7 @@
   <ItemGroup>
     <Folder Include="GetCustomerOrders\Validators\" />
     <Folder Include="OrderCreation\Exceptions\" />
+    <Folder Include="OrderProcessing\Consumers\" />
   </ItemGroup>
 
   <ItemGroup>

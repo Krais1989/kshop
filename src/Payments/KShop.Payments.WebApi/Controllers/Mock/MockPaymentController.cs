@@ -11,33 +11,67 @@ using System.Threading.Tasks;
 using KShop.Shared.Integration.Contracts;
 using KShop.Payments.Domain;
 using KShop.Payments.Persistence;
+using KShop.Shared.Authentication;
 
 namespace KShop.Payments.WebApi
 {
     public class MockPaymentCreateRequestApiDto
     {
-        public Guid OrderID { get; set; }
-        public Money Price { get; set; }
+        public MockPaymentCreateRequestApiDto(uint userID, Guid orderID, Money price)
+        {
+            UserID = userID;
+            OrderID = orderID;
+            Price = price;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public Money Price { get; private set; }
     }
     public class MockPaymentCreateResponseApiDto
     {
-        public Guid PaymentID { get; set; }
-        public string ExternalPaymentID { get; set; }
+        public MockPaymentCreateResponseApiDto(Guid paymentID, string externalPaymentID)
+        {
+            PaymentID = paymentID;
+            ExternalPaymentID = externalPaymentID;
+        }
+
+        public Guid PaymentID { get; private set; }
+        public string ExternalPaymentID { get; private set; }
     }
 
     public class MockPaymentStatusRequestApiDto
     {
-        public Guid PaymentID { get; set; }
+        public MockPaymentStatusRequestApiDto(uint userID, Guid paymentID)
+        {
+            UserID = userID;
+            PaymentID = paymentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
 
     public class MockPaymentStatusResponseApiDto
     {
-        public EPaymentStatus Status { get; set; }
+        public MockPaymentStatusResponseApiDto(EPaymentStatus status)
+        {
+            Status = status;
+        }
+
+        public EPaymentStatus Status { get; private set; }
     }
 
     public class MockCancelPaymentRequestApiDto
     {
-        public Guid PaymentID { get; set; }
+        public MockCancelPaymentRequestApiDto(uint userID, Guid paymentID)
+        {
+            UserID = userID;
+            PaymentID = paymentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
 
     [ApiController]
@@ -75,12 +109,11 @@ namespace KShop.Payments.WebApi
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentTest([FromBody] MockPaymentCreateRequestApiDto dto)
         {
-            var createBusReq = new PaymentCreateSvcRequest()
-            {
-                PaymentPlatform = EPaymentProvider.Mock,
-                OrderID = dto.OrderID,
-                Money = dto.Price,
-            };
+            var createBusReq = new PaymentCreateSvcRequest(
+                orderID: dto.OrderID,
+                userID: dto.UserID,
+                paymentPlatform: EPaymentProvider.Mock,
+                money: dto.Price);
 
             var result = await _createClient.GetResponse<PaymentCreateSuccessSvcEvent>(createBusReq);
 
@@ -93,10 +126,11 @@ namespace KShop.Payments.WebApi
         [HttpGet("[action]")]
         public async Task<ActionResult> GetStatus([FromQuery] MockPaymentStatusRequestApiDto dto)
         {
-            var statusReq = new PaymentGetStatusMediatorRequest()
-            {
-                PaymentID = dto.PaymentID
-            };
+            var statusReq = new PaymentGetStatusMediatorRequest
+            (
+                paymentID: dto.PaymentID,
+                userID: this.GetCurrentUserID().Value
+            );
             var statusResp = await _mediator.Send(statusReq);
             return Ok(statusResp);
         }
@@ -104,10 +138,7 @@ namespace KShop.Payments.WebApi
         [HttpPost("[action]")]
         public async Task<IActionResult> CancelPayment([FromBody] MockCancelPaymentRequestApiDto dto)
         {
-            var cancelReq = new PaymentCancelSvcRequest()
-            {
-                PaymentID = dto.PaymentID
-            };
+            var cancelReq = new PaymentCancelSvcRequest(dto.PaymentID, dto.UserID);
             var cancelResp = await _cancelClient.GetResponse<PaymentCancelSvcResponse>(cancelReq);
             return Ok(cancelResp);
         }
@@ -121,17 +152,19 @@ namespace KShop.Payments.WebApi
             switch (dto.Status)
             {
                 case EMockPaymentExternalStatus.Paid:
-                    var payReq = new PaymentSetPaidByExternalIDMediatorRequest()
-                    {
-                        ExternalPaymentID = dto.ExternalPaymentID
-                    };
+                    var payReq = new PaymentSetPaidByExternalIDMediatorRequest
+                    (
+                        externalPaymentID: dto.ExternalPaymentID,
+                        userID: this.GetCurrentUserID().Value
+                    );
                     var payResp = await _mediator.Send(payReq);
                     break;
                 case EMockPaymentExternalStatus.Canceled:
                     var cancelReq = new PaymentSetCanceledByExternalIDMediatorRequest
-                    {
-                        ExternalPaymentID = dto.ExternalPaymentID
-                    };
+                    (
+                        externalPaymentID: dto.ExternalPaymentID,
+                        userID: this.GetCurrentUserID().Value
+                    );
                     var cancelResp = await _mediator.Send(cancelReq);
                     break;
                 case EMockPaymentExternalStatus.Error:

@@ -18,30 +18,38 @@ namespace KShop.Products.Domain
 
     public class ProductsReserveMediatorResponse : BaseResponse
     {
-        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData)
-        {
-            ReservationData = reservationData;
-        }
-
         public ProductsReserveMediatorResponse(string errorMessage)
         {
             ErrorMessage = errorMessage;
+        }
+
+        public ProductsReserveMediatorResponse(ProductsReserveMap reservationData, Money orderPrice)
+        {
+            ReservationData = reservationData;
+            OrderPrice = orderPrice;
         }
 
         /// <summary>
         /// Данные в формате <id_продукта, id_резерва>
         /// </summary>
         public ProductsReserveMap ReservationData { get; private set; }
-        public Money OrderPrice { get; set; }
+        public Money OrderPrice { get; private set; }
     }
     /// <summary>
     /// Запрос на резервацию заказа
     /// </summary>
     public class ProductsReserveMediatorRequest : IRequest<ProductsReserveMediatorResponse>
     {
-        public Guid OrderID { get; set; }
-        public uint CustomerID { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
+        public ProductsReserveMediatorRequest(Guid orderID, uint userID, List<ProductQuantity> orderContent)
+        {
+            OrderID = orderID;
+            UserID = userID;
+            OrderContent = orderContent;
+        }
+
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
     }
     public class ProductsReserveMediatorHandler : IRequestHandler<ProductsReserveMediatorRequest, ProductsReserveMediatorResponse>
     {
@@ -73,7 +81,7 @@ namespace KShop.Products.Domain
                     Quantity = e.Quantity,
                     CreateDate = DateTime.UtcNow,
                     Status = ProductReserve.EStatus.Pending,
-                    CustomerID = request.CustomerID
+                    CustomerID = request.UserID
                 }).ToList();
 
             await _context.AddRangeAsync(reserves);
@@ -85,12 +93,12 @@ namespace KShop.Products.Domain
                 .Select(e => new { e.ID, e.Price, e.Discount })
                 .ToListAsync()).ToDictionary(e => e.ID, e => e.Price * e.Discount / 100m);
 
-            //var order_price = order_content_map.Aggregate(
-            //    new Money(0, product_price_map.Values.First().Currency),
-            //    (acc, cur) => acc + (cur.Value * product_price_map[cur.Key].Price));
+            var order_price = order_content_map.Aggregate(
+                new Money(0, product_price_map.Values.First().Currency),
+                (acc, cur) => acc + (cur.Value * product_price_map[cur.Key].Price));
 
             var reservationData = new ProductsReserveMap(reserves.ToDictionary(e => e.ProductID, e => e.ID));
-            return new ProductsReserveMediatorResponse(reservationData);
+            return new ProductsReserveMediatorResponse(reservationData, order_price);
         }
     }
 }

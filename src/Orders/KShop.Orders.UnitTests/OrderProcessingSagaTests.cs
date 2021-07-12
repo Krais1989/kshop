@@ -32,14 +32,14 @@ namespace KShop.Orders.UnitTests
             try
             {
                 var submitOrder = new OrderSubmitSagaRequest
-                {
-                    OrderID = Guid.NewGuid(),
-                    Address = new Address { Data = "Test address" },
-                    CustomerID = 1,
-                    OrderContent = new List<ProductQuantity> { },
-                    PaymentProvider = EPaymentProvider.Mock,
-                    ShippingMethod = EShippingMethod.Default
-                };
+                (
+                    orderID: Guid.NewGuid(),
+                    address: new Address { Data = "Test address" },
+                    customerID: 1,
+                    orderContent: new List<ProductQuantity> { },
+                    paymentProvider: EPaymentProvider.Mock,
+                    shippingMethod: EShippingMethod.Default
+                );
                 await harness.Bus.Publish(submitOrder);
 
                 Assert.IsTrue(harness.Consumed.Select<OrderSubmitSagaRequest>().Any());

@@ -24,10 +24,11 @@ namespace KShop.Orders.Domain
         {
             try
             {
-                var createOrder = new OrderCancelMediatorRequest()
-                {
-                    OrderID = context.Message.OrderID
-                };
+                var createOrder = new OrderCancelMediatorRequest
+                (
+                    orderID: context.Message.OrderID,
+                    userID: context.Message.UserID
+                );
 
                 var res = await _mediator.Send(createOrder);
 

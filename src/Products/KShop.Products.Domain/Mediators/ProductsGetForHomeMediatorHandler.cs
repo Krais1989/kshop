@@ -16,11 +16,26 @@ namespace KShop.Products.Domain
 
     public class ProductsGetForHomeMediatorResponse : BaseResponse
     {
-        public List<ProductPresentation> Data { get; set; } = new List<ProductPresentation>();
-        public List<Category> Categories { get; set; } = new List<Category>();
+        public ProductsGetForHomeMediatorResponse(List<ProductPresentation> data, List<Category> categories)
+        {
+            Data = data;
+            Categories = categories;
+        }
+
+        public List<ProductPresentation> Data { get; private set; } = new List<ProductPresentation>();
+        public List<Category> Categories { get; private set; } = new List<Category>();
+
     }
     public class ProductsGetForHomeMediatorRequest : IRequest<ProductsGetForHomeMediatorResponse>
     {
+        public ProductsGetForHomeMediatorRequest() { }
+        public ProductsGetForHomeMediatorRequest(int pageIndex, uint? userID)
+        {
+            UserID = userID;
+            PageIndex = pageIndex;
+        }
+
+        public uint? UserID { get; set; }
         public int PageIndex { get; set; }
     }
     public class ProductsGetForHomeMediatorHandler : IRequestHandler<ProductsGetForHomeMediatorRequest, ProductsGetForHomeMediatorResponse>
@@ -58,11 +73,13 @@ namespace KShop.Products.Domain
                 .Take(pagesize)
                 .ToListAsync();
 
+            var categories = await _productsContext.Categories.ToListAsync();
+
             //var categories = await _productsContext.Cate
 
             // Расчитать сколько осталось продуктов
 
-            return new ProductsGetForHomeMediatorResponse() { Data = data };
+            return new ProductsGetForHomeMediatorResponse(data, categories);
         }
     }
 }

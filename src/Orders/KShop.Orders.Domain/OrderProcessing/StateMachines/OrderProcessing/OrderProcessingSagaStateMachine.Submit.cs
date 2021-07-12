@@ -33,7 +33,7 @@ namespace KShop.Orders.Domain
         {
             _logger.LogDebug($"Saga - Started - {ctx.Instance.CorrelationId}");
 
-            ctx.Instance.CustomerID = ctx.Data.CustomerID;
+            ctx.Instance.CustomerID = ctx.Data.UserID;
             ctx.Instance.OrderContent = ctx.Data.OrderContent;
             ctx.Instance.PaymentProvider = ctx.Data.PaymentProvider;
             ctx.Instance.ShippingMethod = ctx.Data.ShippingMethod;
@@ -50,11 +50,11 @@ namespace KShop.Orders.Domain
             //});
 
             await ctx.Publish(new ProductsReserveSvcRequest
-            {
-                CustomerID = ctx.Data.CustomerID,
-                OrderID = ctx.Data.OrderID,
-                OrderContent = ctx.Data.OrderContent
-            });
+            (
+                userID: ctx.Data.UserID,
+                orderID: ctx.Data.OrderID,
+                orderContent: ctx.Data.OrderContent
+            ));
         }
     }
 }

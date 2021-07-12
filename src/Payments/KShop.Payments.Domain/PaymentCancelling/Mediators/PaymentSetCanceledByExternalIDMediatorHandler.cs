@@ -18,7 +18,14 @@ namespace KShop.Payments.Domain
     }
     public class PaymentSetCanceledByExternalIDMediatorRequest : IRequest<PaymentSetCanceledByExternalIDMediatorResponse>
     {
-        public string ExternalPaymentID { get; set; }
+        public PaymentSetCanceledByExternalIDMediatorRequest(string externalPaymentID, uint userID)
+        {
+            ExternalPaymentID = externalPaymentID;
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
+        public string ExternalPaymentID { get; private set; }
     }
     public class PaymentSetCanceledByExternalIDMediatorHandler : IRequestHandler<PaymentSetCanceledByExternalIDMediatorRequest, PaymentSetCanceledByExternalIDMediatorResponse>
     {

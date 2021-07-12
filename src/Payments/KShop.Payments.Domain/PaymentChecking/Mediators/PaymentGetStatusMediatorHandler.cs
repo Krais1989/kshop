@@ -16,12 +16,25 @@ namespace KShop.Payments.Domain
 
     public class PaymentGetStatusMediatorResponse
     {
-        public Guid PaymentID { get; set; }
-        public EPaymentStatus Status { get; set; }
+        public PaymentGetStatusMediatorResponse(Guid paymentID, EPaymentStatus status)
+        {
+            PaymentID = paymentID;
+            Status = status;
+        }
+
+        public Guid PaymentID { get; private set; }
+        public EPaymentStatus Status { get; private set; }
     }
     public class PaymentGetStatusMediatorRequest : IRequest<PaymentGetStatusMediatorResponse>
     {
-        public Guid PaymentID { get; set; }
+        public PaymentGetStatusMediatorRequest(uint userID, Guid paymentID)
+        {
+            UserID = userID;
+            PaymentID = paymentID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
     public class PaymentGetStatusMediatorHandler : IRequestHandler<PaymentGetStatusMediatorRequest, PaymentGetStatusMediatorResponse>
     {
@@ -44,10 +57,10 @@ namespace KShop.Payments.Domain
 
             var payment = await _context.Payments.FirstOrDefaultAsync(e => e.ID == request.PaymentID);
 
-            return new PaymentGetStatusMediatorResponse() {
-                PaymentID = payment.ID,
-                Status = payment.Status                
-            };
+            return new PaymentGetStatusMediatorResponse(
+                paymentID: payment.ID,
+                status: payment.Status                
+            );
         }
     }
 }

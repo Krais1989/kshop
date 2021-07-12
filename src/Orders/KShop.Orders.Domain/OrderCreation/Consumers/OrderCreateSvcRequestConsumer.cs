@@ -28,24 +28,24 @@ namespace KShop.Orders.Domain
         {
             try
             {
-                var createOrder = new OrderCreateMediatorRequest()
-                {
-                    OrderID = context.Message.OrderID,
-                    CustomerID = context.Message.CustomerID,
-                    OrderContent = context.Message.OrderContent,
-                    OrderPrice = context.Message.OrderPrice
-                };
+                var createOrder = new OrderCreateMediatorRequest
+                (
+                    orderID: context.Message.OrderID,
+                    customerID: context.Message.UserID,
+                    orderContent: context.Message.OrderContent,
+                    orderPrice: context.Message.OrderPrice
+                );
 
                 var res = await _mediator.Send(createOrder);
 
-                await _publishEndpoint.Publish(new OrderCreateSuccessSvcEvent() { OrderID = res.OrderID });
+                await _publishEndpoint.Publish(new OrderCreateSuccessSvcEvent(orderID: res.OrderID));
 
                 //if (context.RequestId.HasValue && context.ResponseAddress != null)
                 //    await context.RespondAsync(new OrderCreateSuccessSvcEvent() { OrderID = res.OrderID });
             }
             catch (Exception e)
             {
-                await _publishEndpoint.Publish(new OrderCreateFaultSvcEvent() { });
+                await _publishEndpoint.Publish(new OrderCreateFaultSvcEvent(context.Message.OrderID));
                 //if (context.RequestId.HasValue && context.ResponseAddress != null)
                 //    await context.RespondAsync(new OrderCreateSuccessSvcEvent() { ErrorMessage = e.Message });
             }

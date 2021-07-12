@@ -14,17 +14,36 @@ using System.Threading.Tasks;
 namespace KShop.Orders.Domain
 {
 
-    public class OrderSubmitMediatorResponse
+    public class OrderSubmitMediatorResponse : BaseResponse
     {
-        public Guid OrderID { get; set; }
+        public OrderSubmitMediatorResponse(Guid orderID) : base()
+        {
+            OrderID = orderID;
+        }
+
+        public Guid OrderID { get; private set; }
     }
     public class OrderSubmitMediatorRequest : IRequest<OrderSubmitMediatorResponse>
     {
-        public Address Address { get; set; }
-        public EPaymentProvider PaymentProvider { get; set; }
-        public EShippingMethod ShippingMethod { get; set; }
-        public List<ProductQuantity> OrderContent { get; set; }
-        public uint UserID { get; set; }
+        public OrderSubmitMediatorRequest(
+            Address address,
+            EPaymentProvider paymentProvider,
+            EShippingMethod shippingMethod,
+            List<ProductQuantity> orderContent,
+            uint userID)
+        {
+            Address = address;
+            PaymentProvider = paymentProvider;
+            ShippingMethod = shippingMethod;
+            OrderContent = orderContent;
+            UserID = userID;
+        }
+
+        public Address Address { get; private set; }
+        public EPaymentProvider PaymentProvider { get; private set; }
+        public EShippingMethod ShippingMethod { get; private set; }
+        public List<ProductQuantity> OrderContent { get; private set; }
+        public uint UserID { get; private set; }
     }
     public class OrderSubmitMediatorHandler : IRequestHandler<OrderSubmitMediatorRequest, OrderSubmitMediatorResponse>
     {
@@ -44,17 +63,17 @@ namespace KShop.Orders.Domain
             //var validatorDto = new OrderPlacingMediatorFluentValidatorDto() { };
             //_validator.Validate(validatorDto);
             var orderCreateRequest = new OrderSubmitSagaRequest
-            {
-                OrderID = Guid.NewGuid(),
-                CustomerID = request.UserID,
-                PaymentProvider = request.PaymentProvider,
-                ShippingMethod = request.ShippingMethod,
-                OrderContent = request.OrderContent,
-                Address = request.Address,
-            };
+            (
+                orderID: Guid.NewGuid(),
+                customerID: request.UserID,
+                paymentProvider: request.PaymentProvider,
+                shippingMethod: request.ShippingMethod,
+                orderContent: request.OrderContent,
+                address: request.Address
+            );
 
             await _pubEndpoint.Publish(orderCreateRequest);
-            return new OrderSubmitMediatorResponse() { OrderID = orderCreateRequest.OrderID };
+            return new OrderSubmitMediatorResponse(orderCreateRequest.OrderID);
         }
     }
 }

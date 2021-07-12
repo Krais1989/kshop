@@ -100,7 +100,7 @@ const WShoppingCart: React.FunctionComponent<IWShoppingCartProps> = (props) => {
             </div>
             <div className="kshop-w-shopping-cart-positions-row-price">
                 <span>
-                    {order_price} {cartPos.price.currency} &#8381;
+                    {cartPos.price.price * cartPos.quantity} {cartPos.price.currency} &#8381;
                 </span>
             </div>
 

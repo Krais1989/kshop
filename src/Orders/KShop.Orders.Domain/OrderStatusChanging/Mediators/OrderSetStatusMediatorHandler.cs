@@ -17,8 +17,16 @@ namespace KShop.Orders.Domain
     }
     public class OrderSetStatusRequest : IRequest<OrderSetStatusResponse>
     {
-        public Guid OrderID { get; set; }
-        public EOrderStatus OrderStatus { get; set; }
+        public OrderSetStatusRequest(Guid orderID, EOrderStatus orderStatus, uint userID)
+        {
+            OrderID = orderID;
+            OrderStatus = orderStatus;
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
+        public EOrderStatus OrderStatus { get; private set; }
     }
     public class OrderSetStatusMediatorHandler : IRequestHandler<OrderSetStatusRequest, OrderSetStatusResponse>
     {

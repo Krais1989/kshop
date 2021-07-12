@@ -15,11 +15,21 @@ namespace KShop.Products.Domain
 
     public class BookmarksGetMediatorResponse
     {
-        public uint[] ProductsIDs { get; set; }
+        public BookmarksGetMediatorResponse(uint[] productsIDs)
+        {
+            ProductsIDs = productsIDs;
+        }
+
+        public uint[] ProductsIDs { get; private set; }
     }
     public class BookmarksGetMediatorRequest : IRequest<BookmarksGetMediatorResponse>
     {
-        public uint UsedID { get; set; }
+        public BookmarksGetMediatorRequest(uint usedID)
+        {
+            UsedID = usedID;
+        }
+
+        public uint UsedID { get; private set; }
     }
     public class BookmarksGetMediatorHandler : IRequestHandler<BookmarksGetMediatorRequest, BookmarksGetMediatorResponse>
     {
@@ -43,7 +53,7 @@ namespace KShop.Products.Domain
                 .Select(e => e.ProductID)
                 .ToArrayAsync();
 
-            return new BookmarksGetMediatorResponse() { ProductsIDs = prodIds };
+            return new BookmarksGetMediatorResponse(prodIds);
         }
     }
 }

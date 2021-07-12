@@ -67,14 +67,16 @@ export const AuthProvider: React.FunctionComponent<IProps> = (props) => {
         });
 
     // В случае ошибок 401
-    const auth_err_flag = localStorage.getItem("auth_err");
+    
+    const [authErr, setAuthErr] = useState(localStorage.getItem("auth_err"));
+    //const auth_err_flag = localStorage.getItem("auth_err");
     useEffect(() => {
-        if (auth_err_flag != null){
+        if (authErr != null){
             localStorage.removeItem("auth_err");
             set(null);
             redirect.toHome();
         }
-    }, [auth_err_flag])
+    }, [authErr, redirect]);
 
 
     return (

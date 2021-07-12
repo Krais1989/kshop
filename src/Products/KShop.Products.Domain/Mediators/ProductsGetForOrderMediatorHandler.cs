@@ -15,11 +15,23 @@ namespace KShop.Products.Domain
 
     public class ProductsGetForOrderMediatorResponse
     {
-        public List<ProductPresentation> Data { get; set; } = new List<ProductPresentation>();
+        public ProductsGetForOrderMediatorResponse(List<ProductPresentation> data)
+        {
+            Data = data;
+        }
+
+        public List<ProductPresentation> Data { get; private set; } = new List<ProductPresentation>();
     }
     public class ProductsGetForOrderMediatorRequest : IRequest<ProductsGetForOrderMediatorResponse>
     {
-        public uint[] ProductsIDs { get; set; }
+        public ProductsGetForOrderMediatorRequest(uint? userID, uint[] productsIDs)
+        {
+            UserID = userID;
+            ProductsIDs = productsIDs;
+        }
+
+        public uint? UserID { get; private set; }
+        public uint[] ProductsIDs { get; private set; }
     }
     public class ProductsGetForOrderMediatorHandler : IRequestHandler<ProductsGetForOrderMediatorRequest, ProductsGetForOrderMediatorResponse>
     {
@@ -53,7 +65,7 @@ namespace KShop.Products.Domain
                 .OrderByDescending(e => e.ID)
                 .ToListAsync();
 
-            return new ProductsGetForOrderMediatorResponse() { Data = data };
+            return new ProductsGetForOrderMediatorResponse(data);
         }
     }
 }

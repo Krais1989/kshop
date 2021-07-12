@@ -64,12 +64,12 @@ namespace KShop.Orders.Domain
 
             _logger.LogDebug($"Saga - Start Order Inialization");
 
-            await ctx.Publish(new OrderCreateSvcRequest { 
-                OrderID = ctx.Instance.CorrelationId,
-                CustomerID = ctx.Instance.CustomerID,
-                OrderContent = ctx.Instance.OrderContent,
-                OrderPrice = ctx.Instance.OrderPrice
-            });
+            await ctx.Publish(new OrderCreateSvcRequest (
+                orderID: ctx.Instance.CorrelationId,
+                userID: ctx.Instance.CustomerID,
+                orderContent: ctx.Instance.OrderContent,
+                orderPrice: ctx.Instance.OrderPrice
+            ));
         }
 
         private async Task HandlerOnProductsReserveFault(BehaviorContext<OrderProcessingSagaState, ProductsReserveFaultEvent> ctx)

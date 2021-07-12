@@ -37,14 +37,14 @@ namespace KShop.Products.WebApi.Controllers
         [HttpGet]
         public async ValueTask<IActionResult> GetBookmarks()
         {
-            var response = await _mediator.Send(new BookmarksGetMediatorRequest { UsedID = this.GetCurrentUserID().Value });
+            var response = await _mediator.Send(new BookmarksGetMediatorRequest(usedID: this.GetCurrentUserID().Value));
             return Ok(response);
         }
 
         [HttpPost]
         public async ValueTask<IActionResult> AddBookmarks([FromBody] AddBookmarksDto dto)
         {
-            var request = new BookmarksAddMediatorRequest { UserID = this.GetCurrentUserID().Value, ProductsIDs = dto.ProductsIDs };
+            var request = new BookmarksAddMediatorRequest(userID: this.GetCurrentUserID().Value, productsIDs: dto.ProductsIDs);
             var response = await _mediator.Send(request);
             return Ok(response);
         }
@@ -52,7 +52,7 @@ namespace KShop.Products.WebApi.Controllers
         [HttpDelete]
         public async ValueTask<IActionResult> DeleteBookmarks([FromBody] DelBookmarksDto dto)
         {
-            var request = new BookmarksDeleteMediatorRequest { UserID = this.GetCurrentUserID().Value, ProductsIDs = dto.ProductsIDs };
+            var request = new BookmarksDeleteMediatorRequest ( userID: this.GetCurrentUserID().Value, productsIDs: dto.ProductsIDs );
             var response = await _mediator.Send(request);
             return Ok(response);
         }

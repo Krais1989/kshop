@@ -18,7 +18,12 @@ namespace KShop.Carts.Domain.Mediators
     }
     public class ClearCartMediatorRequest : IRequest<ClearCartMediatorResponse>
     {
-        public uint UserID { get; set; }
+        public ClearCartMediatorRequest(uint userID)
+        {
+            UserID = userID;
+        }
+
+        public uint UserID { get; private set; }
     }
     public class ClearCartMediatorHandler : IRequestHandler<ClearCartMediatorRequest, ClearCartMediatorResponse>
     {

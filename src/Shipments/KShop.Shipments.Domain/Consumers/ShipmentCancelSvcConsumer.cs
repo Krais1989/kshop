@@ -28,10 +28,11 @@ namespace KShop.Shipments.Domain
             try
             {
                 /* Создание платежа */
-                var result = await _mediator.Send(new ShipmentCancelMediatorRequest()
-                {
-                    ShipmentID = context.Message.ShipmentID
-                });
+                var result = await _mediator.Send(new ShipmentCancelMediatorRequest
+                (
+                    shipmentID: context.Message.ShipmentID,
+                    userID: context.Message.UserID
+                ));
 
                 if (context.RequestId.HasValue && context.ResponseAddress != null)
                 {

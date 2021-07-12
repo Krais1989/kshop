@@ -21,6 +21,8 @@ namespace KShop.Payments.Persistence
 
         public Money Price { get; set; }
 
+        public uint UserID { get; set; }
+
         public ICollection<PaymentLog> Logs { get; set; } = new List<PaymentLog>();
 
         public void SetStatus(EPaymentStatus newStatus, string logMessage = null)

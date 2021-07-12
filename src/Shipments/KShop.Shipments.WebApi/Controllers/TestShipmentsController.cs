@@ -42,7 +42,7 @@ namespace KShop.Shipments.WebApi.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var response = await _mediator.Send(new ShipmentGetByIdRequest { ShipmentID = id });
+            var response = await _mediator.Send(new ShipmentGetByIdRequest(0, id));
             return Ok(response);
         }
     }

@@ -29,14 +29,14 @@ namespace KShop.Identities.WebApi
         [HttpGet("current")]
         public async Task<IActionResult> Current()
         {
-            var request = new GetCurrentIdentityMediatorRequest { User = this.User };
+            var request = new GetCurrentIdentityMediatorRequest(user: this.User);
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
         [AllowAnonymous]
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn([FromBody]SignInByEmailPasswordMediatorHandlerRequest request)
+        public async Task<IActionResult> SignIn([FromBody] SignInByEmailPasswordMediatorHandlerRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -44,7 +44,7 @@ namespace KShop.Identities.WebApi
 
         [AllowAnonymous]
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody]RefreshTokenRequest request)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);

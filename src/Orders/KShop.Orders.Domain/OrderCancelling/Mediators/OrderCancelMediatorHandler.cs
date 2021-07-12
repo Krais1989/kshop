@@ -18,7 +18,14 @@ namespace KShop.Orders.Domain
     }
     public class OrderCancelMediatorRequest : IRequest<OrderCancelMediatorResponse>
     {
-        public Guid OrderID { get; set; }
+        public OrderCancelMediatorRequest(uint userID, Guid orderID)
+        {
+            UserID = userID;
+            OrderID = orderID;
+        }
+
+        public uint UserID { get; private set; }
+        public Guid OrderID { get; private set; }
     }
     public class OrderCancelMediatorHandler : IRequestHandler<OrderCancelMediatorRequest, OrderCancelMediatorResponse>
     {
@@ -41,7 +48,7 @@ namespace KShop.Orders.Domain
             var validatorDto = new OrderCancelFluentValidatorDto() { };
             _validator.Validate(validatorDto);
 
-            var order = await _orderContext.Orders.FirstOrDefaultAsync(e => e.ID == request.OrderID);
+            var order = await _orderContext.Orders.FirstOrDefaultAsync(e => e.ID == request.OrderID && e.CustomerID == request.UserID);
             order.SetStatus(EOrderStatus.Cancelled);
 
             await _orderContext.SaveChangesAsync();

@@ -10,10 +10,18 @@ namespace KShop.Shared.Integration.Contracts
     /// </summary>
     public class PaymentCreateSvcRequest
     {
-        public Guid OrderID { get; set; }
-        public uint CustomerID { get; set; }
-        public EPaymentProvider PaymentPlatform { get; set; }
-        public Money Money { get; set; }
+        public PaymentCreateSvcRequest(Guid orderID, uint userID, EPaymentProvider paymentPlatform, Money money)
+        {
+            OrderID = orderID;
+            UserID = userID;
+            PaymentPlatform = paymentPlatform;
+            Money = money;
+        }
+
+        public Guid OrderID { get; private set; }
+        public uint UserID { get; private set; }
+        public EPaymentProvider PaymentPlatform { get; private set; }
+        public Money Money { get; private set; }
     }
 
 
@@ -28,8 +36,8 @@ namespace KShop.Shared.Integration.Contracts
         /// <summary>
         /// OrderID - для корреляции сообшений
         /// </summary>
-        public Guid OrderID { get; set; }
-        public Guid PaymentID { get; set; }
+        public Guid OrderID { get; private set; }
+        public Guid PaymentID { get; private set; }
     }
 
     public class PaymentCreateFaultSvcEvent
@@ -40,8 +48,8 @@ namespace KShop.Shared.Integration.Contracts
             ErrorMessage = errorMessage;
         }
 
-        public Guid OrderID { get; set; }
-        public string ErrorMessage { get; set; }
+        public Guid OrderID { get; private set; }
+        public string ErrorMessage { get; private set; }
 
     }
 }

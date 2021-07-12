@@ -22,10 +22,7 @@ namespace KShop.Orders.Domain
         }
         private async Task HandleOnGetStatus(BehaviorContext<OrderProcessingSagaState, OrderGetStatusSagaRequest> ctx)
         {
-            await ctx.RespondAsync(new OrderGetStatusSagaResponse()
-            {
-                Status = ctx.Instance.CurrentState
-            });
+            await ctx.RespondAsync(new OrderGetStatusSagaResponse(ctx.Instance.CurrentState));
         }
     }
 }
