@@ -14,12 +14,21 @@ import {
     AddBookmarksResponse,
     DeleteBookmarksResponse,
     GetBookmarksResponse,
+    GetCategoriesResponse,
 } from "./dtos/ProductsDtos";
 import { HttpClient } from "./HttpClient";
 
 class CProductsClient {
 
     //getProductsBookmarked = async()
+
+    getCategories = async () => {
+        return await HttpClient.get<GetCategoriesResponse>(
+            GetCategoriesResponse,
+            `${AppSettings.ProductsHost}/api/categories`,
+            AuthService.getAuthHeader()
+        );
+    }
 
     getBookmarks = async() => {
         return await HttpClient.get<GetBookmarksResponse>(

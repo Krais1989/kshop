@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using KShop.Orders.Domain.OrderProcessing.Validators;
 using KShop.Shared.Domain.Contracts;
 using KShop.Shared.Integration.Contracts;
 using MassTransit;
@@ -19,6 +20,10 @@ namespace KShop.Orders.Domain
         public OrderSubmitMediatorResponse(Guid orderID) : base()
         {
             OrderID = orderID;
+        }
+
+        public OrderSubmitMediatorResponse(string error) : base(error)
+        {
         }
 
         public Guid OrderID { get; private set; }
@@ -49,19 +54,24 @@ namespace KShop.Orders.Domain
     {
         private readonly ILogger<OrderSubmitMediatorHandler> _logger;
         private readonly IPublishEndpoint _pubEndpoint;
+        private readonly IValidator<OrderSubmitFluentValidatorDto> _validator;
 
-        public OrderSubmitMediatorHandler(ILogger<OrderSubmitMediatorHandler> logger, IPublishEndpoint pubEndpoint)
+        public OrderSubmitMediatorHandler(ILogger<OrderSubmitMediatorHandler> logger, IPublishEndpoint pubEndpoint, IValidator<OrderSubmitFluentValidatorDto> validator)
         {
             _logger = logger;
             _pubEndpoint = pubEndpoint;
+            _validator = validator;
         }
 
-        //private readonly IValidator<OrderPlacingMediatorFluentValidatorDto> _validator;
 
         public async Task<OrderSubmitMediatorResponse> Handle(OrderSubmitMediatorRequest request, CancellationToken cancellationToken)
         {
-            //var validatorDto = new OrderPlacingMediatorFluentValidatorDto() { };
-            //_validator.Validate(validatorDto);
+            var valid_dto = new OrderSubmitFluentValidatorDto() { };
+            var valid_result = _validator.Validate(valid_dto);
+
+            if (!valid_result.IsValid)
+                return new OrderSubmitMediatorResponse(valid_result.Errors.ToString());
+
             var orderCreateRequest = new OrderSubmitSagaRequest
             (
                 orderID: Guid.NewGuid(),

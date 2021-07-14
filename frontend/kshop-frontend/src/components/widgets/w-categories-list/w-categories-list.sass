@@ -1,0 +1,29 @@
+.kshop-w-categories
+    width: 100%
+
+    //border: 1px solid #e2e0e0
+
+    &-item
+
+        padding: 5px 10px
+        display: flex
+        justify-items: center
+        align-content: center
+        //text-align: center
+
+        width: 100%
+        cursor: pointer
+
+        background-color: #e0e8f0
+
+        span
+            white-space: nowrap
+
+        &:hover
+            @extend .kshop-w-categories-item
+            background-color: #b6d0eb
+            
+
+        &-selected
+            @extend .kshop-w-categories-item
+            background-color: #b6d0eb

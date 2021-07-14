@@ -8,7 +8,7 @@ import "styles/checkbox.sass";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "../pages/home-page/home-page";
 import CatalogPage from "../pages/catalog-page/catalog-page";
-import Navbar from "../widgets/navbar/navbar";
+import WNavbar from "../widgets/w-navbar/w-navbar";
 import AppContent from "./app-content/app-content";
 import AppFooter from "./app-footer/app-footer";
 import AppHeader from "./app-header/app-header";
@@ -36,7 +36,7 @@ const App: React.FC = () => {
                                 <BookmarksProvider>
                                     <OrderingProvider>
                                         <AppHeader />
-                                        <Navbar />
+                                        <WNavbar />
                                         <AppContent>
                                             <Switch>
                                                 <Route exact path="/" component={HomePage} />

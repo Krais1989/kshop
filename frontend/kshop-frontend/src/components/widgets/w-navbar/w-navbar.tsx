@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import "./navbar.sass";
+import "./w-navbar.sass";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBookmark,
@@ -14,7 +14,7 @@ import { useAuth } from "components/providers/AuthProvider";
 
 interface INavbarProps {}
 
-const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
+const WNavbar: React.FunctionComponent<INavbarProps> = (props) => {
     const { auth, isAuthenticated } = useAuth();
 
     // useEffect(() => {
@@ -45,7 +45,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
 
     const isAuth = isAuthenticated();
     return (
-        <div className="kshop-navbar">
+        <div className="kshop-w-navbar">
             <WLoginPanel />
             {isAuth && jsxAuthTabs}
             <Link to="/cart">
@@ -56,4 +56,4 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
     );
 };
 
-export default Navbar;
+export default WNavbar;

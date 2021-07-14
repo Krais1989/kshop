@@ -20,6 +20,10 @@ namespace KShop.Orders.Domain
             Order = order;
         }
 
+        public OrderGetDetailsResponse(string error) : base(error)
+        {
+        }
+
         public Order Order { get; private set; }
     }
     public class OrderGetDetailsRequest : IRequest<OrderGetDetailsResponse>
@@ -52,7 +56,10 @@ namespace KShop.Orders.Domain
         public async Task<OrderGetDetailsResponse> Handle(OrderGetDetailsRequest request, CancellationToken cancellationToken)
         {
             var validatorDto = new OrderGetDetailsFluentValidatorDto() { };
-            _validator.Validate(validatorDto);
+            var validator_result = _validator.Validate(validatorDto);
+
+            if (!validator_result.IsValid)
+                return new OrderGetDetailsResponse(validator_result.Errors.ToString());
 
             var result = await _orderContext.Orders.AsNoTracking().FirstOrDefaultAsync(e => e.ID == request.OrderID && e.CustomerID == request.UserID);
 

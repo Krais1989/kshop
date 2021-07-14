@@ -22,6 +22,10 @@ namespace KShop.Orders.Domain
             OrderID = orderID;
         }
 
+        public OrderCreateMediatorResponse(string error) : base(error)
+        {
+        }
+
         public Guid OrderID { get; set; }
     }
     public class OrderCreateMediatorRequest : IRequest<OrderCreateMediatorResponse>
@@ -64,7 +68,9 @@ namespace KShop.Orders.Domain
             _logger.LogInformation($"MediatoR CreateOrder");
 
             var validatorDto = new OrderCreateFluentValidatorDto() { };
-            _validator.Validate(validatorDto);
+            var validator_result = _validator.Validate(validatorDto);
+            if (!validator_result.IsValid)
+                return new OrderCreateMediatorResponse(validator_result.Errors.ToString());
 
             var entity = new Order
             {
@@ -81,21 +87,14 @@ namespace KShop.Orders.Domain
 
             try
             {
-                var strat = _context.Database.CreateExecutionStrategy();
-                await strat.ExecuteAsync((ct) =>
-                {
-                    //throw new Exception("test exception");
-                    return _context.SaveChangesAsync(ct);
-                }, cancellationToken);
+                await _context.SaveChangesAsync();
+                return new OrderCreateMediatorResponse(entity.ID);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Cover strategy exception");
+                return new OrderCreateMediatorResponse(e.Message);
             }
-
-
-
-            return new OrderCreateMediatorResponse(entity.ID);
         }
     }
 }

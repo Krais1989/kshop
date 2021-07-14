@@ -15,6 +15,10 @@ namespace KShop.Orders.Domain
 
     public class OrderCancelMediatorResponse : BaseResponse
     {
+        public OrderCancelMediatorResponse() : base() { }
+        public OrderCancelMediatorResponse(string error) : base(error)
+        {
+        }
     }
     public class OrderCancelMediatorRequest : IRequest<OrderCancelMediatorResponse>
     {
@@ -46,7 +50,10 @@ namespace KShop.Orders.Domain
         public async Task<OrderCancelMediatorResponse> Handle(OrderCancelMediatorRequest request, CancellationToken cancellationToken)
         {
             var validatorDto = new OrderCancelFluentValidatorDto() { };
-            _validator.Validate(validatorDto);
+            var validator_result = _validator.Validate(validatorDto);
+            if (!validator_result.IsValid)
+                return new OrderCancelMediatorResponse(validator_result.Errors.ToString());
+
 
             var order = await _orderContext.Orders.FirstOrDefaultAsync(e => e.ID == request.OrderID && e.CustomerID == request.UserID);
             order.SetStatus(EOrderStatus.Cancelled);

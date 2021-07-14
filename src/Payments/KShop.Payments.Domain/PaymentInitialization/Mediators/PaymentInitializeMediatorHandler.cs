@@ -12,11 +12,15 @@ using System.Threading.Tasks;
 
 namespace KShop.Payments.Domain
 {
-    public class PaymentInitializeMediatorResponse
+    public class PaymentInitializeMediatorResponse : BaseResponse
     {
         public PaymentInitializeMediatorResponse(Guid paymentID)
         {
             PaymentID = paymentID;
+        }
+
+        public PaymentInitializeMediatorResponse(string error) : base(error)
+        {
         }
 
         public Guid PaymentID { get; private set; }
@@ -50,7 +54,10 @@ namespace KShop.Payments.Domain
         public async Task<PaymentInitializeMediatorResponse> Handle(PaymentInitializeMediatorRequest request, CancellationToken cancellationToken)
         {
             var validatorDto = new PaymentCreatedValidatorDto() { };
-            _validator.Validate(validatorDto);
+            var validator_result = _validator.Validate(validatorDto);
+
+            if (!validator_result.IsValid)
+                return new PaymentInitializeMediatorResponse(validator_result.Errors.ToString());
 
             var payment = new Payment()
             {

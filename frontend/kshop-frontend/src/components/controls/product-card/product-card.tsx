@@ -47,7 +47,9 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
 
     const isBooked = isBookmarked(props.id);
     const curIcon = isBooked ? faHeart : faHeart;
-    const bookmarkCallback = isBooked ? () => delBookmarks([props.id]) : () => addBookmarks([props.id]);
+    const bookmarkCallback = isBooked
+        ? () => delBookmarks([props.id])
+        : () => addBookmarks([props.id]);
     const curStyle = isBooked ? "kshop-product-card-fav-booked" : "kshop-product-card-fav";
 
     const jsxBookmark = (
@@ -96,11 +98,14 @@ const ProductCard: React.FunctionComponent<IProductCardProps> = (props) => {
 
             <div className="kshop-product-card-actions">
                 {getQuantity(props.id) === 0 ? (
-                    <button className="kshop-button-green" onClick={() => addToCartCallback()}>
+                    <button
+                        className="kshop-button-green kshop-product-card-actions-cart"
+                        onClick={() => addToCartCallback()}
+                    >
                         В корзину <FontAwesomeIcon icon={faCartArrowDown} />{" "}
                     </button>
                 ) : (
-                    <div>Added</div>
+                    <div className="kshop-product-card-actions-added">Added</div>
                 )}
 
                 <DropDown title="..." className="kshop-product-card-actions-extra">

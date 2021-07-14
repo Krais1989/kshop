@@ -36,7 +36,7 @@ const WProductDetails: React.FunctionComponent<IWProductDetailsProps> = (
         // ];
 
         ProductsClient.getProductsDetails({
-            productID: [productID],
+            productIDs: [productID],
         }).then((r) => {
             if (r.isSuccess) {
                 const d = r.data.length > 0 ? r.data[0] : null;

@@ -1,18 +1,23 @@
+import { Category } from "models/Category";
 import { ProductDetails } from "models/ProductDetails";
 import { ProductPresentation } from "models/ProductPresentation";
-import { BaseResult } from "../../BaseResult";
+import { BaseResult } from "services/BaseResult";
+
+export class GetCategoriesResponse extends BaseResult {
+    categories: Array<Category> = [];
+}
 
 export class GetBookmarksResponse extends BaseResult {
-    productsIDs: Array<number> = []
+    productsIDs: Array<number> = [];
 }
 
 export class AddBookmarksRequest {
-    productsIDs: Array<number> = []
+    productsIDs: Array<number> = [];
 }
 export class AddBookmarksResponse extends BaseResult {}
 
 export class DeleteBookmarksRequest {
-    productsIDs: Array<number> = []
+    productsIDs: Array<number> = [];
 }
 export class DeleteBookmarksResponse extends BaseResult {}
 
@@ -22,13 +27,14 @@ export class GetProductsBookmarkedResponse extends BaseResult {
 
 export class GetProductsForHomeRequest {
     pageIndex: number = 0;
+    categoryID: number = 0;
 }
 export class GetProductsForHomeResponse extends BaseResult {
     data: Array<ProductPresentation> = [];
 }
 
 export class GetProductDetailsRequest {
-    productID: Array<number> = [];
+    productIDs: Array<number> = [];
 }
 export class GetProductDetailsResponse extends BaseResult {
     data: Array<ProductDetails> = [];

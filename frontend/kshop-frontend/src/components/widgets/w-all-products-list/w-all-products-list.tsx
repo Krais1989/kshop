@@ -9,7 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { ProductsClient } from "services/clients/ProductsClient";
 import { useCallback } from "react";
 
-interface IWAllProductsListProps {}
+interface IProps {
+    categoryId: number;
+}
 
 class State {
     items: ProductPresentation[] = [];
@@ -18,8 +20,17 @@ class State {
     hasError: boolean = false;
 }
 
-const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (props) => {
+const WAllProductsList: React.FunctionComponent<IProps> = (props) => {
     const [state, setState] = React.useState<State>(new State());
+    const categoryId = props.categoryId;
+    
+    /* при смене categoryId необходимо сбросить состояние загрузки продуктов */
+    React.useEffect(()=>{
+        state.items = [];
+        state.hasError = false;
+        state.hasMore = true;
+        state.nextPage = 0;
+    }, [categoryId]);
 
     React.useEffect(() => {
         /* hasMore */
@@ -28,6 +39,7 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (props
             console.log(`Loading page: ${nextPage} hasMore:${hasMore} hasError:${hasError}`);
             ProductsClient.getProductsForHome({
                 pageIndex: nextPage,
+                categoryID: categoryId
             })
                 .then((e) => {
                     if (e.isSuccess) {
@@ -56,7 +68,7 @@ const WAllProductsList: React.FunctionComponent<IWAllProductsListProps> = (props
                     });
                 });
         }
-    }, [state]);
+    }, [state, categoryId]);
 
     const jsxProducts = state.items.map(({ id, title, price, description, image }, index) => (
         <ProductCard

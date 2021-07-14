@@ -22,7 +22,7 @@ namespace KShop.Products.WebApi
 
     public class ProductGetDetailsRequest
     {
-        public uint[] Data { get; set; }
+        public uint[] ProductIDs { get; set; }
     }
 
     public class ProductsGetForOrderRequest
@@ -65,7 +65,7 @@ namespace KShop.Products.WebApi
         [HttpGet("for-home")]
         public async ValueTask<IActionResult> GetProductsForHomePage([FromQuery] ProductsGetForHomeMediatorRequest dto)
         {
-            var request = new ProductsGetForHomeMediatorRequest(dto.PageIndex, this.GetCurrentUserID());
+            var request = new ProductsGetForHomeMediatorRequest(dto.PageIndex, dto.CategoryID, this.GetCurrentUserID());
             var response = await _mediator.Send(request);
 
             return Ok(response);
@@ -74,7 +74,7 @@ namespace KShop.Products.WebApi
         [HttpGet("details")]
         public async ValueTask<IActionResult> GetProductsDetails([FromQuery] ProductGetDetailsRequest dto)
         {
-            var request = new ProductGetDetailsMediatorRequest(productID: dto.Data, userID: this.GetCurrentUserID());
+            var request = new ProductGetDetailsMediatorRequest(productID: dto.ProductIDs, userID: this.GetCurrentUserID());
             var response = await _mediator.Send(request);
 
             return Ok(response);

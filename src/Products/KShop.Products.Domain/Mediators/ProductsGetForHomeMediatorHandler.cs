@@ -16,27 +16,29 @@ namespace KShop.Products.Domain
 
     public class ProductsGetForHomeMediatorResponse : BaseResponse
     {
-        public ProductsGetForHomeMediatorResponse(List<ProductPresentation> data, List<Category> categories)
+        public ProductsGetForHomeMediatorResponse(List<ProductPresentation> data, int pagesLeft)
         {
             Data = data;
-            Categories = categories;
+            PagesLeft = pagesLeft;
         }
 
         public List<ProductPresentation> Data { get; private set; } = new List<ProductPresentation>();
-        public List<Category> Categories { get; private set; } = new List<Category>();
+        public int PagesLeft { get; private set; } = 0;
 
     }
     public class ProductsGetForHomeMediatorRequest : IRequest<ProductsGetForHomeMediatorResponse>
     {
         public ProductsGetForHomeMediatorRequest() { }
-        public ProductsGetForHomeMediatorRequest(int pageIndex, uint? userID)
+        public ProductsGetForHomeMediatorRequest(int pageIndex, uint categoryID, uint? userID)
         {
             UserID = userID;
             PageIndex = pageIndex;
+            CategoryID = categoryID;
         }
 
         public uint? UserID { get; set; }
         public int PageIndex { get; set; }
+        public uint CategoryID { get; set; } = 0;
     }
     public class ProductsGetForHomeMediatorHandler : IRequestHandler<ProductsGetForHomeMediatorRequest, ProductsGetForHomeMediatorResponse>
     {
@@ -68,18 +70,14 @@ namespace KShop.Products.Domain
                     Price = e.Price,
                     Image = e.Image
                 })
+                .Where(e => request.CategoryID == 0 || e.CategoryID == request.CategoryID)
                 .OrderByDescending(e => e.ID)
                 .Skip(request.PageIndex * pagesize)
                 .Take(pagesize)
                 .ToListAsync();
 
-            var categories = await _productsContext.Categories.ToListAsync();
 
-            //var categories = await _productsContext.Cate
-
-            // Расчитать сколько осталось продуктов
-
-            return new ProductsGetForHomeMediatorResponse(data, categories);
+            return new ProductsGetForHomeMediatorResponse(data, 0);
         }
     }
 }
