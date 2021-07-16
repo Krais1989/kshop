@@ -27,17 +27,17 @@
 Для развёртки используется docker-compose, располагаемый в папке `docker/`.
 Для работы Docker рекомендуется выделить 3gb RAM.
 ```
-docker-compose -f docker-compose.yml up -d
+docker-compose -p kshop-env -f docker-compose.yml up -d
 ```
 ## Развертка сервисов
 #### В Docker
 Занимает продолжительное время, что связано с выкачкой образов и nuget-пакетов.
 ```
-docker-compose -f docker-compose-services.yml up -d
+docker-compose -p kshop-svc -f docker-compose-services.yml up -d
 ```
 #### Локально
-Используется Visual Studio 2019.
-Локальное развертывание заключается в одновременном запуске WebApi-проектов через пункт меню `Set Startup Projects` в солюшене.
+Локальное развертывание заключается в одновременном запуске WebApi-проектов. 
+В Visual Studio это настраивается через `Set Startup Projects` во всплывающем меню солюшена.
 
  - KShop.Carts.WebApi 
  - KShop.Identities.WebApi 
