@@ -1,20 +1,119 @@
 version: '3.9'
 services:
-
-    api_orders:
-        image: kshop.orders.webapi:latest
+    api_identities:
+        build: 
+            context: ../src
+            dockerfile: ../docker/identities.dockerfile
+        image: kshop.identities.webapi:latest
         restart: always
         environment: 
             ASPNETCORE_ENVIRONMENT: 'Staging'
         ports:
             - '5000:80'
             - '5001:443'
-        expose: 
+        expose:
             - '5000'
+            - '5001'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_identities
+
+    api_orders:
+        build:
+            context: ../src
+            dockerfile: ../docker/orders.dockerfile
+        image: kshop.orders.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5010:80'
+            - '5011:443'
+        expose:
+            - '5010'
+            - '5011'
         networks:
             kshop_network:
                 aliases:
                     - api_orders
+
+    api_products:
+        build:
+            context: ../src
+            dockerfile: ../docker/products.dockerfile
+        image: kshop.products.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5020:80'
+            - '5021:443'
+        expose:
+            - '5020'
+            - '5021'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_products
+
+    api_payments:
+        build:
+            context: ../src
+            dockerfile: ../docker/payments.dockerfile
+        image: kshop.payments.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5030:80'
+            - '5031:443'
+        expose:
+            - '5030'
+            - '5031'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_payments
+
+    api_shipments:
+        build:
+            context: ../src
+            dockerfile: ../docker/shipments.dockerfile
+        image: kshop.shipments.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5040:80'
+            - '5041:443'
+        expose:
+            - '5040'
+            - '5041'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_shipments
+
+    api_carts:
+        build:
+            context: ../src
+            dockerfile: ../docker/carts.dockerfile
+        image: kshop.carts.webapi:latest
+        restart: always
+        environment: 
+            ASPNETCORE_ENVIRONMENT: 'Staging'
+        ports:
+            - '5050:80'
+            - '5051:443'
+        expose:
+            - '5050'
+            - '5051'
+        networks:
+            kshop_network:
+                aliases:
+                    - api_carts
+
 networks:
     kshop_network:
         name: kshop_network
