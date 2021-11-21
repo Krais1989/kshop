@@ -1,7 +1,3 @@
-using App.Metrics.AspNetCore;
-using App.Metrics.Formatters.Ascii;
-using App.Metrics.Formatters.InfluxDB;
-using MassTransit.RabbitMqTransport.Contexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;

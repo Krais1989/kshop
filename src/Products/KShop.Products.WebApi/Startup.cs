@@ -56,15 +56,15 @@ namespace KShop.Products.WebApi
 
                 });
 
-            services.AddKShopMetrics(Configuration);
-            services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
             services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(ProductsReserveMediatorHandler).Assembly);
 
             services.AddKShopAuth(Configuration);
 
             services.AddControllers()
-                .AddMetrics()
+                //.AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ProductsReserveFluentValidator).Assembly));
 
             services.AddHostedService<ProductsReservationBackgroundService>();
@@ -74,8 +74,8 @@ namespace KShop.Products.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllEndpoints();
 
             if (env.IsDevelopment())
             {

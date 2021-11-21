@@ -52,8 +52,8 @@ namespace KShop.Orders.WebApi
             });
 
             services.AddMediatR(typeof(OrderCreateMediatorHandler).Assembly);
-            services.AddKShopTracing(Configuration);
-            services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
             services.AddKShopSwagger(Configuration);
 
             services.AddKShopAuth(Configuration);
@@ -89,7 +89,7 @@ namespace KShop.Orders.WebApi
                 });
 
             services.AddControllers()
-                .AddMetrics()
+                //.AddMetrics()
                 .AddEnumNameConverter()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
         }
@@ -99,8 +99,8 @@ namespace KShop.Orders.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllEndpoints();
 
             if (env.IsDevelopment())
             {

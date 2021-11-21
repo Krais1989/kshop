@@ -45,8 +45,8 @@ namespace KShop.Carts.WebApi
             services.AddSingleton<MongoSettings>(sp => sp.GetRequiredService<IOptions<MongoSettings>>().Value);
             services.AddScoped<ICartKVRepository, MongoCartRepository>();
 
-            services.AddKShopTracing(Configuration);
-            services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
             services.AddKShopSwagger(Configuration);
 
             services.AddKShopAuth(Configuration);
@@ -62,8 +62,9 @@ namespace KShop.Carts.WebApi
             services.AddMediatR(typeof(GetCurrentCartMediatorHandler).Assembly);
 
             services.AddControllers()
-                .AddMetrics();
+                //.AddMetrics();
                 //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
+                ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,8 +72,8 @@ namespace KShop.Carts.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllEndpoints();
 
             if (env.IsDevelopment())
             {

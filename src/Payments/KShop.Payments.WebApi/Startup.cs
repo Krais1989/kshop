@@ -57,15 +57,15 @@ namespace KShop.Payments.WebApi
 
                 });
 
-            services.AddKShopMetrics(Configuration);
-            services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
             services.AddKShopSwagger(Configuration);
             services.AddMediatR(typeof(PaymentInitializeMediatorHandler).Assembly);
 
             services.AddKShopAuth(Configuration);
 
             services.AddControllers()
-                .AddMetrics()
+                //.AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(PaymentCreatedFluentValidator).Assembly));
 
             services.AddHostedService<PaymentInitializingBackgroundService>();
@@ -80,7 +80,7 @@ namespace KShop.Payments.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllMiddleware();
             // Or to cherry-pick the tracking of interest
             // app.UseMetricsActiveRequestMiddleware();
             // app.UseMetricsErrorTrackingMiddleware();
@@ -89,7 +89,7 @@ namespace KShop.Payments.WebApi
             // app.UseMetricsOAuth2TrackingMiddleware();
             // app.UseMetricsApdexTrackingMiddleware();
 
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllEndpoints();
             // Or to cherry-pick endpoint of interest
             // app.UseMetricsEndpoint();
             // app.UseMetricsTextEndpoint();

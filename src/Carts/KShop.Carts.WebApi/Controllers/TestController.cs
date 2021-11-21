@@ -31,11 +31,11 @@ namespace KShop.Carts.WebApi
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create([FromBody] string id)
         {
             var cart = new Cart
             {
-                ID = "test_cart",
+                ID = id,
                 Positions = new List<CartPosition> {
                     new CartPosition(1, 1, false, "Product #1", new Money(100), "", "" ),
                     new CartPosition(2, 1, false, "Product #2", new Money(100), "", "" ),

@@ -55,8 +55,8 @@ namespace KShop.Shipments.WebApi
 
                 });
 
-            services.AddKShopMetrics(Configuration);
-            services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
             services.AddKShopSwagger(Configuration);
 
             services.AddMediatR(typeof(ShipmentInitializeMediatorHandler).Assembly);
@@ -70,7 +70,7 @@ namespace KShop.Shipments.WebApi
             services.AddSingleton<IExternalShipmentServiceProvider, MockExternallShipmentProvider>();
 
             services.AddControllers()
-                .AddMetrics()
+                //.AddMetrics()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(ShipmentCreateFluentValidator).Assembly));
         }
 
@@ -79,8 +79,8 @@ namespace KShop.Shipments.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllEndpoints();
 
             if (env.IsDevelopment())
             {

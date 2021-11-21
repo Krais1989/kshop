@@ -1,4 +1,5 @@
 
+using FluentValidation.AspNetCore;
 using KShop.Identities.Domain;
 using KShop.Identities.Persistence;
 using KShop.Shared.Authentication;
@@ -56,8 +57,8 @@ namespace KShop.Identities.WebApi
             });
 
             services.AddMediatR(typeof(SignInByEmailPasswordMediaotorHandler).Assembly);
-            services.AddKShopTracing(Configuration);
-            services.AddKShopMetrics(Configuration);
+            //services.AddKShopTracing(Configuration);
+            //services.AddKShopMetrics(Configuration);
             services.AddKShopSwagger(Configuration);
 
             services.AddKShopAuth(Configuration);
@@ -75,8 +76,9 @@ namespace KShop.Identities.WebApi
             services.AddSingleton<IJWTFactory, JwtFactory>();
 
             services.AddControllers()
-                .AddMetrics();
+                //.AddMetrics();
             //.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(OrderCreateFluentValidator).Assembly));
+            ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,8 +86,8 @@ namespace KShop.Identities.WebApi
         {
             app.UseKShopExceptionHandler();
 
-            app.UseMetricsAllMiddleware();
-            app.UseMetricsAllEndpoints();
+            //app.UseMetricsAllMiddleware();
+            //app.UseMetricsAllEndpoints();
 
             if (env.IsDevelopment())
             {
